@@ -142,3 +142,41 @@ export const emailNotifications = mysqlTable("emailNotifications", {
 
 export type EmailNotification = typeof emailNotifications.$inferSelect;
 export type InsertEmailNotification = typeof emailNotifications.$inferInsert;
+
+/**
+ * Notificações de WhatsApp enviadas
+ */
+export const whatsappNotifications = mysqlTable("whatsappNotifications", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  appointmentId: int("appointmentId").notNull(),
+  clientId: int("clientId").notNull(),
+  clientPhone: varchar("clientPhone", { length: 20 }).notNull(),
+  type: mysqlEnum("type", ["confirmation", "reminder_24h", "reminder_1h", "cancellation"]).default("confirmation"),
+  message: text("message"),
+  sentAt: timestamp("sentAt"),
+  status: mysqlEnum("status", ["pending", "sent", "failed", "read"]).default("pending"),
+  errorMessage: text("errorMessage"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export type WhatsappNotification = typeof whatsappNotifications.$inferSelect;
+export type InsertWhatsappNotification = typeof whatsappNotifications.$inferInsert;
+
+/**
+ * Configurações de notificação do usuário
+ */
+export const notificationSettings = mysqlTable("notificationSettings", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull().unique(),
+  whatsappEnabled: boolean("whatsappEnabled").default(true),
+  reminderBefore24h: boolean("reminderBefore24h").default(true),
+  reminderBefore1h: boolean("reminderBefore1h").default(true),
+  sendConfirmation: boolean("sendConfirmation").default(true),
+  sendCancellation: boolean("sendCancellation").default(true),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type NotificationSettings = typeof notificationSettings.$inferSelect;
+export type InsertNotificationSettings = typeof notificationSettings.$inferInsert;

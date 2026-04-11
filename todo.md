@@ -21,8 +21,8 @@
 - [x] Design system e cores profissionais
 - [x] Layout principal com sidebar de navegação
 - [x] Dashboard com cards de métricas
-- [x] Calendário de agendamentos (visualização mês/semana/dia)
-- [ ] Gráficos de faturamento (série temporal)
+- [x] Calendário de agendamentos (visualização mês)
+- [ ] Gráficos de faturamento (futuro - série temporal)
 
 ## Fase 4: Frontend - Módulo de Agendamentos
 - [x] Página de agendamentos com calendário
@@ -35,7 +35,7 @@
 - [x] Página de listagem de clientes
 - [x] Cadastro de novo cliente
 - [x] Edição de cliente
-- [ ] Visualização de histórico de atendimentos (timeline por cliente)
+- [ ] Visualização de histórico de atendimentos (futuro - timeline por cliente)
 - [x] Busca e filtros (nome/telefone/email)
 
 ## Fase 6: Frontend - Módulo de Serviços
@@ -53,9 +53,9 @@
 - [x] Exportação de dados (CSV)
 
 ## Fase 8: Integrações e Notificações
-- [ ] Sistema de notificações por email
-- [ ] Lembretes automáticos de agendamento
-- [ ] Integração com Stripe/PIX (básico)
+- [ ] Sistema de notificações por email (futuro)
+- [ ] Lembretes automáticos de agendamento (futuro)
+- [ ] Integração com Stripe/PIX (futuro)
 
 ## Fase 9: Testes, UI/UX e Polimento
 - [x] Testes de fluxos principais
@@ -69,3 +69,11 @@
 - [x] Instruções para Hostinger
 - [x] Variáveis de ambiente
 - [x] Checkpoint final
+
+## Fase 11: Sistema de Notificações WhatsApp
+- [x] Configurar Baileys (WhatsApp Web - 100% gratuito)
+- [x] Estender schema com tabelas de notificações
+- [x] Implementar APIs de envio WhatsApp
+- [ ] Criar job agendado para lembretes automáticos
+- [x] Desenvolver frontend de gerenciamento
+- [x] Testes e validação

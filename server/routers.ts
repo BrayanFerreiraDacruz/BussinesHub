@@ -23,6 +23,12 @@ import {
   createPayment,
   updatePayment,
 } from "./db";
+import {
+  getOrCreateNotificationSettings,
+  updateNotificationSettings,
+  getWhatsAppNotifications,
+} from "./db-whatsapp";
+import { sendWhatsAppMessage, getWhatsAppStatus } from "./whatsapp";
 
 export const appRouter = router({
   system: systemRouter,
@@ -275,6 +281,42 @@ export const appRouter = router({
         .filter((apt) => new Date(apt.startTime) >= now && apt.status === "scheduled")
         .sort((a, b) => new Date(a.startTime).getTime() - new Date(b.startTime).getTime())
         .slice(0, 10);
+    }),
+  }),
+
+  whatsapp: router({
+    status: protectedProcedure.query(() => {
+      return getWhatsAppStatus();
+    }),
+
+    sendTest: protectedProcedure
+      .input(z.object({ phoneNumber: z.string(), message: z.string() }))
+      .mutation(async ({ input }) => {
+        const result = await sendWhatsAppMessage(input.phoneNumber, input.message);
+        return result;
+      }),
+
+    settings: protectedProcedure.query(async ({ ctx }) => {
+      return await getOrCreateNotificationSettings(ctx.user.id);
+    }),
+
+    updateSettings: protectedProcedure
+      .input(
+        z.object({
+          whatsappEnabled: z.boolean().optional(),
+          reminderBefore24h: z.boolean().optional(),
+          reminderBefore1h: z.boolean().optional(),
+          sendConfirmation: z.boolean().optional(),
+          sendCancellation: z.boolean().optional(),
+        })
+      )
+      .mutation(async ({ ctx, input }) => {
+        await updateNotificationSettings(ctx.user.id, input);
+        return { success: true };
+      }),
+
+    history: protectedProcedure.query(async ({ ctx }) => {
+      return await getWhatsAppNotifications(ctx.user.id);
     }),
   }),
 });
