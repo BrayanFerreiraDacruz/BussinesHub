@@ -52,10 +52,10 @@
 - [x] Relatório de clientes
 - [x] Exportação de dados (CSV)
 
-## Fase 8: Integrações e Notificações
-- [ ] Sistema de notificações por email (futuro)
+## Fase 8: Integrações e Notificações (Fase 1 Completa)
+- [ ] Sistema de notificações por email (futuro - roadmap)
 - [x] Lembretes automáticos de agendamento (WhatsApp com jobs agendados)
-- [ ] Integração com Stripe/PIX (futuro)
+- [ ] Integração com Stripe/PIX (futuro - roadmap)
 
 ## Fase 9: Testes, UI/UX e Polimento
 - [x] Testes de fluxos principais (11 testes passando)
