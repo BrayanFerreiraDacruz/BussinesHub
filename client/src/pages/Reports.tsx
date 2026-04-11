@@ -6,9 +6,11 @@ import { BarChart3, Download, Calendar } from "lucide-react";
 import { useState } from "react";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
+import { toast } from "sonner";
 
 export default function Reports() {
   const [dateRange, setDateRange] = useState("month");
+  const [isExporting, setIsExporting] = useState(false);
 
   const { data: appointments } = trpc.appointments.list.useQuery();
   const { data: payments } = trpc.payments.list.useQuery();
@@ -69,6 +71,49 @@ export default function Reports() {
     ? totalRevenue / filteredPayments.length
     : 0;
 
+  const handleExportCSV = () => {
+    setIsExporting(true);
+    try {
+      const rows = [];
+      rows.push(["RELATORIO DE FATURAMENTO", format(new Date(), "dd/MM/yyyy HH:mm", { locale: ptBR })]);
+      rows.push([]);
+      rows.push(["Periodo", dateRange]);
+      rows.push(["Faturamento Total", `R$ ${totalRevenue.toFixed(2)}`]);
+      rows.push(["Ticket Medio", `R$ ${averageTicket.toFixed(2)}`]);
+      rows.push(["Total de Pagamentos", filteredPayments.length]);
+      rows.push([]);
+      rows.push(["DETALHES DE PAGAMENTOS"]);
+      rows.push(["Data", "Cliente", "Valor", "Metodo", "Status"]);
+      
+      filteredPayments.forEach((p) => {
+        rows.push([
+          format(new Date(p.createdAt), "dd/MM/yyyy", { locale: ptBR }),
+          `Cliente #${p.clientId}`,
+          `R$ ${parseFloat(p.amount.toString()).toFixed(2)}`,
+          p.paymentMethod,
+          p.status,
+        ]);
+      });
+
+      const csv = rows.map((row) => row.map((cell) => `"${cell}"`).join(",")).join("\n");
+      const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+      const link = document.createElement("a");
+      const url = URL.createObjectURL(blob);
+      link.setAttribute("href", url);
+      link.setAttribute("download", `relatorio_${dateRange}_${format(new Date(), "ddMMyyyy")}.csv`);
+      link.style.visibility = "hidden";
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      
+      toast.success("Relatorio exportado com sucesso!");
+    } catch (error) {
+      toast.error("Erro ao exportar relatorio");
+    } finally {
+      setIsExporting(false);
+    }
+  };
+
   return (
     <DashboardLayout>
       <div className="space-y-8">
@@ -80,9 +125,9 @@ export default function Reports() {
               Analise o desempenho do seu negocio
             </p>
           </div>
-          <Button variant="outline">
+          <Button variant="outline" onClick={handleExportCSV} disabled={isExporting}>
             <Download className="w-4 h-4 mr-2" />
-            Exportar Relatorio
+            {isExporting ? "Exportando..." : "Exportar Relatorio"}
           </Button>
         </div>
 

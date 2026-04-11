@@ -21,28 +21,28 @@
 - [x] Design system e cores profissionais
 - [x] Layout principal com sidebar de navegação
 - [x] Dashboard com cards de métricas
-- [ ] Calendário de agendamentos
-- [ ] Gráficos de faturamento
+- [x] Calendário de agendamentos (visualização mês/semana/dia)
+- [ ] Gráficos de faturamento (série temporal)
 
 ## Fase 4: Frontend - Módulo de Agendamentos
 - [x] Página de agendamentos com calendário
 - [x] Formulário de novo agendamento
 - [x] Edição de agendamento
-- [ ] Cancelamento de agendamento
+- [x] Cancelamento de agendamento
 - [x] Visualização de detalhes
 
 ## Fase 5: Frontend - Módulo de Clientes (CRM)
 - [x] Página de listagem de clientes
 - [x] Cadastro de novo cliente
 - [x] Edição de cliente
-- [ ] Visualização de histórico de atendimentos
-- [ ] Busca e filtros
+- [ ] Visualização de histórico de atendimentos (timeline por cliente)
+- [x] Busca e filtros (nome/telefone/email)
 
 ## Fase 6: Frontend - Módulo de Serviços
 - [x] Página de catálogo de serviços
 - [x] Cadastro de novo serviço
 - [x] Edição de serviço
-- [ ] Exclusão de serviço
+- [x] Exclusão de serviço
 
 ## Fase 7: Frontend - Módulo de Relatórios
 - [x] Página de relatórios
@@ -50,7 +50,7 @@
 - [x] Relatório de faturamento
 - [x] Relatório de agendamentos
 - [x] Relatório de clientes
-- [ ] Exportação de dados
+- [x] Exportação de dados (CSV)
 
 ## Fase 8: Integrações e Notificações
 - [ ] Sistema de notificações por email

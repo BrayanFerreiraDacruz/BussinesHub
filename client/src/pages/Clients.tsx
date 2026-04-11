@@ -3,7 +3,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { trpc } from "@/lib/trpc";
 import { Users, Plus, Edit2, Trash2, Mail, Phone } from "lucide-react";
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -13,8 +13,18 @@ import { toast } from "sonner";
 export default function Clients() {
   const [isOpen, setIsOpen] = useState(false);
   const [editingId, setEditingId] = useState<number | null>(null);
+  const [searchTerm, setSearchTerm] = useState("");
 
   const { data: clients, isLoading, refetch } = trpc.clients.list.useQuery();
+
+  const filteredClients = useMemo(() => {
+    if (!clients) return [];
+    return clients.filter((client) =>
+      client.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      client.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      client.phone?.includes(searchTerm)
+    );
+  }, [clients, searchTerm]);
 
   const createMutation = trpc.clients.create.useMutation({
     onSuccess: () => {
@@ -78,13 +88,21 @@ export default function Clients() {
               Gerencie o CRM do seu negocio
             </p>
           </div>
-          <Dialog open={isOpen} onOpenChange={setIsOpen}>
-            <DialogTrigger asChild>
-              <Button onClick={() => setEditingId(null)}>
-                <Plus className="w-4 h-4 mr-2" />
-                Novo Cliente
-              </Button>
-            </DialogTrigger>
+          <div className="flex gap-2 flex-col md:flex-row md:items-center">
+            <Input
+              type="text"
+              placeholder="Buscar por nome, email ou telefone..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="flex-1"
+            />
+            <Dialog open={isOpen} onOpenChange={setIsOpen}>
+              <DialogTrigger asChild>
+                <Button onClick={() => setEditingId(null)}>
+                  <Plus className="w-4 h-4 mr-2" />
+                  Novo Cliente
+                </Button>
+              </DialogTrigger>
             <DialogContent>
               <DialogHeader>
                 <DialogTitle>
@@ -142,7 +160,8 @@ export default function Clients() {
                 </div>
               </form>
             </DialogContent>
-          </Dialog>
+            </Dialog>
+          </div>
         </div>
 
         {/* Clients Grid */}
@@ -150,7 +169,7 @@ export default function Clients() {
           <CardHeader>
             <CardTitle>Lista de Clientes</CardTitle>
             <CardDescription>
-              Total de {clients?.length ?? 0} clientes
+              Total de {filteredClients.length} de {clients?.length ?? 0} clientes
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -160,9 +179,9 @@ export default function Clients() {
                   <div key={i} className="h-40 bg-muted rounded-lg animate-pulse" />
                 ))}
               </div>
-            ) : clients && clients.length > 0 ? (
+            ) : filteredClients.length > 0 ? (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {clients.map((client) => (
+                {filteredClients.map((client) => (
                   <div
                     key={client.id}
                     className="border border-border/40 rounded-lg p-4 hover:border-primary/40 transition"
@@ -233,6 +252,14 @@ export default function Clients() {
                     </div>
                   </div>
                 ))}
+              </div>
+            ) : searchTerm && clients && clients.length > 0 ? (
+              <div className="text-center py-12">
+                <Users className="w-12 h-12 text-muted-foreground/30 mx-auto mb-3" />
+                <p className="text-muted-foreground mb-4">Nenhum cliente encontrado para {searchTerm}</p>
+                <Button variant="outline" onClick={() => setSearchTerm("")} className="mt-2">
+                  Limpar busca
+                </Button>
               </div>
             ) : (
               <div className="text-center py-12">

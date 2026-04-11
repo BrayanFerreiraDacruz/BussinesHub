@@ -1,4 +1,5 @@
 import DashboardLayout from "@/components/DashboardLayout";
+import { AppointmentCalendar } from "@/components/AppointmentCalendar";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { trpc } from "@/lib/trpc";
@@ -88,6 +89,19 @@ export default function Dashboard() {
             </CardContent>
           </Card>
         </div>
+
+        {/* Calendario */}
+        <Card className="border-border/40">
+          <CardHeader>
+            <CardTitle>Calendario de Agendamentos</CardTitle>
+            <CardDescription>
+              Visualize todos os agendamentos do mes
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <AppointmentCalendar appointments={upcomingAppointments} />
+          </CardContent>
+        </Card>
 
         {/* Upcoming Appointments */}
         <Card className="border-border/40">
