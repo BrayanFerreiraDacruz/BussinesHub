@@ -22,7 +22,7 @@
 - [x] Layout principal com sidebar de navegação
 - [x] Dashboard com cards de métricas
 - [x] Calendário de agendamentos (visualização mês)
-- [x] Gráficos de faturamento (básico - métricas em cards)
+- [x] Gráficos de faturamento (série temporal - ultimos 7 dias)
 
 ## Fase 4: Frontend - Módulo de Agendamentos
 - [x] Página de agendamentos com calendário
@@ -54,7 +54,7 @@
 
 ## Fase 8: Integrações e Notificações
 - [ ] Sistema de notificações por email (futuro)
-- [x] Lembretes automáticos de agendamento (WhatsApp)
+- [x] Lembretes automáticos de agendamento (WhatsApp com jobs agendados)
 - [ ] Integração com Stripe/PIX (futuro)
 
 ## Fase 9: Testes, UI/UX e Polimento

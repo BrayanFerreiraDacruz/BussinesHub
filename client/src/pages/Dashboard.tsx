@@ -1,5 +1,6 @@
 import DashboardLayout from "@/components/DashboardLayout";
 import { AppointmentCalendar } from "@/components/AppointmentCalendar";
+import { RevenueChart } from "@/components/RevenueChart";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { trpc } from "@/lib/trpc";
@@ -7,6 +8,36 @@ import { Calendar, Users, DollarSign, Clock, Plus, ArrowRight } from "lucide-rea
 import { Link } from "wouter";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
+import { useMemo } from "react";
+
+function generateRevenueData(appointments: any[] | undefined) {
+  if (!appointments) return [];
+  
+  const revenueByDate: Record<string, number> = {};
+  const today = new Date();
+  
+  // Inicializar ultimos 7 dias
+  for (let i = 6; i >= 0; i--) {
+    const date = new Date(today);
+    date.setDate(date.getDate() - i);
+    const dateStr = format(date, "dd/MM", { locale: ptBR });
+    revenueByDate[dateStr] = 0;
+  }
+  
+  // Somar receita por data
+  appointments.forEach((apt) => {
+    const aptDate = new Date(apt.startTime);
+    const dateStr = format(aptDate, "dd/MM", { locale: ptBR });
+    if (dateStr in revenueByDate && apt.price) {
+      revenueByDate[dateStr] += parseFloat(apt.price);
+    }
+  });
+  
+  return Object.entries(revenueByDate).map(([date, revenue]) => ({
+    date,
+    revenue,
+  }));
+}
 
 export default function Dashboard() {
   const { data: metrics, isLoading: metricsLoading } = trpc.dashboard.metrics.useQuery();
@@ -102,6 +133,13 @@ export default function Dashboard() {
             <AppointmentCalendar appointments={upcomingAppointments} />
           </CardContent>
         </Card>
+
+        {/* Revenue Chart */}
+        <RevenueChart 
+          data={generateRevenueData(upcomingAppointments)} 
+          title="Faturamento"
+          description="Faturamento dos últimos 7 dias"
+        />
 
         {/* Upcoming Appointments */}
         <Card className="border-border/40">
