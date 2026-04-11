@@ -173,7 +173,12 @@ export async function getAppointmentById(appointmentId: number) {
 export async function createAppointment(data: InsertAppointment) {
   const db = await getDb();
   if (!db) throw new Error("Database not available");
-  return db.insert(appointments).values(data);
+  const result = await db.insert(appointments).values(data);
+  // Retornar o ID inserido
+  if (result && (result as any).insertId) {
+    return { id: Number((result as any).insertId) };
+  }
+  return result;
 }
 
 export async function updateAppointment(appointmentId: number, data: Partial<InsertAppointment>) {

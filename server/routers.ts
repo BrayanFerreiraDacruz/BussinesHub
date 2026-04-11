@@ -29,6 +29,7 @@ import {
   getWhatsAppNotifications,
 } from "./db-whatsapp";
 import { sendWhatsAppMessage, getWhatsAppStatus } from "./whatsapp";
+import { sendConfirmation, sendCancellation } from "./jobs";
 
 export const appRouter = router({
   system: systemRouter,
@@ -174,10 +175,17 @@ export const appRouter = router({
         })
       )
       .mutation(async ({ ctx, input }) => {
-        return createAppointment({
+        const result = await createAppointment({
           userId: ctx.user.id,
           ...input,
         });
+        // Enviar confirmação via WhatsApp
+        if (result && "id" in result && result.id) {
+          sendConfirmation(result.id).catch((error) => {
+            console.error("Error sending confirmation:", error);
+          });
+        }
+        return result;
       }),
 
     update: protectedProcedure
@@ -195,7 +203,14 @@ export const appRouter = router({
       )
       .mutation(async ({ input }) => {
         const { id, ...data } = input;
-        return updateAppointment(id, data);
+        const result = await updateAppointment(id, data);
+        // Enviar notificação de cancelamento se status mudou para cancelled
+        if (data.status === "cancelled") {
+          sendCancellation(id).catch((error) => {
+            console.error("Error sending cancellation:", error);
+          });
+        }
+        return result;
       }),
 
     delete: protectedProcedure

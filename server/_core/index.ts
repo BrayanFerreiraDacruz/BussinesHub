@@ -7,6 +7,8 @@ import { registerOAuthRoutes } from "./oauth";
 import { appRouter } from "../routers";
 import { createContext } from "./context";
 import { serveStatic, setupVite } from "./vite";
+import { initWhatsApp } from "../whatsapp";
+import { startScheduledJobs } from "../jobs";
 
 function isPortAvailable(port: number): Promise<boolean> {
   return new Promise(resolve => {
@@ -60,6 +62,17 @@ async function startServer() {
   server.listen(port, () => {
     console.log(`Server running on http://localhost:${port}/`);
   });
+
+  // Inicializar WhatsApp e jobs agendados
+  if (process.env.NODE_ENV === "production" || process.env.ENABLE_JOBS === "true") {
+    try {
+      await initWhatsApp();
+      startScheduledJobs();
+      console.log("[Server] WhatsApp and scheduled jobs initialized");
+    } catch (error) {
+      console.warn("[Server] Failed to initialize WhatsApp/jobs:", error);
+    }
+  }
 }
 
 startServer().catch(console.error);

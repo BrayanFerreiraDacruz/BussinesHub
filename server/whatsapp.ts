@@ -162,3 +162,5 @@ export async function disconnectWhatsApp(): Promise<void> {
     sock = null;
   }
 }
+
+

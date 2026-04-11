@@ -74,6 +74,6 @@
 - [x] Configurar Baileys (WhatsApp Web - 100% gratuito)
 - [x] Estender schema com tabelas de notificações
 - [x] Implementar APIs de envio WhatsApp
-- [ ] Criar job agendado para lembretes automáticos
+- [x] Criar job agendado para lembretes automáticos (24h, 1h, confirmação, cancelamento)
 - [x] Desenvolver frontend de gerenciamento
 - [x] Testes e validação
