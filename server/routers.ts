@@ -30,6 +30,8 @@ import {
 } from "./db-whatsapp";
 import { sendWhatsAppMessage, getWhatsAppStatus } from "./whatsapp";
 import { sendConfirmation, sendCancellation } from "./jobs";
+import { createPaymentLink } from "./abacatepay";
+import { createPaymentRecord, updatePaymentStatus, getPaymentByTransactionId, getTotalReceivedPayments } from "./db-abacatepay";
 
 export const appRouter = router({
   system: systemRouter,
@@ -332,6 +334,79 @@ export const appRouter = router({
 
     history: protectedProcedure.query(async ({ ctx }) => {
       return await getWhatsAppNotifications(ctx.user.id);
+    }),
+  }),
+
+  // Abacatepay - Pagamentos
+  abacatepay: router({
+    createLink: protectedProcedure
+      .input(
+        z.object({
+          appointmentId: z.number(),
+          clientId: z.number(),
+          amount: z.number(),
+          description: z.string(),
+          customerName: z.string(),
+          customerEmail: z.string(),
+        })
+      )
+      .mutation(async ({ ctx, input }) => {
+        try {
+          const paymentLink = await createPaymentLink({
+            amount: Math.round(input.amount * 100),
+            description: input.description,
+            customer: {
+              name: input.customerName,
+              email: input.customerEmail,
+            },
+            metadata: {
+              appointmentId: input.appointmentId,
+              clientId: input.clientId,
+            },
+          });
+
+          await createPaymentRecord({
+            userId: ctx.user.id,
+            appointmentId: input.appointmentId,
+            clientId: input.clientId,
+            amount: input.amount,
+            status: "pending",
+            transactionId: paymentLink.id,
+            description: input.description,
+            paymentMethod: "pix",
+          });
+
+          return {
+            success: true,
+            paymentUrl: paymentLink.paymentUrl,
+            paymentId: paymentLink.id,
+          };
+        } catch (error) {
+          console.error("[API] Error creating payment link:", error);
+          throw new Error("Failed to create payment link");
+        }
+      }),
+
+    getStatus: protectedProcedure
+      .input(z.object({ transactionId: z.string() }))
+      .query(async ({ input }) => {
+        try {
+          const payment = await getPaymentByTransactionId(input.transactionId);
+          return payment || { status: "not_found" };
+        } catch (error) {
+          console.error("[API] Error getting payment status:", error);
+          throw new Error("Failed to get payment status");
+        }
+      }),
+
+    getTotalReceived: protectedProcedure.query(async ({ ctx }) => {
+      try {
+        const total = await getTotalReceivedPayments();
+        return { total };
+      } catch (error) {
+        console.error("[API] Error getting total received:", error);
+        return { total: 0 };
+      }
     }),
   }),
 });
