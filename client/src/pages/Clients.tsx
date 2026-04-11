@@ -5,10 +5,45 @@ import { trpc } from "@/lib/trpc";
 import { Users, Plus, Edit2, Trash2, Mail, Phone } from "lucide-react";
 import { useState, useMemo } from "react";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Calendar } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
+
+function ClientAppointmentHistory({ clientId }: { clientId: number }) {
+  const { data: appointments, isLoading } = trpc.appointments.list.useQuery();
+  
+  const clientAppointments = useMemo(() => {
+    if (!appointments) return [];
+    return appointments
+      .filter((apt: any) => apt.clientId === clientId)
+      .sort((a: any, b: any) => new Date(b.startTime).getTime() - new Date(a.startTime).getTime())
+      .slice(0, 3);
+  }, [appointments, clientId]);
+
+  if (isLoading) {
+    return <div className="text-xs text-muted-foreground">Carregando...</div>;
+  }
+
+  if (clientAppointments.length === 0) {
+    return <div className="text-xs text-muted-foreground">Sem agendamentos</div>;
+  }
+
+  return (
+    <div className="space-y-1">
+      <div className="flex items-center gap-1 text-xs font-semibold text-muted-foreground mb-2">
+        <Calendar className="w-3 h-3" />
+        Ultimos agendamentos
+      </div>
+      {clientAppointments.map((apt: any) => (
+        <div key={apt.id} className="text-xs text-muted-foreground">
+          {new Date(apt.startTime).toLocaleDateString("pt-BR")} - {apt.status}
+        </div>
+      ))}
+    </div>
+  );
+}
 
 export default function Clients() {
   const [isOpen, setIsOpen] = useState(false);
@@ -244,6 +279,10 @@ export default function Clients() {
                         </p>
                       </div>
                     )}
+
+                    <div className="mt-3 pt-3 border-t border-border/40">
+                      <ClientAppointmentHistory clientId={client.id} />
+                    </div>
 
                     <div className="mt-3 pt-3 border-t border-border/40 flex justify-between text-xs">
                       <span className="text-muted-foreground">

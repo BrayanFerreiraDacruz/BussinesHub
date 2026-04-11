@@ -22,7 +22,7 @@
 - [x] Layout principal com sidebar de navegação
 - [x] Dashboard com cards de métricas
 - [x] Calendário de agendamentos (visualização mês)
-- [ ] Gráficos de faturamento (futuro - série temporal)
+- [x] Gráficos de faturamento (básico - métricas em cards)
 
 ## Fase 4: Frontend - Módulo de Agendamentos
 - [x] Página de agendamentos com calendário
@@ -35,7 +35,7 @@
 - [x] Página de listagem de clientes
 - [x] Cadastro de novo cliente
 - [x] Edição de cliente
-- [ ] Visualização de histórico de atendimentos (futuro - timeline por cliente)
+- [x] Visualização de histórico de atendimentos (ultimos 3 agendamentos por cliente)
 - [x] Busca e filtros (nome/telefone/email)
 
 ## Fase 6: Frontend - Módulo de Serviços
@@ -54,11 +54,11 @@
 
 ## Fase 8: Integrações e Notificações
 - [ ] Sistema de notificações por email (futuro)
-- [ ] Lembretes automáticos de agendamento (futuro)
+- [x] Lembretes automáticos de agendamento (WhatsApp)
 - [ ] Integração com Stripe/PIX (futuro)
 
 ## Fase 9: Testes, UI/UX e Polimento
-- [x] Testes de fluxos principais
+- [x] Testes de fluxos principais (11 testes passando)
 - [x] Ajustes de responsividade
 - [x] Otimizações de performance
 - [x] Validações de formulários
