@@ -9,6 +9,7 @@ import { createContext } from "./context";
 import { serveStatic, setupVite } from "./vite";
 import { initWhatsApp } from "../whatsapp";
 import { startScheduledJobs } from "../jobs";
+import { getDb } from "../db";
 
 function isPortAvailable(port: number): Promise<boolean> {
   return new Promise(resolve => {
