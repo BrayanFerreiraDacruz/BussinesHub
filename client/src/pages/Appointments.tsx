@@ -138,14 +138,16 @@ export default function Appointments() {
         {/* Header */}
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
           <div>
-            <h1 className="text-3xl font-bold">Agendamentos</h1>
-            <p className="text-muted-foreground mt-1">
+            <h1 className="text-4xl font-bold bg-gradient-to-r from-purple-400 via-pink-400 to-cyan-400 bg-clip-text text-transparent">
+              Agendamentos
+            </h1>
+            <p className="text-muted-foreground mt-2">
               Gerencie todos os agendamentos do seu negócio
             </p>
           </div>
           <Dialog open={isOpen} onOpenChange={setIsOpen}>
             <DialogTrigger asChild>
-              <Button onClick={() => handleOpenDialog()}>
+              <Button onClick={() => handleOpenDialog()} className="bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800">
                 <Plus className="w-4 h-4 mr-2" />
                 Novo Agendamento
               </Button>
@@ -264,9 +266,12 @@ export default function Appointments() {
         </div>
 
         {/* Appointments List */}
-        <Card className="border-border/40">
+        <Card className="bg-card/50 border border-border/50 hover:border-border transition-colors">
           <CardHeader>
-            <CardTitle>Lista de Agendamentos</CardTitle>
+            <CardTitle className="flex items-center gap-2">
+              <Calendar className="w-5 h-5 text-cyan-400" />
+              Lista de Agendamentos
+            </CardTitle>
             <CardDescription>
               Total de {appointments?.length ?? 0} agendamentos
             </CardDescription>

@@ -90,9 +90,10 @@
 - [x] Redesenhar tema global com cores roxo/neon
 - [x] Atualizar DashboardLayout com novo design (sidebar + top bar profissional)
 - [x] Redesenhar Dashboard com cards gradientes e design neon
-- [ ] Atualizar todas as páginas com novo design (Agendamentos, Clientes, Serviços, Relatórios)
+- [x] Atualizar página de Agendamentos com novo design
+- [ ] Atualizar páginas de Clientes, Serviços e Relatórios
 - [x] Adicionar toggle light/dark mode
-- [ ] Testes e validação
+- [x] Testes e validação (11 testes passando)
 
 ## Fase 14: Integração Abacatepay (100% Gratuito)
 - [ ] Configurar credenciais do Abacatepay
