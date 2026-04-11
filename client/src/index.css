@@ -43,35 +43,35 @@
 }
 
 :root {
-  /* Cores modernas roxo para BusinessHub - Paleta moderna para saúde/beleza */
+  /* Light Mode - Cores neutras */
   --primary: oklch(0.55 0.24 283); /* Roxo vibrante */
   --primary-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.45 0.22 283); /* Roxo mais escuro para sidebar */
+  --sidebar-primary: oklch(0.45 0.22 283);
   --sidebar-primary-foreground: oklch(0.985 0 0);
-  --chart-1: oklch(0.55 0.24 283); /* Roxo */
-  --chart-2: oklch(0.65 0.2 290); /* Roxo claro */
-  --chart-3: oklch(0.45 0.25 275); /* Roxo escuro */
-  --chart-4: oklch(0.6 0.22 280); /* Roxo médio */
-  --chart-5: oklch(0.5 0.23 285); /* Roxo profundo */
+  --chart-1: oklch(0.55 0.24 283);
+  --chart-2: oklch(0.65 0.2 290);
+  --chart-3: oklch(0.45 0.25 275);
+  --chart-4: oklch(0.6 0.22 280);
+  --chart-5: oklch(0.5 0.23 285);
   --radius: 0.65rem;
-  --background: oklch(0.98 0.001 283); /* Branco com toque roxo */
-  --foreground: oklch(0.2 0.02 283); /* Quase preto com toque roxo */
+  --background: oklch(0.98 0.001 283);
+  --foreground: oklch(0.2 0.02 283);
   --card: oklch(0.99 0.001 283);
   --card-foreground: oklch(0.2 0.02 283);
   --popover: oklch(0.99 0.001 283);
   --popover-foreground: oklch(0.2 0.02 283);
-  --secondary: oklch(0.55 0.24 283); /* Roxo para ações */
+  --secondary: oklch(0.55 0.24 283);
   --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.95 0.01 283); /* Cinza roxo claro */
-  --muted-foreground: oklch(0.55 0.02 283); /* Cinza roxo escuro */
-  --accent: oklch(0.65 0.2 290); /* Roxo claro para destaque */
+  --muted: oklch(0.95 0.01 283);
+  --muted-foreground: oklch(0.55 0.02 283);
+  --accent: oklch(0.65 0.2 290);
   --accent-foreground: oklch(0.2 0.02 283);
   --destructive: oklch(0.577 0.245 27.325);
   --destructive-foreground: oklch(0.985 0 0);
-  --border: oklch(0.92 0.01 283); /* Borda roxo muito claro */
+  --border: oklch(0.92 0.01 283);
   --input: oklch(0.92 0.01 283);
-  --ring: oklch(0.55 0.24 283); /* Roxo para focus */
-  --sidebar: oklch(0.98 0.001 283); /* Fundo sidebar claro */
+  --ring: oklch(0.55 0.24 283);
+  --sidebar: oklch(0.98 0.001 283);
   --sidebar-foreground: oklch(0.2 0.02 283);
   --sidebar-accent: oklch(0.55 0.24 283);
   --sidebar-accent-foreground: oklch(0.985 0 0);
@@ -80,38 +80,57 @@
 }
 
 .dark {
-  --primary: oklch(0.65 0.2 290); /* Roxo claro em dark mode */
-  --primary-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.45 0.22 283); /* Roxo escuro para sidebar */
+  /* Dark Mode - Profissional roxo/neon */
+  --primary: oklch(0.7 0.22 290); /* Roxo neon claro */
+  --primary-foreground: oklch(0.12 0.01 283);
+  --sidebar-primary: oklch(0.65 0.2 290);
   --sidebar-primary-foreground: oklch(0.985 0 0);
-  --background: oklch(0.12 0.01 283); /* Quase preto com toque roxo */
-  --foreground: oklch(0.9 0.01 283); /* Branco com toque roxo */
-  --card: oklch(0.18 0.01 283); /* Cinza roxo escuro */
-  --card-foreground: oklch(0.9 0.01 283);
-  --popover: oklch(0.18 0.01 283);
-  --popover-foreground: oklch(0.9 0.01 283);
-  --secondary: oklch(0.65 0.2 290); /* Roxo claro */
+  
+  /* Fundo escuro profissional */
+  --background: oklch(0.1 0.008 283); /* Quase preto com toque roxo */
+  --foreground: oklch(0.92 0.008 283); /* Branco com toque roxo */
+  
+  /* Cards com fundo mais escuro */
+  --card: oklch(0.16 0.01 283); /* Cinza roxo escuro */
+  --card-foreground: oklch(0.92 0.008 283);
+  --popover: oklch(0.16 0.01 283);
+  --popover-foreground: oklch(0.92 0.008 283);
+  
+  /* Cores secundárias */
+  --secondary: oklch(0.7 0.22 290);
   --secondary-foreground: oklch(0.12 0.01 283);
-  --muted: oklch(0.25 0.01 283); /* Cinza roxo */
-  --muted-foreground: oklch(0.7 0.01 283);
-  --accent: oklch(0.65 0.2 290); /* Roxo claro para destaque */
+  
+  /* Muted para textos secundários */
+  --muted: oklch(0.25 0.01 283);
+  --muted-foreground: oklch(0.75 0.01 283);
+  
+  /* Accent para destaques */
+  --accent: oklch(0.7 0.22 290);
   --accent-foreground: oklch(0.12 0.01 283);
+  
+  /* Cores destrutivas */
   --destructive: oklch(0.704 0.191 22.216);
   --destructive-foreground: oklch(0.985 0 0);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.65 0.2 290); /* Roxo para focus */
-  --chart-1: oklch(0.65 0.2 290);
-  --chart-2: oklch(0.55 0.24 283);
-  --chart-3: oklch(0.45 0.25 275);
-  --chart-4: oklch(0.6 0.22 280);
-  --chart-5: oklch(0.5 0.23 285);
-  --sidebar: oklch(0.18 0.01 283);
-  --sidebar-foreground: oklch(0.9 0.01 283);
-  --sidebar-accent: oklch(0.65 0.2 290);
+  
+  /* Bordas e inputs */
+  --border: oklch(0.25 0.01 283 / 40%);
+  --input: oklch(0.25 0.01 283 / 60%);
+  --ring: oklch(0.7 0.22 290);
+  
+  /* Gráficos com cores neon */
+  --chart-1: oklch(0.7 0.22 290); /* Roxo neon */
+  --chart-2: oklch(0.75 0.18 200); /* Cyan neon */
+  --chart-3: oklch(0.68 0.2 130); /* Verde neon */
+  --chart-4: oklch(0.72 0.19 350); /* Rosa neon */
+  --chart-5: oklch(0.65 0.22 50); /* Amarelo neon */
+  
+  /* Sidebar */
+  --sidebar: oklch(0.16 0.01 283);
+  --sidebar-foreground: oklch(0.92 0.008 283);
+  --sidebar-accent: oklch(0.7 0.22 290);
   --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.65 0.2 290);
+  --sidebar-border: oklch(0.25 0.01 283 / 40%);
+  --sidebar-ring: oklch(0.7 0.22 290);
 }
 
 @layer base {
@@ -135,24 +154,11 @@
 }
 
 @layer components {
-  /**
-   * Custom container utility that centers content and adds responsive padding.
-   *
-   * This overrides Tailwind's default container behavior to:
-   * - Auto-center content (mx-auto)
-   * - Add responsive horizontal padding
-   * - Set max-width for large screens
-   *
-   * Usage: <div className="container">...</div>
-   *
-   * For custom widths, use max-w-* utilities directly:
-   * <div className="max-w-6xl mx-auto px-4">...</div>
-   */
   .container {
     width: 100%;
     margin-left: auto;
     margin-right: auto;
-    padding-left: 1rem; /* 16px - mobile padding */
+    padding-left: 1rem;
     padding-right: 1rem;
   }
 
@@ -161,18 +167,60 @@
     min-width: 0;
   }
 
+  /* Cards com gradientes neon */
+  .card-gradient-1 {
+    @apply bg-gradient-to-br from-purple-600/20 to-purple-900/20 border border-purple-500/30;
+  }
+
+  .card-gradient-2 {
+    @apply bg-gradient-to-br from-cyan-600/20 to-cyan-900/20 border border-cyan-500/30;
+  }
+
+  .card-gradient-3 {
+    @apply bg-gradient-to-br from-green-600/20 to-green-900/20 border border-green-500/30;
+  }
+
+  .card-gradient-4 {
+    @apply bg-gradient-to-br from-pink-600/20 to-pink-900/20 border border-pink-500/30;
+  }
+
+  .card-gradient-5 {
+    @apply bg-gradient-to-br from-yellow-600/20 to-yellow-900/20 border border-yellow-500/30;
+  }
+
+  /* Texto neon */
+  .text-neon-cyan {
+    @apply text-cyan-400;
+  }
+
+  .text-neon-green {
+    @apply text-green-400;
+  }
+
+  .text-neon-pink {
+    @apply text-pink-400;
+  }
+
+  .text-neon-purple {
+    @apply text-purple-400;
+  }
+
+  .text-neon-yellow {
+    @apply text-yellow-400;
+  }
+
   @media (min-width: 640px) {
     .container {
-      padding-left: 1.5rem; /* 24px - tablet padding */
+      padding-left: 1.5rem;
       padding-right: 1.5rem;
     }
   }
 
   @media (min-width: 1024px) {
     .container {
-      padding-left: 2rem; /* 32px - desktop padding */
+      padding-left: 2rem;
       padding-right: 2rem;
-      max-width: 1280px; /* Standard content width */
+      max-width: 1280px;
     }
   }
 }

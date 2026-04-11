@@ -84,3 +84,20 @@
 - [x] Edição de cliente/serviço mantém todos os campos (formulários com estado controlado)
 - [x] Dashboard mostra faturamento dos serviços concluídos (preço salvo corretamente)
 - [x] Tema mudado para roxo moderno (paleta roxo vibrante implementada)
+
+
+## Fase 13: Redesign Completo - Dark Mode Profissional
+- [x] Redesenhar tema global com cores roxo/neon
+- [x] Atualizar DashboardLayout com novo design (sidebar + top bar profissional)
+- [x] Redesenhar Dashboard com cards gradientes e design neon
+- [ ] Atualizar todas as páginas com novo design (Agendamentos, Clientes, Serviços, Relatórios)
+- [x] Adicionar toggle light/dark mode
+- [ ] Testes e validação
+
+## Fase 14: Integração Abacatepay (100% Gratuito)
+- [ ] Configurar credenciais do Abacatepay
+- [ ] Estender schema com tabelas de transações
+- [ ] Implementar APIs backend Abacatepay
+- [ ] Criar frontend de pagamentos
+- [ ] Implementar webhook de confirmação
+- [ ] Testes e validação
