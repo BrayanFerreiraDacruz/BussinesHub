@@ -77,3 +77,10 @@
 - [x] Criar job agendado para lembretes automáticos (24h, 1h, confirmação, cancelamento)
 - [x] Desenvolver frontend de gerenciamento
 - [x] Testes e validação
+
+
+## Bugs a Corrigir (Fase 12)
+- [x] Pagamento salva valor do serviço concluído (preço do serviço é preenchido automaticamente)
+- [x] Edição de cliente/serviço mantém todos os campos (formulários com estado controlado)
+- [x] Dashboard mostra faturamento dos serviços concluídos (preço salvo corretamente)
+- [x] Tema mudado para roxo moderno (paleta roxo vibrante implementada)

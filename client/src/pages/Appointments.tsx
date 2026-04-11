@@ -3,7 +3,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { trpc } from "@/lib/trpc";
 import { Calendar, Plus, Edit2, Trash2, AlertCircle } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
@@ -16,6 +16,13 @@ import { toast } from "sonner";
 export default function Appointments() {
   const [isOpen, setIsOpen] = useState(false);
   const [editingId, setEditingId] = useState<number | null>(null);
+  const [selectedClientId, setSelectedClientId] = useState<string>("");
+  const [selectedServiceId, setSelectedServiceId] = useState<string>("");
+  const [selectedStartTime, setSelectedStartTime] = useState<string>("");
+  const [selectedEndTime, setSelectedEndTime] = useState<string>("");
+  const [selectedStatus, setSelectedStatus] = useState<string>("scheduled");
+  const [selectedNotes, setSelectedNotes] = useState<string>("");
+  const [selectedPrice, setSelectedPrice] = useState<string>("");
 
   const { data: appointments, isLoading, refetch } = trpc.appointments.list.useQuery();
   const { data: clients } = trpc.clients.list.useQuery();
@@ -25,6 +32,7 @@ export default function Appointments() {
     onSuccess: () => {
       toast.success("Agendamento criado com sucesso!");
       setIsOpen(false);
+      resetForm();
       refetch();
     },
     onError: (error) => {
@@ -37,6 +45,7 @@ export default function Appointments() {
       toast.success("Agendamento atualizado com sucesso!");
       setIsOpen(false);
       setEditingId(null);
+      resetForm();
       refetch();
     },
     onError: (error) => {
@@ -54,17 +63,52 @@ export default function Appointments() {
     },
   });
 
+  const resetForm = () => {
+    setSelectedClientId("");
+    setSelectedServiceId("");
+    setSelectedStartTime("");
+    setSelectedEndTime("");
+    setSelectedStatus("scheduled");
+    setSelectedNotes("");
+    setSelectedPrice("");
+  };
+
+  const handleOpenDialog = (appointment?: any) => {
+    if (appointment) {
+      setEditingId(appointment.id);
+      setSelectedClientId(appointment.clientId.toString());
+      setSelectedServiceId(appointment.serviceId.toString());
+      setSelectedStartTime(format(new Date(appointment.startTime), "yyyy-MM-dd'T'HH:mm"));
+      setSelectedEndTime(format(new Date(appointment.endTime), "yyyy-MM-dd'T'HH:mm"));
+      setSelectedStatus(appointment.status);
+      setSelectedNotes(appointment.notes || "");
+      setSelectedPrice(appointment.price || "");
+    } else {
+      resetForm();
+      setEditingId(null);
+    }
+    setIsOpen(true);
+  };
+
+  const handleServiceChange = (serviceId: string) => {
+    setSelectedServiceId(serviceId);
+    const service = services?.find((s) => s.id === parseInt(serviceId));
+    if (service) {
+      setSelectedPrice(service.price.toString());
+    }
+  };
+
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const formData = new FormData(e.currentTarget);
 
     const data = {
-      clientId: parseInt(formData.get("clientId") as string),
-      serviceId: parseInt(formData.get("serviceId") as string),
-      startTime: new Date(formData.get("startTime") as string),
-      endTime: new Date(formData.get("endTime") as string),
-      notes: formData.get("notes") as string,
-      status: formData.get("status") as "scheduled" | "completed" | "cancelled" | "no-show",
+      clientId: parseInt(selectedClientId),
+      serviceId: parseInt(selectedServiceId),
+      startTime: new Date(selectedStartTime),
+      endTime: new Date(selectedEndTime),
+      notes: selectedNotes,
+      status: selectedStatus as "scheduled" | "completed" | "cancelled" | "no-show",
+      price: selectedPrice,
     };
 
     if (editingId) {
@@ -101,7 +145,7 @@ export default function Appointments() {
           </div>
           <Dialog open={isOpen} onOpenChange={setIsOpen}>
             <DialogTrigger asChild>
-              <Button onClick={() => setEditingId(null)}>
+              <Button onClick={() => handleOpenDialog()}>
                 <Plus className="w-4 h-4 mr-2" />
                 Novo Agendamento
               </Button>
@@ -119,7 +163,7 @@ export default function Appointments() {
                 <div className="grid grid-cols-2 gap-4">
                   <div>
                     <Label htmlFor="clientId">Cliente</Label>
-                    <Select name="clientId" required>
+                    <Select value={selectedClientId} onValueChange={setSelectedClientId} required>
                       <SelectTrigger>
                         <SelectValue placeholder="Selecione um cliente" />
                       </SelectTrigger>
@@ -134,7 +178,7 @@ export default function Appointments() {
                   </div>
                   <div>
                     <Label htmlFor="serviceId">Serviço</Label>
-                    <Select name="serviceId" required>
+                    <Select value={selectedServiceId} onValueChange={handleServiceChange} required>
                       <SelectTrigger>
                         <SelectValue placeholder="Selecione um serviço" />
                       </SelectTrigger>
@@ -154,7 +198,8 @@ export default function Appointments() {
                     <Label htmlFor="startTime">Data e Hora de Início</Label>
                     <Input
                       type="datetime-local"
-                      name="startTime"
+                      value={selectedStartTime}
+                      onChange={(e) => setSelectedStartTime(e.target.value)}
                       required
                     />
                   </div>
@@ -162,31 +207,45 @@ export default function Appointments() {
                     <Label htmlFor="endTime">Data e Hora de Término</Label>
                     <Input
                       type="datetime-local"
-                      name="endTime"
+                      value={selectedEndTime}
+                      onChange={(e) => setSelectedEndTime(e.target.value)}
                       required
                     />
                   </div>
                 </div>
 
-                <div>
-                  <Label htmlFor="status">Status</Label>
-                  <Select name="status" defaultValue="scheduled">
-                    <SelectTrigger>
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="scheduled">Agendado</SelectItem>
-                      <SelectItem value="completed">Concluído</SelectItem>
-                      <SelectItem value="cancelled">Cancelado</SelectItem>
-                      <SelectItem value="no-show">Não Compareceu</SelectItem>
-                    </SelectContent>
-                  </Select>
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <Label htmlFor="status">Status</Label>
+                    <Select value={selectedStatus} onValueChange={setSelectedStatus}>
+                      <SelectTrigger>
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="scheduled">Agendado</SelectItem>
+                        <SelectItem value="completed">Concluído</SelectItem>
+                        <SelectItem value="cancelled">Cancelado</SelectItem>
+                        <SelectItem value="no-show">Não Compareceu</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div>
+                    <Label htmlFor="price">Preço (R$)</Label>
+                    <Input
+                      type="number"
+                      step="0.01"
+                      value={selectedPrice}
+                      onChange={(e) => setSelectedPrice(e.target.value)}
+                      placeholder="0.00"
+                    />
+                  </div>
                 </div>
 
                 <div>
                   <Label htmlFor="notes">Notas</Label>
                   <Textarea
-                    name="notes"
+                    value={selectedNotes}
+                    onChange={(e) => setSelectedNotes(e.target.value)}
                     placeholder="Observações sobre o agendamento..."
                   />
                 </div>
@@ -251,25 +310,16 @@ export default function Appointments() {
                             <Button
                               size="sm"
                               variant="ghost"
-                              onClick={() => {
-                                setEditingId(apt.id);
-                                setIsOpen(true);
-                              }}
+                              onClick={() => handleOpenDialog(apt)}
                             >
                               <Edit2 className="w-4 h-4" />
                             </Button>
                             <Button
                               size="sm"
                               variant="ghost"
-                              className="text-destructive hover:text-destructive"
-                              onClick={() => {
-                                if (window.confirm("Tem certeza que deseja deletar este agendamento?")) {
-                                  deleteMutation.mutate({ id: apt.id });
-                                }
-                              }}
-                              disabled={deleteMutation.isPending}
+                              onClick={() => deleteMutation.mutate({ id: apt.id })}
                             >
-                              <Trash2 className="w-4 h-4" />
+                              <Trash2 className="w-4 h-4 text-red-500" />
                             </Button>
                           </div>
                         </td>
@@ -280,12 +330,8 @@ export default function Appointments() {
               </div>
             ) : (
               <div className="text-center py-12">
-                <Calendar className="w-12 h-12 text-muted-foreground/30 mx-auto mb-3" />
-                <p className="text-muted-foreground mb-4">Nenhum agendamento criado ainda</p>
-                <Button onClick={() => setIsOpen(true)}>
-                  <Plus className="w-4 h-4 mr-2" />
-                  Criar Primeiro Agendamento
-                </Button>
+                <AlertCircle className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
+                <p className="text-muted-foreground">Nenhum agendamento encontrado</p>
               </div>
             )}
           </CardContent>

@@ -49,6 +49,10 @@ export default function Clients() {
   const [isOpen, setIsOpen] = useState(false);
   const [editingId, setEditingId] = useState<number | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
+  const [selectedName, setSelectedName] = useState("");
+  const [selectedEmail, setSelectedEmail] = useState("");
+  const [selectedPhone, setSelectedPhone] = useState("");
+  const [selectedNotes, setSelectedNotes] = useState("");
 
   const { data: clients, isLoading, refetch } = trpc.clients.list.useQuery();
 
@@ -65,6 +69,7 @@ export default function Clients() {
     onSuccess: () => {
       toast.success("Cliente criado com sucesso!");
       setIsOpen(false);
+      resetForm();
       refetch();
     },
     onError: (error) => {
@@ -77,6 +82,7 @@ export default function Clients() {
       toast.success("Cliente atualizado com sucesso!");
       setIsOpen(false);
       setEditingId(null);
+      resetForm();
       refetch();
     },
     onError: (error) => {
@@ -94,15 +100,35 @@ export default function Clients() {
     },
   });
 
+  const resetForm = () => {
+    setSelectedName("");
+    setSelectedEmail("");
+    setSelectedPhone("");
+    setSelectedNotes("");
+  };
+
+  const handleOpenDialog = (client?: any) => {
+    if (client) {
+      setEditingId(client.id);
+      setSelectedName(client.name);
+      setSelectedEmail(client.email || "");
+      setSelectedPhone(client.phone || "");
+      setSelectedNotes(client.notes || "");
+    } else {
+      resetForm();
+      setEditingId(null);
+    }
+    setIsOpen(true);
+  };
+
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const formData = new FormData(e.currentTarget);
 
     const data = {
-      name: formData.get("name") as string,
-      email: formData.get("email") as string,
-      phone: formData.get("phone") as string,
-      notes: formData.get("notes") as string,
+      name: selectedName,
+      email: selectedEmail,
+      phone: selectedPhone,
+      notes: selectedNotes,
     };
 
     if (editingId) {
@@ -133,7 +159,7 @@ export default function Clients() {
             />
             <Dialog open={isOpen} onOpenChange={setIsOpen}>
               <DialogTrigger asChild>
-                <Button onClick={() => setEditingId(null)}>
+                <Button onClick={() => handleOpenDialog()}>
                   <Plus className="w-4 h-4 mr-2" />
                   Novo Cliente
                 </Button>
@@ -149,42 +175,48 @@ export default function Clients() {
               </DialogHeader>
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div>
-                  <Label htmlFor="name">Nome *</Label>
+                  <Label htmlFor="name">Nome</Label>
                   <Input
-                    type="text"
+                    id="name"
                     name="name"
-                    placeholder="Nome completo"
+                    value={selectedName}
+                    onChange={(e) => setSelectedName(e.target.value)}
+                    placeholder="Nome do cliente"
                     required
                   />
                 </div>
-
                 <div>
                   <Label htmlFor="email">Email</Label>
                   <Input
-                    type="email"
+                    id="email"
                     name="email"
-                    placeholder="email@exemplo.com"
+                    type="email"
+                    value={selectedEmail}
+                    onChange={(e) => setSelectedEmail(e.target.value)}
+                    placeholder="email@example.com"
                   />
                 </div>
-
                 <div>
-                  <Label htmlFor="phone">Telefone *</Label>
+                  <Label htmlFor="phone">Telefone</Label>
                   <Input
-                    type="tel"
+                    id="phone"
                     name="phone"
+                    value={selectedPhone}
+                    onChange={(e) => setSelectedPhone(e.target.value)}
                     placeholder="(11) 99999-9999"
                     required
                   />
                 </div>
-
                 <div>
                   <Label htmlFor="notes">Notas</Label>
                   <Textarea
+                    id="notes"
                     name="notes"
-                    placeholder="Observacoes sobre o cliente..."
+                    value={selectedNotes}
+                    onChange={(e) => setSelectedNotes(e.target.value)}
+                    placeholder="Observações sobre o cliente..."
                   />
                 </div>
-
                 <div className="flex gap-2 justify-end">
                   <Button type="button" variant="outline" onClick={() => setIsOpen(false)}>
                     Cancelar
@@ -200,118 +232,72 @@ export default function Clients() {
         </div>
 
         {/* Clients Grid */}
-        <Card className="border-border/40">
-          <CardHeader>
-            <CardTitle>Lista de Clientes</CardTitle>
-            <CardDescription>
-              Total de {filteredClients.length} de {clients?.length ?? 0} clientes
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            {isLoading ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {[1, 2, 3].map((i) => (
-                  <div key={i} className="h-40 bg-muted rounded-lg animate-pulse" />
-                ))}
-              </div>
-            ) : filteredClients.length > 0 ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {filteredClients.map((client) => (
-                  <div
-                    key={client.id}
-                    className="border border-border/40 rounded-lg p-4 hover:border-primary/40 transition"
-                  >
-                    <div className="flex items-start justify-between mb-3">
-                      <div>
-                        <h3 className="font-semibold text-base">{client.name}</h3>
-                        <p className="text-xs text-muted-foreground">ID: {client.id}</p>
+        <div>
+          {isLoading ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {[1, 2, 3].map((i) => (
+                <div key={i} className="h-40 bg-muted rounded-lg animate-pulse" />
+              ))}
+            </div>
+          ) : filteredClients && filteredClients.length > 0 ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {filteredClients.map((client) => (
+                <Card key={client.id} className="border-border/40 hover:shadow-lg transition">
+                  <CardHeader>
+                    <div className="flex items-start justify-between">
+                      <div className="flex-1">
+                        <CardTitle className="text-lg">{client.name}</CardTitle>
+                        <CardDescription className="mt-1">
+                          Gasto total: R$ {parseFloat(client.totalSpent || "0").toFixed(2)}
+                        </CardDescription>
                       </div>
-                      <div className="flex gap-1">
+                      <div className="flex gap-2">
                         <Button
                           size="sm"
                           variant="ghost"
-                          onClick={() => {
-                            setEditingId(client.id);
-                            setIsOpen(true);
-                          }}
+                          onClick={() => handleOpenDialog(client)}
                         >
                           <Edit2 className="w-4 h-4" />
                         </Button>
                         <Button
                           size="sm"
                           variant="ghost"
-                          className="text-destructive hover:text-destructive"
-                          onClick={() => {
-                            if (window.confirm("Tem certeza que deseja deletar este cliente?")) {
-                              deleteMutation.mutate({ id: client.id });
-                            }
-                          }}
-                          disabled={deleteMutation.isPending}
+                          onClick={() => deleteMutation.mutate({ id: client.id })}
                         >
-                          <Trash2 className="w-4 h-4" />
+                          <Trash2 className="w-4 h-4 text-red-500" />
                         </Button>
                       </div>
                     </div>
-
-                    <div className="space-y-2 text-sm">
-                      {client.email && (
-                        <div className="flex items-center gap-2 text-muted-foreground">
-                          <Mail className="w-4 h-4" />
-                          <a href={`mailto:${client.email}`} className="hover:text-primary">
-                            {client.email}
-                          </a>
-                        </div>
-                      )}
-                      {client.phone && (
-                        <div className="flex items-center gap-2 text-muted-foreground">
-                          <Phone className="w-4 h-4" />
-                          <a href={`tel:${client.phone}`} className="hover:text-primary">
-                            {client.phone}
-                          </a>
-                        </div>
-                      )}
-                    </div>
-
-                    {client.notes && (
-                      <div className="mt-3 pt-3 border-t border-border/40">
-                        <p className="text-xs text-muted-foreground line-clamp-2">
-                          {client.notes}
-                        </p>
+                  </CardHeader>
+                  <CardContent className="space-y-3">
+                    {client.email && (
+                      <div className="flex items-center gap-2 text-sm">
+                        <Mail className="w-4 h-4 text-muted-foreground" />
+                        <span className="text-muted-foreground">{client.email}</span>
                       </div>
                     )}
-
-                    <div className="mt-3 pt-3 border-t border-border/40">
+                    {client.phone && (
+                      <div className="flex items-center gap-2 text-sm">
+                        <Phone className="w-4 h-4 text-muted-foreground" />
+                        <span className="text-muted-foreground">{client.phone}</span>
+                      </div>
+                    )}
+                    <div className="pt-2 border-t border-border/40">
                       <ClientAppointmentHistory clientId={client.id} />
                     </div>
-
-                    <div className="mt-3 pt-3 border-t border-border/40 flex justify-between text-xs">
-                      <span className="text-muted-foreground">
-                        Gasto: R$ {parseFloat(client.totalSpent?.toString() || "0").toFixed(2)}
-                      </span>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            ) : searchTerm && clients && clients.length > 0 ? (
-              <div className="text-center py-12">
-                <Users className="w-12 h-12 text-muted-foreground/30 mx-auto mb-3" />
-                <p className="text-muted-foreground mb-4">Nenhum cliente encontrado para {searchTerm}</p>
-                <Button variant="outline" onClick={() => setSearchTerm("")} className="mt-2">
-                  Limpar busca
-                </Button>
-              </div>
-            ) : (
-              <div className="text-center py-12">
-                <Users className="w-12 h-12 text-muted-foreground/30 mx-auto mb-3" />
-                <p className="text-muted-foreground mb-4">Nenhum cliente criado ainda</p>
-                <Button onClick={() => setIsOpen(true)}>
-                  <Plus className="w-4 h-4 mr-2" />
-                  Criar Primeiro Cliente
-                </Button>
-              </div>
-            )}
-          </CardContent>
-        </Card>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          ) : (
+            <Card className="border-border/40">
+              <CardContent className="text-center py-12">
+                <Users className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
+                <p className="text-muted-foreground">Nenhum cliente encontrado</p>
+              </CardContent>
+            </Card>
+          )}
+        </div>
       </div>
     </DashboardLayout>
   );
