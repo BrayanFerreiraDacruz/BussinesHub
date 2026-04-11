@@ -99,16 +99,18 @@ export default function Services() {
         {/* Header */}
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
           <div>
-            <h1 className="text-3xl font-bold">Servicos</h1>
-            <p className="text-muted-foreground mt-1">
+            <h1 className="text-4xl font-bold bg-gradient-to-r from-purple-400 via-pink-400 to-cyan-400 bg-clip-text text-transparent">
+              Serviços
+            </h1>
+            <p className="text-muted-foreground mt-2">
               Gerencie o catalogo de servicos do seu negocio
             </p>
           </div>
           <Dialog open={isOpen} onOpenChange={setIsOpen}>
             <DialogTrigger asChild>
-              <Button onClick={() => handleOpenDialog()}>
+              <Button onClick={() => handleOpenDialog()} className="bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800">
                 <Plus className="w-4 h-4 mr-2" />
-                Novo Servico
+                Novo Serviço
               </Button>
             </DialogTrigger>
             <DialogContent>
@@ -190,11 +192,11 @@ export default function Services() {
           ) : services && services.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {services.map((service) => (
-                <Card key={service.id} className="border-border/40 hover:shadow-lg transition">
+                <Card key={service.id} className="bg-card/50 border border-border/50 hover:border-border transition-colors">
                   <CardHeader>
                     <div className="flex items-start justify-between">
                       <div className="flex-1">
-                        <CardTitle className="text-lg">{service.name}</CardTitle>
+                        <CardTitle className="text-lg text-foreground">{service.name}</CardTitle>
                         <CardDescription className="mt-1 line-clamp-2">
                           {service.description}
                         </CardDescription>
@@ -204,6 +206,7 @@ export default function Services() {
                           size="sm"
                           variant="ghost"
                           onClick={() => handleOpenDialog(service)}
+                          className="hover:bg-purple-500/20 hover:text-purple-400"
                         >
                           <Edit2 className="w-4 h-4" />
                         </Button>
@@ -211,20 +214,21 @@ export default function Services() {
                           size="sm"
                           variant="ghost"
                           onClick={() => deleteMutation.mutate({ id: service.id })}
+                          className="hover:bg-red-500/20 hover:text-red-400"
                         >
-                          <Trash2 className="w-4 h-4 text-red-500" />
+                          <Trash2 className="w-4 h-4" />
                         </Button>
                       </div>
                     </div>
                   </CardHeader>
                   <CardContent className="space-y-3">
                     <div className="flex items-center gap-2 text-sm">
-                      <DollarSign className="w-4 h-4 text-primary" />
-                      <span className="font-semibold">R$ {parseFloat(service.price).toFixed(2)}</span>
+                      <DollarSign className="w-4 h-4 text-cyan-400" />
+                      <span className="font-semibold text-cyan-400">R$ {parseFloat(service.price).toFixed(2)}</span>
                     </div>
                     <div className="flex items-center gap-2 text-sm">
-                      <Clock className="w-4 h-4 text-muted-foreground" />
-                      <span className="text-muted-foreground">{service.duration} minutos</span>
+                      <Clock className="w-4 h-4 text-purple-400" />
+                      <span className="text-foreground">{service.duration} minutos</span>
                     </div>
                   </CardContent>
                 </Card>

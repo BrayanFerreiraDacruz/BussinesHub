@@ -144,8 +144,10 @@ export default function Clients() {
         {/* Header */}
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
           <div>
-            <h1 className="text-3xl font-bold">Clientes</h1>
-            <p className="text-muted-foreground mt-1">
+            <h1 className="text-4xl font-bold bg-gradient-to-r from-purple-400 via-pink-400 to-cyan-400 bg-clip-text text-transparent">
+              Clientes
+            </h1>
+            <p className="text-muted-foreground mt-2">
               Gerencie o CRM do seu negocio
             </p>
           </div>
@@ -159,10 +161,10 @@ export default function Clients() {
             />
             <Dialog open={isOpen} onOpenChange={setIsOpen}>
               <DialogTrigger asChild>
-                <Button onClick={() => handleOpenDialog()}>
-                  <Plus className="w-4 h-4 mr-2" />
-                  Novo Cliente
-                </Button>
+              <Button onClick={() => handleOpenDialog()} className="bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800">
+                <Plus className="w-4 h-4 mr-2" />
+                Novo Cliente
+              </Button>
               </DialogTrigger>
             <DialogContent>
               <DialogHeader>
@@ -242,13 +244,13 @@ export default function Clients() {
           ) : filteredClients && filteredClients.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {filteredClients.map((client) => (
-                <Card key={client.id} className="border-border/40 hover:shadow-lg transition">
+                <Card key={client.id} className="bg-card/50 border border-border/50 hover:border-border transition-colors">
                   <CardHeader>
                     <div className="flex items-start justify-between">
                       <div className="flex-1">
-                        <CardTitle className="text-lg">{client.name}</CardTitle>
-                        <CardDescription className="mt-1">
-                          Gasto total: R$ {parseFloat(client.totalSpent || "0").toFixed(2)}
+                        <CardTitle className="text-lg text-foreground">{client.name}</CardTitle>
+                        <CardDescription className="mt-1 text-cyan-400 font-semibold">
+                          R$ {parseFloat(client.totalSpent || "0").toFixed(2)}
                         </CardDescription>
                       </div>
                       <div className="flex gap-2">
@@ -256,6 +258,7 @@ export default function Clients() {
                           size="sm"
                           variant="ghost"
                           onClick={() => handleOpenDialog(client)}
+                          className="hover:bg-purple-500/20 hover:text-purple-400"
                         >
                           <Edit2 className="w-4 h-4" />
                         </Button>
@@ -263,8 +266,9 @@ export default function Clients() {
                           size="sm"
                           variant="ghost"
                           onClick={() => deleteMutation.mutate({ id: client.id })}
+                          className="hover:bg-red-500/20 hover:text-red-400"
                         >
-                          <Trash2 className="w-4 h-4 text-red-500" />
+                          <Trash2 className="w-4 h-4" />
                         </Button>
                       </div>
                     </div>
@@ -272,17 +276,17 @@ export default function Clients() {
                   <CardContent className="space-y-3">
                     {client.email && (
                       <div className="flex items-center gap-2 text-sm">
-                        <Mail className="w-4 h-4 text-muted-foreground" />
-                        <span className="text-muted-foreground">{client.email}</span>
+                        <Mail className="w-4 h-4 text-cyan-400" />
+                        <span className="text-foreground">{client.email}</span>
                       </div>
                     )}
                     {client.phone && (
                       <div className="flex items-center gap-2 text-sm">
-                        <Phone className="w-4 h-4 text-muted-foreground" />
-                        <span className="text-muted-foreground">{client.phone}</span>
+                        <Phone className="w-4 h-4 text-cyan-400" />
+                        <span className="text-foreground">{client.phone}</span>
                       </div>
                     )}
-                    <div className="pt-2 border-t border-border/40">
+                    <div className="pt-2 border-t border-border/30">
                       <ClientAppointmentHistory clientId={client.id} />
                     </div>
                   </CardContent>

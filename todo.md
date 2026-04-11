@@ -91,7 +91,7 @@
 - [x] Atualizar DashboardLayout com novo design (sidebar + top bar profissional)
 - [x] Redesenhar Dashboard com cards gradientes e design neon
 - [x] Atualizar página de Agendamentos com novo design
-- [ ] Atualizar páginas de Clientes, Serviços e Relatórios
+- [x] Atualizar páginas de Clientes, Serviços e Relatórios com novo design roxo/neon
 - [x] Adicionar toggle light/dark mode
 - [x] Testes e validação (11 testes passando)
 

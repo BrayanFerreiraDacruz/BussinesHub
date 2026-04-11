@@ -120,21 +120,26 @@ export default function Reports() {
         {/* Header */}
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
           <div>
-            <h1 className="text-3xl font-bold">Relatorios</h1>
-            <p className="text-muted-foreground mt-1">
+            <h1 className="text-4xl font-bold bg-gradient-to-r from-purple-400 via-pink-400 to-cyan-400 bg-clip-text text-transparent">
+              Relatórios
+            </h1>
+            <p className="text-muted-foreground mt-2">
               Analise o desempenho do seu negocio
             </p>
           </div>
-          <Button variant="outline" onClick={handleExportCSV} disabled={isExporting}>
+          <Button onClick={handleExportCSV} disabled={isExporting} className="bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800">
             <Download className="w-4 h-4 mr-2" />
-            {isExporting ? "Exportando..." : "Exportar Relatorio"}
+            {isExporting ? "Exportando..." : "Exportar Relatório"}
           </Button>
         </div>
 
         {/* Date Range Filter */}
-        <Card className="border-border/40">
+        <Card className="bg-card/50 border border-border/50">
           <CardHeader>
-            <CardTitle className="text-base">Periodo</CardTitle>
+            <CardTitle className="text-base flex items-center gap-2">
+              <Calendar className="w-5 h-5 text-cyan-400" />
+              Período
+            </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="flex gap-2 flex-wrap">
@@ -296,13 +301,13 @@ export default function Reports() {
 
 function ReportCard({ title, value, subtitle, icon }: { title: string; value: string | number; subtitle: string; icon: React.ReactNode }) {
   return (
-    <Card className="border-border/40">
+    <Card className="bg-gradient-to-br from-purple-900/40 to-pink-900/40 border border-purple-500/30 hover:border-purple-500/50 transition-colors">
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-        <CardTitle className="text-sm font-medium">{title}</CardTitle>
-        <div className="text-primary">{icon}</div>
+        <CardTitle className="text-sm font-medium text-foreground">{title}</CardTitle>
+        <div className="text-cyan-400">{icon}</div>
       </CardHeader>
       <CardContent>
-        <div className="text-2xl font-bold">{value}</div>
+        <div className="text-2xl font-bold bg-gradient-to-r from-cyan-400 to-pink-400 bg-clip-text text-transparent">{value}</div>
         <p className="text-xs text-muted-foreground mt-1">{subtitle}</p>
       </CardContent>
     </Card>
