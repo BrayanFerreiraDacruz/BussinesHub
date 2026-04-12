@@ -84,6 +84,8 @@
 - [x] Edição de cliente/serviço mantém todos os campos (formulários com estado controlado)
 - [x] Dashboard mostra faturamento dos serviços concluídos (preço salvo corretamente)
 - [x] Tema mudado para roxo moderno (paleta roxo vibrante implementada)
+- [ ] Dashboard faturamento deve mostrar apenas pagamentos confirmados (não agendamentos concluídos)
+- [ ] Página de Pagamentos deve buscar dados de cliente corretamente
 
 
 ## Fase 13: Redesign Completo - Dark Mode Profissional
@@ -106,9 +108,11 @@
 - [x] Console sem erros
 
 ## Fase 15: Integração Abacatepay (100% Gratuito)
-- [ ] Configurar credenciais do Abacatepay
-- [ ] Estender schema com tabelas de transações
-- [ ] Implementar APIs backend Abacatepay
-- [ ] Criar frontend de pagamentos
-- [ ] Implementar webhook de confirmação
+- [x] Configurar credenciais do Abacatepay (ABACATEPAY_API_KEY, ABACATEPAY_WEBHOOK_SECRET)
+- [x] Estender schema com tabelas de transações (payments table)
+- [x] Implementar APIs backend Abacatepay (createPaymentLink, getStatus, getTotalReceived)
+- [x] Criar frontend de pagamentos (página Payments com seleção de agendamento)
+- [x] Implementar webhook de confirmação (POST /api/webhooks/abacatepay)
+- [ ] Atualizar Dashboard para mostrar faturamento correto (baseado em pagamentos confirmados)
+- [ ] Atualizar Relatórios para incluir dados de Abacatepay
 - [ ] Testes e validação

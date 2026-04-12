@@ -10,6 +10,7 @@ import { serveStatic, setupVite } from "./vite";
 import { initWhatsApp } from "../whatsapp";
 import { startScheduledJobs } from "../jobs";
 import { getDb } from "../db";
+import { handleAbacatepayWebhook } from "../webhooks";
 
 function isPortAvailable(port: number): Promise<boolean> {
   return new Promise(resolve => {
@@ -38,6 +39,8 @@ async function startServer() {
   app.use(express.urlencoded({ limit: "50mb", extended: true }));
   // OAuth callback under /api/oauth/callback
   registerOAuthRoutes(app);
+  // Webhook for Abacatepay
+  app.post("/api/webhooks/abacatepay", handleAbacatepayWebhook);
   // tRPC API
   app.use(
     "/api/trpc",

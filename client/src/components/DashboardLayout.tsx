@@ -22,7 +22,7 @@ import { getLoginUrl } from "@/const";
 import { useIsMobile } from "@/hooks/useMobile";
 import { useTheme } from "@/contexts/ThemeContext";
 import { useAuth } from "@/_core/hooks/useAuth";
-import { LayoutDashboard, LogOut, PanelLeft, Users, Calendar, ShoppingBag, BarChart3, MessageCircle, Moon, Sun, Search, Bell, Settings } from "lucide-react";
+import { LayoutDashboard, LogOut, PanelLeft, Users, Calendar, ShoppingBag, BarChart3, MessageCircle, Moon, Sun, Search, Bell, Settings, CreditCard } from "lucide-react";
 import { CSSProperties, useEffect, useRef, useState } from "react";
 import { useLocation } from "wouter";
 import { DashboardLayoutSkeleton } from './DashboardLayoutSkeleton';
@@ -35,6 +35,7 @@ const menuItems = [
   { icon: Users, label: "Clientes", path: "/clients" },
   { icon: ShoppingBag, label: "Serviços", path: "/services" },
   { icon: BarChart3, label: "Relatórios", path: "/reports" },
+  { icon: CreditCard, label: "Pagamentos", path: "/payments" },
   { icon: MessageCircle, label: "Notificações", path: "/notifications" },
 ];
 
