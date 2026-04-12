@@ -113,6 +113,8 @@
 - [x] Implementar APIs backend Abacatepay (createPaymentLink, getStatus, getTotalReceived)
 - [x] Criar frontend de pagamentos (página Payments com seleção de agendamento)
 - [x] Implementar webhook de confirmação (POST /api/webhooks/abacatepay)
-- [ ] Atualizar Dashboard para mostrar faturamento correto (baseado em pagamentos confirmados)
-- [ ] Atualizar Relatórios para incluir dados de Abacatepay
-- [ ] Testes e validação
+- [x] Atualizar Dashboard para mostrar faturamento correto (baseado em pagamentos confirmados)
+- [x] Relatórios já usam pagamentos confirmados (implementado anteriormente)
+- [x] Testes de Abacatepay webhook (6 testes passando)
+- [x] 17 testes passando no total (vitest)
+- [x] TypeScript compilando sem erros

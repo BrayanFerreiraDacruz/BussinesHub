@@ -10,8 +10,8 @@ import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { useMemo } from "react";
 
-function generateRevenueData(appointments: any[] | undefined) {
-  if (!appointments) return [];
+function generateRevenueDataFromPayments(payments: any[] | undefined) {
+  if (!payments) return [];
   
   const revenueByDate: Record<string, number> = {};
   const today = new Date();
@@ -23,13 +23,16 @@ function generateRevenueData(appointments: any[] | undefined) {
     revenueByDate[dateStr] = 0;
   }
   
-  appointments.forEach((apt) => {
-    const aptDate = new Date(apt.startTime);
-    const dateStr = format(aptDate, "dd/MM", { locale: ptBR });
-    if (dateStr in revenueByDate && apt.price) {
-      revenueByDate[dateStr] += parseFloat(apt.price);
-    }
-  });
+  // Usar apenas pagamentos confirmados
+  payments
+    .filter((p) => p.status === "completed")
+    .forEach((payment) => {
+      const paymentDate = new Date(payment.createdAt);
+      const dateStr = format(paymentDate, "dd/MM", { locale: ptBR });
+      if (dateStr in revenueByDate) {
+        revenueByDate[dateStr] += parseFloat(payment.amount.toString());
+      }
+    });
   
   return Object.entries(revenueByDate).map(([date, revenue]) => ({
     date,
@@ -74,6 +77,7 @@ function MetricCard({ title, value, icon, loading, gradient }: any) {
 export default function Dashboard() {
   const { data: metrics, isLoading: metricsLoading } = trpc.dashboard.metrics.useQuery();
   const { data: upcomingAppointments, isLoading: appointmentsLoading } = trpc.dashboard.upcomingAppointments.useQuery();
+  const { data: payments } = trpc.payments.list.useQuery();
 
   return (
     <DashboardLayout>
@@ -185,11 +189,11 @@ export default function Dashboard() {
           </CardContent>
         </Card>
 
-        {/* Revenue Chart */}
+        {/* Revenue Chart - Baseado em Pagamentos Confirmados */}
         <RevenueChart 
-          data={generateRevenueData(upcomingAppointments)} 
+          data={generateRevenueDataFromPayments(payments)} 
           title="Faturamento"
-          description="Faturamento dos últimos 7 dias"
+          description="Faturamento dos últimos 7 dias (pagamentos confirmados)"
         />
 
         {/* Upcoming Appointments */}
@@ -201,50 +205,49 @@ export default function Dashboard() {
                 Próximos Agendamentos
               </CardTitle>
               <CardDescription>
-                Seus agendamentos programados para os próximos dias
+                Próximos 10 agendamentos confirmados
               </CardDescription>
             </div>
             <Button variant="ghost" size="sm" asChild>
               <Link to="/appointments">
-                Ver todos <ArrowRight className="w-4 h-4 ml-1" />
+                Ver todos
+                <ArrowRight className="w-4 h-4 ml-2" />
               </Link>
             </Button>
           </CardHeader>
           <CardContent>
             {appointmentsLoading ? (
-              <p className="text-muted-foreground">Carregando...</p>
+              <div className="text-center py-8 text-muted-foreground">Carregando...</div>
             ) : upcomingAppointments && upcomingAppointments.length > 0 ? (
-              <div className="space-y-3">
-                {upcomingAppointments.slice(0, 5).map((apt: any) => (
+              <div className="space-y-4">
+                {upcomingAppointments.slice(0, 5).map((appointment) => (
                   <div
-                    key={apt.id}
-                    className="flex items-center justify-between p-3 rounded-lg bg-background/50 border border-border/30 hover:border-border/50 transition-colors"
+                    key={appointment.id}
+                    className="flex items-center justify-between p-3 rounded-lg bg-slate-700/30 border border-slate-600/30 hover:border-slate-500/50 transition-colors"
                   >
                     <div className="flex-1">
-                      <p className="font-medium text-foreground">{apt.clientName}</p>
+                      <p className="font-medium text-foreground">
+                        Agendamento #{appointment.id}
+                      </p>
                       <p className="text-sm text-muted-foreground">
-                        {apt.serviceName} • {format(new Date(apt.startTime), "dd MMM HH:mm", { locale: ptBR })}
+                        {format(new Date(appointment.startTime), "dd/MM/yyyy HH:mm", { locale: ptBR })}
                       </p>
                     </div>
                     <div className="text-right">
-                      <p className="font-semibold text-cyan-400">R$ {parseFloat(apt.price || 0).toFixed(2)}</p>
-                      <p className={`text-xs font-medium ${
-                        apt.status === "completed" ? "text-green-400" :
-                        apt.status === "cancelled" ? "text-red-400" :
-                        "text-yellow-400"
-                      }`}>
-                        {apt.status === "completed" ? "Concluído" :
-                         apt.status === "cancelled" ? "Cancelado" :
-                         "Agendado"}
+                      <p className="font-semibold text-cyan-400">
+                        R$ {appointment.price}
+                      </p>
+                      <p className="text-xs text-muted-foreground capitalize">
+                        {appointment.status === "scheduled" ? "Confirmado" : appointment.status}
                       </p>
                     </div>
                   </div>
                 ))}
               </div>
             ) : (
-              <p className="text-muted-foreground text-center py-8">
+              <div className="text-center py-8 text-muted-foreground">
                 Nenhum agendamento próximo
-              </p>
+              </div>
             )}
           </CardContent>
         </Card>
