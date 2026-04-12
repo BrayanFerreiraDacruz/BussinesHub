@@ -74,6 +74,7 @@ export function AppointmentCalendar({ appointments = [], onDateClick }: Appointm
           const dayAppointments = getAppointmentsForDay(day);
           const isCurrentMonth = isSameMonth(day, currentDate);
           const isToday = isSameDay(day, new Date());
+          const hasAppointments = dayAppointments.length > 0;
 
           return (
             <div
@@ -82,7 +83,7 @@ export function AppointmentCalendar({ appointments = [], onDateClick }: Appointm
               className={`
                 min-h-24 p-1 rounded border cursor-pointer transition
                 ${isCurrentMonth ? "bg-white" : "bg-muted/30"}
-                ${isToday ? "border-primary bg-primary/5" : "border-border/40"}
+                ${isToday ? "border-primary bg-primary/5" : hasAppointments ? "border-purple-400 bg-purple-50" : "border-border/40"}
                 hover:border-primary/40
               `}
             >

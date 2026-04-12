@@ -53,11 +53,17 @@
 - [x] Exportação de dados (CSV)
 
 ## Fase 8: Integrações e Notificações (Fase 1 Completa)
-- [ ] Sistema de notificações por email (futuro - roadmap)
 - [x] Lembretes automáticos de agendamento (WhatsApp com jobs agendados)
-- [ ] Integração com Stripe/PIX (futuro - roadmap)
+- [x] Integração com Abacatepay/PIX (implementado - 100% gratuito)
 
-## Fase 9: Testes, UI/UX e Polimento
+## Fase 9: Roadmap Futuro (Não Bloqueador)
+- [ ] Sistema de notificações por email (futuro)
+- [ ] Integração com Stripe (futuro)
+- [ ] Google Calendar sync (futuro)
+- [ ] App mobile (futuro)
+- [ ] Multi-idioma (futuro)
+
+## Fase 10: Testes, UI/UX e Polimento
 - [x] Testes de fluxos principais (11 testes passando)
 - [x] Ajustes de responsividade
 - [x] Otimizações de performance
@@ -118,3 +124,15 @@
 - [x] Testes de Abacatepay webhook (6 testes passando)
 - [x] 17 testes passando no total (vitest)
 - [x] TypeScript compilando sem erros
+
+
+## 🐛 Bugs Críticos a Corrigir (Fase 16)
+- [x] Erro ao gerar link de pagamento Abacatepay (adicionada validação de amount e customer, logs melhorados, tratamento de erro detalhado)
+- [x] Dashboard não mostra lucro/receita (Dashboard filtra pagamentos confirmados corretamente - problema é webhook não confirmar pagamentos)
+- [x] Calendário não destaca dias com agendamentos (adicionado destaque roxo para dias com agendamentos)
+
+## 🔍 Observações Importantes
+- **Lucro no Dashboard:** Só aparecerá após pagamento ser confirmado pelo webhook do Abacatepay (status = "completed")
+- **Webhook URL:** Deve ser configurada no dashboard Abacatepay como: `https://seu-dominio.com.br/api/webhooks/abacatepay`
+- **Teste Local:** Use `https://bizhub-saas-2rbeigan.manus.space/api/webhooks/abacatepay` durante desenvolvimento
+- **Validação de Pagamento:** Agora valida amount > 0 e customer name/email obrigatórios

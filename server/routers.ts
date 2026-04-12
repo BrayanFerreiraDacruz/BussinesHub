@@ -352,6 +352,21 @@ export const appRouter = router({
       )
       .mutation(async ({ ctx, input }) => {
         try {
+          // Validar valores
+          if (input.amount <= 0) {
+            throw new Error("Valor do pagamento deve ser maior que zero");
+          }
+
+          if (!input.customerName || !input.customerEmail) {
+            throw new Error("Nome e email do cliente sao obrigatorios");
+          }
+
+          console.log("[API] Creating payment link:", {
+            amount: Math.round(input.amount * 100),
+            customerName: input.customerName,
+            customerEmail: input.customerEmail,
+          });
+
           const paymentLink = await createPaymentLink({
             amount: Math.round(input.amount * 100),
             description: input.description,
@@ -364,6 +379,8 @@ export const appRouter = router({
               clientId: input.clientId,
             },
           });
+
+          console.log("[API] Payment link created:", paymentLink);
 
           await createPaymentRecord({
             userId: ctx.user.id,
@@ -381,9 +398,10 @@ export const appRouter = router({
             paymentUrl: paymentLink.paymentUrl,
             paymentId: paymentLink.id,
           };
-        } catch (error) {
-          console.error("[API] Error creating payment link:", error);
-          throw new Error("Failed to create payment link");
+        } catch (error: any) {
+          const errorMessage = error?.message || "Erro ao criar link de pagamento";
+          console.error("[API] Error creating payment link:", errorMessage);
+          throw new Error(errorMessage);
         }
       }),
 
