@@ -84,8 +84,8 @@
 - [x] Edição de cliente/serviço mantém todos os campos (formulários com estado controlado)
 - [x] Dashboard mostra faturamento dos serviços concluídos (preço salvo corretamente)
 - [x] Tema mudado para roxo moderno (paleta roxo vibrante implementada)
-- [ ] Dashboard faturamento deve mostrar apenas pagamentos confirmados (não agendamentos concluídos)
-- [ ] Página de Pagamentos deve buscar dados de cliente corretamente
+- [x] Dashboard faturamento mostra apenas pagamentos confirmados (não agendamentos concluídos)
+- [x] Página de Pagamentos busca dados de cliente corretamente
 
 
 ## Fase 13: Redesign Completo - Dark Mode Profissional

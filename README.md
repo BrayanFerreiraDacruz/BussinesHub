@@ -264,4 +264,19 @@ Contribuições são bem-vindas! Por favor:
 
 **Desenvolvido com ❤️ para pequenos negócios**
 
-Versão 1.0.0 | Última atualização: 2026-04-11
+Versão 3.0.0 | Última atualização: Abril 2026
+
+## 💳 Integrações
+
+### Abacatepay (Pagamentos PIX)
+- **Documentação:** https://docs.abacatepay.com
+- **API Key:** Obtenha em https://dashboard.abacatepay.com
+- **Webhook:** Configurado em `/api/webhooks/abacatepay`
+
+### Baileys (WhatsApp)
+- **Documentação:** https://github.com/WhiskeySockets/Baileys
+- **Autenticação:** QR Code via navegador
+
+### OAuth Manus
+- **Documentação:** https://manus.im/docs
+- **Callback:** `/api/oauth/callback`
