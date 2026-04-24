@@ -16,11 +16,12 @@ import {
  */
 export const users = mysqlTable("users", {
   id: int("id").autoincrement().primaryKey(),
-  openId: varchar("openId", { length: 64 }).notNull().unique(),
+  openId: varchar("openId", { length: 64 }).unique(), // Mantendo opcional para compatibilidade
   name: text("name"),
-  email: varchar("email", { length: 320 }),
+  email: varchar("email", { length: 320 }).notNull().unique(),
+  password: text("password"), // Hash da senha
   phone: varchar("phone", { length: 20 }),
-  businessName: text("businessName"), // Nome do negócio (salão, clínica, consultório)
+  businessName: text("businessName"),
   businessType: mysqlEnum("businessType", ["salon", "clinic", "consulting", "other"]).default("salon"),
   loginMethod: varchar("loginMethod", { length: 64 }),
   role: mysqlEnum("role", ["user", "admin"]).default("user").notNull(),

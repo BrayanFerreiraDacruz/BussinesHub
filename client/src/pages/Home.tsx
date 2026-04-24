@@ -129,24 +129,24 @@ export default function Home() {
           <div className="grid md:grid-cols-3 gap-6">
             <PricingCard
               name="Básico"
-              price="R$ 99"
+              price="R$ 39,99"
               description="Para pequenos negócios"
               features={[
                 "Até 100 clientes",
                 "Agendamentos ilimitados",
                 "Relatórios básicos",
-                "Suporte por email",
+
               ]}
             />
             <PricingCard
               name="Profissional"
-              price="R$ 199"
+              price="R$ 59,99"
               description="Para negócios em crescimento"
               features={[
                 "Clientes ilimitados",
                 "Agendamentos ilimitados",
                 "Relatórios avançados",
-                "Lembretes por email",
+                " ",
                 "Suporte prioritário",
               ]}
               highlighted

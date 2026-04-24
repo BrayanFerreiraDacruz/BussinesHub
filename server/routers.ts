@@ -1,8 +1,11 @@
-import { COOKIE_NAME } from "@shared/const";
+import { COOKIE_NAME, ONE_YEAR_MS } from "@shared/const";
 import { getSessionCookieOptions } from "./_core/cookies";
 import { systemRouter } from "./_core/systemRouter";
 import { publicProcedure, router, protectedProcedure } from "./_core/trpc";
 import { z } from "zod";
+import bcrypt from "bcryptjs";
+import { nanoid } from "nanoid";
+import { sdk } from "./_core/sdk";
 import {
   getClientsByUserId,
   getClientById,
@@ -22,6 +25,8 @@ import {
   getPaymentsByUserId,
   createPayment,
   updatePayment,
+  getUserByEmail,
+  upsertUser,
 } from "./db";
 import {
   getOrCreateNotificationSettings,
@@ -37,6 +42,68 @@ export const appRouter = router({
   system: systemRouter,
   auth: router({
     me: publicProcedure.query(opts => opts.ctx.user),
+    
+    register: publicProcedure
+      .input(z.object({
+        email: z.string().email(),
+        password: z.string().min(6),
+        name: z.string().min(1),
+      }))
+      .mutation(async ({ input, ctx }) => {
+        const existingUser = await getUserByEmail(input.email);
+        if (existingUser) {
+          throw new Error("Usuário já existe");
+        }
+
+        const hashedPassword = await bcrypt.hash(input.password, 10);
+        const openId = nanoid();
+
+        await upsertUser({
+          email: input.email,
+          password: hashedPassword,
+          name: input.name,
+          openId: openId,
+          lastSignedIn: new Date(),
+        });
+
+        const sessionToken = await sdk.createSessionToken(openId, {
+          name: input.name,
+          expiresInMs: ONE_YEAR_MS,
+        });
+
+        const cookieOptions = getSessionCookieOptions(ctx.req);
+        ctx.res.cookie(COOKIE_NAME, sessionToken, { ...cookieOptions, maxAge: ONE_YEAR_MS });
+
+        return { success: true };
+      }),
+
+    login: publicProcedure
+      .input(z.object({
+        email: z.string().email(),
+        password: z.string(),
+      }))
+      .mutation(async ({ input, ctx }) => {
+        const user = await getUserByEmail(input.email);
+        if (!user || !user.password) {
+          throw new Error("Credenciais inválidas");
+        }
+
+        const isPasswordValid = await bcrypt.compare(input.password, user.password);
+        if (!isPasswordValid) {
+          throw new Error("Credenciais inválidas");
+        }
+
+        const sessionToken = await sdk.createSessionToken(user.openId!, {
+          name: user.name || "",
+          expiresInMs: ONE_YEAR_MS,
+        });
+
+        const cookieOptions = getSessionCookieOptions(ctx.req);
+        ctx.res.cookie(COOKIE_NAME, sessionToken, { ...cookieOptions, maxAge: ONE_YEAR_MS });
+
+        return { success: true };
+      }),
+
     logout: publicProcedure.mutation(({ ctx }) => {
       const cookieOptions = getSessionCookieOptions(ctx.req);
       ctx.res.clearCookie(COOKIE_NAME, { ...cookieOptions, maxAge: -1 });
@@ -335,6 +402,109 @@ export const appRouter = router({
     history: protectedProcedure.query(async ({ ctx }) => {
       return await getWhatsAppNotifications(ctx.user.id);
     }),
+  }),
+
+  // Public Booking
+  booking: router({
+    getProvider: publicProcedure
+      .input(z.object({ userId: z.number() }))
+      .query(async ({ input }) => {
+        const user = await getUserById(input.userId);
+        if (!user) throw new Error("Prestador não encontrado");
+        const services = await getServicesByUserId(input.userId);
+        return {
+          name: user.businessName || user.name,
+          services: services.filter(s => s.isActive),
+        };
+      }),
+
+    getAvailableSlots: publicProcedure
+      .input(z.object({
+        userId: z.number(),
+        serviceId: z.number(),
+        date: z.date(),
+      }))
+      .query(async ({ input }) => {
+        const service = await getServiceById(input.serviceId);
+        if (!service) throw new Error("Serviço não encontrado");
+
+        const appointments = await getAppointmentsByUserId(input.userId);
+        const dayStart = new Date(input.date);
+        dayStart.setHours(9, 0, 0, 0); // Horário padrão de abertura
+        const dayEnd = new Date(input.date);
+        dayEnd.setHours(18, 0, 0, 0); // Horário padrão de fechamento
+
+        const slots = [];
+        let current = new Date(dayStart);
+
+        while (current.getTime() + service.duration * 60000 <= dayEnd.getTime()) {
+          const slotEnd = new Date(current.getTime() + service.duration * 60000);
+          
+          const isOccupied = appointments.some(apt => {
+            const aptStart = new Date(apt.startTime).getTime();
+            const aptEnd = new Date(apt.endTime).getTime();
+            const curStart = current.getTime();
+            const curEnd = slotEnd.getTime();
+            return (curStart < aptEnd && curEnd > aptStart) && apt.status !== "cancelled";
+          });
+
+          if (!isOccupied && current.getTime() > Date.now()) {
+            slots.push(new Date(current));
+          }
+          current = new Date(current.getTime() + 30 * 60000); // Intervalos de 30min
+        }
+
+        return slots;
+      }),
+
+    submit: publicProcedure
+      .input(z.object({
+        userId: z.number(),
+        serviceId: z.number(),
+        startTime: z.date(),
+        clientName: z.string().min(1),
+        clientPhone: z.string().min(1),
+        clientEmail: z.string().email().optional(),
+      }))
+      .mutation(async ({ input }) => {
+        const service = await getServiceById(input.serviceId);
+        if (!service) throw new Error("Serviço não encontrado");
+
+        // 1. Upsert Client (pelo telefone)
+        // Nota: Simplificado para este exemplo, ideal seria buscar por userId + phone
+        const existingClients = await getClientsByUserId(input.userId);
+        let client = existingClients.find(c => c.phone === input.clientPhone);
+
+        if (!client) {
+          const result = await createClient({
+            userId: input.userId,
+            name: input.clientName,
+            phone: input.clientPhone,
+            email: input.clientEmail,
+          });
+          const clients = await getClientsByUserId(input.userId);
+          client = clients[clients.length - 1]; // Pega o último criado
+        }
+
+        // 2. Criar Agendamento
+        const endTime = new Date(input.startTime.getTime() + service.duration * 60000);
+        const appointment = await createAppointment({
+          userId: input.userId,
+          clientId: client!.id,
+          serviceId: input.serviceId,
+          startTime: input.startTime,
+          endTime: endTime,
+          status: "scheduled",
+          price: service.price,
+        });
+
+        // 3. Notificar via WhatsApp (se houver ID)
+        if (appointment && "id" in appointment) {
+          sendConfirmation(appointment.id).catch(console.error);
+        }
+
+        return { success: true };
+      }),
   }),
 
   // Abacatepay - Pagamentos

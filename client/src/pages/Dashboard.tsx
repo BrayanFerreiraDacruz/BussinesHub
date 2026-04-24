@@ -4,11 +4,11 @@ import { RevenueChart } from "@/components/RevenueChart";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { trpc } from "@/lib/trpc";
-import { Calendar, Users, DollarSign, Clock, Plus, ArrowRight, TrendingUp } from "lucide-react";
+import { Calendar, Users, DollarSign, Clock, Plus, ArrowRight, TrendingUp, Sparkles } from "lucide-react";
 import { Link } from "wouter";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
-import { useMemo } from "react";
+import { motion } from "framer-motion";
 
 function generateRevenueDataFromPayments(payments: any[] | undefined) {
   if (!payments) return [];
@@ -23,7 +23,6 @@ function generateRevenueDataFromPayments(payments: any[] | undefined) {
     revenueByDate[dateStr] = 0;
   }
   
-  // Usar apenas pagamentos confirmados
   payments
     .filter((p) => p.status === "completed")
     .forEach((payment) => {
@@ -40,37 +39,46 @@ function generateRevenueDataFromPayments(payments: any[] | undefined) {
   }));
 }
 
-function MetricCard({ title, value, icon, loading, gradient }: any) {
-  const gradients = {
-    1: "from-purple-600/20 to-purple-900/20 border-purple-500/30",
-    2: "from-cyan-600/20 to-cyan-900/20 border-cyan-500/30",
-    3: "from-green-600/20 to-green-900/20 border-green-500/30",
-    4: "from-pink-600/20 to-pink-900/20 border-pink-500/30",
-  };
+const containerVariants = {
+  hidden: { opacity: 0 },
+  show: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1
+    }
+  }
+};
 
-  const iconColors = {
-    1: "text-purple-400",
-    2: "text-cyan-400",
-    3: "text-green-400",
-    4: "text-pink-400",
-  };
+const itemVariants = {
+  hidden: { opacity: 0, y: 20 },
+  show: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 300, damping: 24 } }
+};
 
+function MetricCard({ title, value, icon, loading, subtext }: any) {
   return (
-    <Card className={`bg-gradient-to-br ${gradients[gradient as keyof typeof gradients] || gradients[1]} border`}>
-      <CardContent className="pt-6">
-        <div className="flex items-start justify-between">
-          <div className="flex-1">
-            <p className="text-sm font-medium text-muted-foreground">{title}</p>
-            <p className="text-3xl font-bold mt-2 text-foreground">
-              {loading ? "..." : value}
-            </p>
+    <motion.div variants={itemVariants}>
+      <Card className="glass-card hover:shadow-md hover:border-primary/20 overflow-hidden relative group">
+        <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+        <CardContent className="p-6 relative z-10">
+          <div className="flex items-center justify-between">
+            <div className="space-y-1">
+              <p className="text-sm font-medium text-muted-foreground">{title}</p>
+              <p className="text-3xl font-bold tracking-tight text-foreground">
+                {loading ? "..." : value}
+              </p>
+              {subtext && (
+                <p className="text-xs text-muted-foreground mt-1">
+                  {subtext}
+                </p>
+              )}
+            </div>
+            <div className="p-3 bg-primary/10 rounded-2xl text-primary ring-1 ring-primary/20">
+              {icon}
+            </div>
           </div>
-          <div className={`${iconColors[gradient as keyof typeof iconColors] || iconColors[1]} opacity-80`}>
-            {icon}
-          </div>
-        </div>
-      </CardContent>
-    </Card>
+        </CardContent>
+      </Card>
+    </motion.div>
   );
 }
 
@@ -81,177 +89,211 @@ export default function Dashboard() {
 
   return (
     <DashboardLayout>
-      <div className="space-y-8">
+      <motion.div 
+        className="space-y-8 max-w-7xl mx-auto"
+        variants={containerVariants}
+        initial="hidden"
+        animate="show"
+      >
         {/* Header */}
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+        <motion.div variants={itemVariants} className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
           <div>
-            <h1 className="text-4xl font-bold bg-gradient-to-r from-purple-400 via-pink-400 to-cyan-400 bg-clip-text text-transparent">
+            <div className="flex items-center gap-2 mb-2">
+              <div className="inline-flex items-center justify-center p-1.5 rounded-lg bg-primary/10 text-primary">
+                <Sparkles className="w-4 h-4" />
+              </div>
+              <span className="text-sm font-medium text-primary tracking-wider uppercase">Visão Geral</span>
+            </div>
+            <h1 className="text-3xl font-bold tracking-tight text-foreground">
               Dashboard
             </h1>
-            <p className="text-muted-foreground mt-2">
-              Bem-vindo! Aqui está uma visão geral do seu negócio.
+            <p className="text-muted-foreground mt-1">
+              Bem-vindo de volta. Aqui está o resumo do seu negócio hoje.
             </p>
           </div>
-          <Button asChild className="bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800">
+          <Button asChild className="shadow-lg shadow-primary/20 hover:shadow-primary/30 transition-all rounded-full px-6">
             <Link to="/appointments">
               <Plus className="w-4 h-4 mr-2" />
               Novo Agendamento
             </Link>
           </Button>
-        </div>
+        </motion.div>
 
-        {/* Metrics Grid - Gradientes Neon */}
+        {/* Metrics Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           <MetricCard
-            title="Clientes"
+            title="Total de Clientes"
             value={metrics?.totalClients ?? 0}
-            icon={<Users className="w-6 h-6" />}
+            icon={<Users className="w-5 h-5" />}
             loading={metricsLoading}
-            gradient={1}
+            subtext="Cadastrados no sistema"
           />
           <MetricCard
-            title="Agendamentos"
+            title="Agendamentos Ativos"
             value={metrics?.totalAppointments ?? 0}
-            icon={<Calendar className="w-6 h-6" />}
+            icon={<Calendar className="w-5 h-5" />}
             loading={metricsLoading}
-            gradient={2}
+            subtext="Na agenda"
           />
           <MetricCard
             title="Hoje"
             value={metrics?.todayAppointments ?? 0}
-            icon={<Clock className="w-6 h-6" />}
+            icon={<Clock className="w-5 h-5" />}
             loading={metricsLoading}
-            gradient={3}
+            subtext="Atendimentos para hoje"
           />
           <MetricCard
-            title="Faturamento"
+            title="Faturamento (7 dias)"
             value={`R$ ${(metrics?.totalRevenue ?? 0).toFixed(2)}`}
-            icon={<DollarSign className="w-6 h-6" />}
+            icon={<DollarSign className="w-5 h-5" />}
             loading={metricsLoading}
-            gradient={4}
+            subtext="Receita confirmada"
           />
         </div>
 
-        {/* Status Overview - Cards com Gradientes */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <Card className="bg-gradient-to-br from-purple-600/20 to-purple-900/20 border border-purple-500/30 hover:border-purple-500/50 transition-colors">
-            <CardHeader>
-              <CardTitle className="text-lg flex items-center gap-2">
-                <div className="p-2 bg-purple-500/20 rounded-lg">
-                  <Clock className="w-4 h-4 text-purple-400" />
-                </div>
-                Agendamentos Confirmados
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="text-4xl font-bold text-purple-400">
-                {metrics?.pendingAppointments ?? 0}
-              </div>
-              <p className="text-sm text-muted-foreground mt-2">
-                Aguardando execução
-              </p>
-            </CardContent>
-          </Card>
+        <div className="grid grid-cols-1 lg:grid-cols-7 gap-6">
+          {/* Main Chart Area */}
+          <motion.div variants={itemVariants} className="lg:col-span-4 space-y-6">
+            <Card className="glass-card border-border/50 overflow-hidden">
+              <CardHeader className="pb-2 border-b border-border/40 bg-muted/20">
+                <CardTitle className="text-lg font-medium flex items-center gap-2">
+                  <TrendingUp className="w-4 h-4 text-primary" />
+                  Evolução do Faturamento
+                </CardTitle>
+                <CardDescription>
+                  Pagamentos confirmados nos últimos 7 dias
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="pt-6">
+                <RevenueChart 
+                  data={generateRevenueDataFromPayments(payments)} 
+                />
+              </CardContent>
+            </Card>
 
-          <Card className="bg-gradient-to-br from-green-600/20 to-green-900/20 border border-green-500/30 hover:border-green-500/50 transition-colors">
-            <CardHeader>
-              <CardTitle className="text-lg flex items-center gap-2">
-                <div className="p-2 bg-green-500/20 rounded-lg">
-                  <TrendingUp className="w-4 h-4 text-green-400" />
-                </div>
-                Agendamentos Concluídos
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="text-4xl font-bold text-green-400">
-                {metrics?.completedAppointments ?? 0}
-              </div>
-              <p className="text-sm text-muted-foreground mt-2">
-                Neste período
-              </p>
-            </CardContent>
-          </Card>
-        </div>
-
-        {/* Calendario */}
-        <Card className="bg-card/50 border border-border/50 hover:border-border transition-colors">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Calendar className="w-5 h-5 text-cyan-400" />
-              Calendário de Agendamentos
-            </CardTitle>
-            <CardDescription>
-              Visualize todos os agendamentos do mês
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <AppointmentCalendar appointments={upcomingAppointments} />
-          </CardContent>
-        </Card>
-
-        {/* Revenue Chart - Baseado em Pagamentos Confirmados */}
-        <RevenueChart 
-          data={generateRevenueDataFromPayments(payments)} 
-          title="Faturamento"
-          description="Faturamento dos últimos 7 dias (pagamentos confirmados)"
-        />
-
-        {/* Upcoming Appointments */}
-        <Card className="bg-card/50 border border-border/50 hover:border-border transition-colors">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0">
-            <div>
-              <CardTitle className="flex items-center gap-2">
-                <Calendar className="w-5 h-5 text-pink-400" />
-                Próximos Agendamentos
-              </CardTitle>
-              <CardDescription>
-                Próximos 10 agendamentos confirmados
-              </CardDescription>
-            </div>
-            <Button variant="ghost" size="sm" asChild>
-              <Link to="/appointments">
-                Ver todos
-                <ArrowRight className="w-4 h-4 ml-2" />
-              </Link>
-            </Button>
-          </CardHeader>
-          <CardContent>
-            {appointmentsLoading ? (
-              <div className="text-center py-8 text-muted-foreground">Carregando...</div>
-            ) : upcomingAppointments && upcomingAppointments.length > 0 ? (
-              <div className="space-y-4">
-                {upcomingAppointments.slice(0, 5).map((appointment) => (
-                  <div
-                    key={appointment.id}
-                    className="flex items-center justify-between p-3 rounded-lg bg-slate-700/30 border border-slate-600/30 hover:border-slate-500/50 transition-colors"
-                  >
-                    <div className="flex-1">
-                      <p className="font-medium text-foreground">
-                        Agendamento #{appointment.id}
-                      </p>
-                      <p className="text-sm text-muted-foreground">
-                        {format(new Date(appointment.startTime), "dd/MM/yyyy HH:mm", { locale: ptBR })}
-                      </p>
+            {/* Status Overview */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <Card className="glass-card overflow-hidden group">
+                <div className="absolute inset-0 bg-gradient-to-br from-amber-500/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                <CardContent className="p-6 relative z-10">
+                  <div className="flex items-center gap-4">
+                    <div className="p-4 bg-amber-500/10 rounded-2xl text-amber-500 ring-1 ring-amber-500/20">
+                      <Clock className="w-6 h-6" />
                     </div>
-                    <div className="text-right">
-                      <p className="font-semibold text-cyan-400">
-                        R$ {appointment.price}
-                      </p>
-                      <p className="text-xs text-muted-foreground capitalize">
-                        {appointment.status === "scheduled" ? "Confirmado" : appointment.status}
-                      </p>
+                    <div>
+                      <p className="text-sm font-medium text-muted-foreground">Aguardando Execução</p>
+                      <h3 className="text-2xl font-bold tracking-tight text-foreground">{metrics?.pendingAppointments ?? 0}</h3>
                     </div>
                   </div>
-                ))}
-              </div>
-            ) : (
-              <div className="text-center py-8 text-muted-foreground">
-                Nenhum agendamento próximo
-              </div>
-            )}
-          </CardContent>
-        </Card>
-      </div>
+                </CardContent>
+              </Card>
+
+              <Card className="glass-card overflow-hidden group">
+                <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                <CardContent className="p-6 relative z-10">
+                  <div className="flex items-center gap-4">
+                    <div className="p-4 bg-emerald-500/10 rounded-2xl text-emerald-500 ring-1 ring-emerald-500/20">
+                      <TrendingUp className="w-6 h-6" />
+                    </div>
+                    <div>
+                      <p className="text-sm font-medium text-muted-foreground">Concluídos com Sucesso</p>
+                      <h3 className="text-2xl font-bold tracking-tight text-foreground">{metrics?.completedAppointments ?? 0}</h3>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          </motion.div>
+
+          {/* Sidebar Area */}
+          <motion.div variants={itemVariants} className="lg:col-span-3 space-y-6">
+            <Card className="glass-card border-border/50 h-full flex flex-col">
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 border-b border-border/40 bg-muted/20">
+                <div>
+                  <CardTitle className="text-lg font-medium flex items-center gap-2">
+                    <Calendar className="w-4 h-4 text-primary" />
+                    Próximos
+                  </CardTitle>
+                </div>
+                <Button variant="ghost" size="sm" asChild className="h-8 text-xs hover:text-primary">
+                  <Link to="/appointments">
+                    Ver todos
+                    <ArrowRight className="w-3 h-3 ml-1" />
+                  </Link>
+                </Button>
+              </CardHeader>
+              <CardContent className="pt-6 flex-1">
+                {appointmentsLoading ? (
+                  <div className="flex items-center justify-center h-40">
+                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+                  </div>
+                ) : upcomingAppointments && upcomingAppointments.length > 0 ? (
+                  <div className="space-y-4">
+                    {upcomingAppointments.slice(0, 5).map((appointment, index) => (
+                      <motion.div
+                        initial={{ opacity: 0, x: 20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: index * 0.1 }}
+                        key={appointment.id}
+                        className="group flex items-center justify-between p-4 rounded-xl bg-card border border-border/40 hover:border-primary/30 hover:shadow-sm transition-all"
+                      >
+                        <div className="flex items-center gap-3">
+                          <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary font-semibold text-sm ring-1 ring-primary/20">
+                            {format(new Date(appointment.startTime), "dd")}
+                          </div>
+                          <div>
+                            <p className="font-medium text-foreground group-hover:text-primary transition-colors">
+                              #{appointment.id}
+                            </p>
+                            <p className="text-xs text-muted-foreground flex items-center gap-1 mt-0.5">
+                              <Clock className="w-3 h-3" />
+                              {format(new Date(appointment.startTime), "HH:mm", { locale: ptBR })}
+                            </p>
+                          </div>
+                        </div>
+                        <div className="text-right">
+                          <p className="font-semibold text-foreground">
+                            R$ {appointment.price}
+                          </p>
+                          <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium mt-1
+                            ${appointment.status === 'scheduled' ? 'bg-amber-500/10 text-amber-500 ring-1 ring-inset ring-amber-500/20' : 
+                              appointment.status === 'completed' ? 'bg-emerald-500/10 text-emerald-500 ring-1 ring-inset ring-emerald-500/20' : 
+                              'bg-muted text-muted-foreground ring-1 ring-inset ring-border'}`}>
+                            {appointment.status === "scheduled" ? "Confirmado" : appointment.status}
+                          </span>
+                        </div>
+                      </motion.div>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="flex flex-col items-center justify-center h-40 text-muted-foreground text-sm">
+                    <Calendar className="w-8 h-8 mb-2 opacity-20" />
+                    Nenhum agendamento próximo
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+          </motion.div>
+        </div>
+
+        {/* Full Calendar View */}
+        <motion.div variants={itemVariants}>
+          <Card className="glass-card border-border/50">
+            <CardHeader className="border-b border-border/40 bg-muted/20">
+              <CardTitle className="text-lg font-medium flex items-center gap-2">
+                <Calendar className="w-4 h-4 text-primary" />
+                Calendário Completo
+              </CardTitle>
+              <CardDescription>
+                Visualize e gerencie todos os agendamentos do mês
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="pt-6">
+              <AppointmentCalendar appointments={upcomingAppointments} />
+            </CardContent>
+          </Card>
+        </motion.div>
+      </motion.div>
     </DashboardLayout>
   );
 }
