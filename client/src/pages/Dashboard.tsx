@@ -44,151 +44,144 @@ export default function Dashboard() {
     const link = `${window.location.origin}/book/${user.id}`;
     navigator.clipboard.writeText(link);
     setCopied(true);
-    toast.success("Link de agendamento copiado! Mande para suas clientes.");
+    toast.success("Link copiado!");
     setTimeout(() => setCopied(false), 2000);
   };
 
   return (
     <DashboardLayout>
-      <div className="space-y-12">
-        {/* Header Section */}
-        <section className="flex flex-col lg:flex-row lg:items-center justify-between gap-8 border-b-4 border-black pb-12">
+      <div className="space-y-8">
+        {/* Header - More Compact */}
+        <section className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 border-b-2 border-black/5 pb-8">
           <motion.div 
-            initial={{ opacity: 0, x: -20 }}
+            initial={{ opacity: 0, x: -10 }}
             animate={{ opacity: 1, x: 0 }}
-            className="space-y-4"
+            className="space-y-1"
           >
-            <div className="inline-flex items-center gap-3 px-4 py-1.5 rounded-full bg-black text-white text-xs font-black uppercase tracking-[0.3em]">
-              <Zap className="w-4 h-4 text-primary fill-primary" /> PAINEL PROFISSIONAL
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-black text-white text-[9px] font-black uppercase tracking-widest">
+              <Zap size={12} className="text-primary fill-primary" /> PAINEL
             </div>
-            <h1 className="text-6xl md:text-7xl font-black tracking-tighter text-black">
-              Papel e caneta? <span className="text-primary italic">Pera aí né...</span>
+            <h1 className="text-3xl md:text-5xl font-black tracking-tight text-black">
+              Papel e caneta? <span className="text-primary italic">Pera aí...</span>
             </h1>
-            <p className="text-black font-bold text-2xl opacity-80">
-              Olá, {user?.name.split(' ')[0]}! Seu negócio está florescendo hoje.
+            <p className="text-black/60 font-bold text-lg">
+              Olá, {user?.name.split(' ')[0]}! Veja seu resumo de hoje.
             </p>
           </motion.div>
 
           <motion.div 
-            initial={{ opacity: 0, x: 20 }}
+            initial={{ opacity: 0, x: 10 }}
             animate={{ opacity: 1, x: 0 }}
-            className="flex flex-wrap items-center gap-4"
+            className="flex flex-wrap items-center gap-3"
           >
             <Button 
               variant="outline" 
               onClick={copyBookingLink}
-              className="h-20 rounded-[1.5rem] px-10 border-4 border-black font-black text-xl hover:bg-black/5 transition-all gap-4 shadow-[10px_10px_0px_0px_rgba(0,0,0,1)]"
+              size="sm"
+              className="h-11 rounded-xl px-6 border-2 border-black font-bold text-xs hover:bg-black/5 transition-all gap-2"
             >
-              {copied ? <Check className="w-6 h-6 text-primary" /> : <Copy className="w-6 h-6" />}
-              {copied ? "COPIADO!" : "MEU LINK DE AGENDAMENTO"}
+              {copied ? <Check size={14} className="text-primary" /> : <Copy size={14} />}
+              {copied ? "COPIADO" : "LINK DE AGENDAMENTO"}
             </Button>
             <Link href="/appointments">
-              <Button className="h-20 rounded-[1.5rem] px-12 font-black text-2xl btn-hover-effect bg-primary text-black border-4 border-black shadow-[10px_10px_0px_0px_rgba(0,0,0,1)] gap-3">
-                <Plus className="w-8 h-8" /> NOVO HORÁRIO
+              <Button size="sm" className="h-11 rounded-xl px-8 font-black text-sm btn-hover-effect bg-primary text-black border-2 border-black gap-2">
+                <Plus size={16} /> NOVO HORÁRIO
               </Button>
             </Link>
           </motion.div>
         </section>
 
-        {/* Big Metrics Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        {/* Metrics - Smaller cards */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           <MetricCard
-            title="MINHAS CLIENTES"
+            title="CLIENTES"
             value={metrics?.totalClients ?? 0}
-            icon={<Users className="w-8 h-8" />}
+            icon={<Users size={20} />}
             color="primary"
             loading={metricsLoading}
           />
           <MetricCard
-            title="AGENDAMENTOS"
+            title="AGENDA"
             value={metrics?.totalAppointments ?? 0}
-            icon={<Calendar className="w-8 h-8" />}
+            icon={<Calendar size={20} />}
             color="primary"
             loading={metricsLoading}
           />
           <MetricCard
-            title="ATENDIMENTOS HOJE"
+            title="HOJE"
             value={metrics?.todayAppointments ?? 0}
-            icon={<Clock className="w-8 h-8" />}
+            icon={<Clock size={20} />}
             color="black"
             loading={metricsLoading}
           />
           <MetricCard
-            title="FATURAMENTO"
+            title="RECEITA"
             value={`R$ ${(metrics?.totalRevenue ?? 0).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`}
-            icon={<DollarSign className="w-8 h-8" />}
+            icon={<DollarSign size={20} />}
             color="primary"
             loading={metricsLoading}
           />
         </div>
 
-        {/* Content Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
-          {/* Chart Area */}
-          <Card className="lg:col-span-8 border-4 border-black shadow-[15px_15px_0px_0px_rgba(0,0,0,0.1)] rounded-[3rem] overflow-hidden bg-white">
-            <CardHeader className="p-10 border-b-4 border-black bg-black text-white">
+        {/* Content - Compact Layout */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+          <Card className="lg:col-span-8 border-2 border-black shadow-lg rounded-[2rem] overflow-hidden bg-white">
+            <CardHeader className="p-6 border-b-2 border-black bg-black text-white">
               <div className="flex items-center justify-between">
                 <div>
-                  <CardTitle className="text-3xl font-black tracking-tighter uppercase">Fluxo de Caixa</CardTitle>
-                  <CardDescription className="font-bold text-white/50 uppercase tracking-widest text-xs mt-2">Ganhos reais nos últimos 7 dias</CardDescription>
+                  <CardTitle className="text-xl font-black uppercase tracking-tight">Fluxo de Caixa</CardTitle>
+                  <CardDescription className="font-bold text-white/40 uppercase tracking-widest text-[9px]">Últimos 7 dias</CardDescription>
                 </div>
-                <div className="p-4 rounded-2xl bg-primary text-black">
-                  <TrendingUp className="w-8 h-8" />
-                </div>
+                <TrendingUp size={20} className="text-primary" />
               </div>
             </CardHeader>
-            <CardContent className="p-10">
-              <RevenueChart data={generateRevenueDataFromPayments(payments)} />
+            <CardContent className="p-6">
+              <div className="h-[250px]">
+                <RevenueChart data={generateRevenueDataFromPayments(payments)} />
+              </div>
             </CardContent>
           </Card>
 
-          {/* Upcoming Area */}
-          <Card className="lg:col-span-4 border-4 border-black shadow-[15px_15px_0px_0px_rgba(0,0,0,0.1)] rounded-[3rem] overflow-hidden bg-white">
-            <CardHeader className="p-10 border-b-4 border-black">
-              <CardTitle className="text-3xl font-black tracking-tighter uppercase text-black">Próximos</CardTitle>
-              <CardDescription className="font-bold text-black/40 uppercase tracking-widest text-xs mt-2">Sua colheita de hoje</CardDescription>
-            </Header>
-            <CardContent className="p-8">
+          <Card className="lg:col-span-4 border-2 border-black shadow-lg rounded-[2rem] overflow-hidden bg-white">
+            <CardHeader className="p-6 border-b-2 border-black">
+              <CardTitle className="text-xl font-black uppercase tracking-tight text-black">Próximos</CardTitle>
+            </CardHeader>
+            <CardContent className="p-4">
               {appointmentsLoading ? (
-                <div className="flex items-center justify-center h-80"><div className="animate-spin rounded-full h-16 w-16 border-b-4 border-primary"></div></div>
+                <div className="flex items-center justify-center h-48"><div className="animate-spin rounded-full h-8 w-8 border-b-4 border-primary"></div></div>
               ) : upcomingAppointments && upcomingAppointments.length > 0 ? (
-                <div className="space-y-6">
-                  {upcomingAppointments.slice(0, 4).map((appointment) => (
-                    <div key={appointment.id} className="flex items-center justify-between p-6 rounded-[2rem] bg-[#F8F7E5] border-4 border-black hover:bg-primary/10 transition-all group">
-                      <div className="flex items-center gap-5">
-                        <div className="w-14 h-14 rounded-2xl bg-black text-primary flex items-center justify-center text-xl font-black">
+                <div className="space-y-3">
+                  {upcomingAppointments.slice(0, 5).map((appointment) => (
+                    <div key={appointment.id} className="flex items-center justify-between p-3 rounded-xl bg-muted/30 border border-black/5 hover:bg-primary/5 transition-all">
+                      <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 rounded-lg bg-black text-primary flex items-center justify-center text-sm font-black">
                           {format(new Date(appointment.startTime), "HH")}
                         </div>
-                        <div>
-                          <p className="font-black text-black text-lg">Cliente #{appointment.id}</p>
-                          <p className="text-sm font-black text-black/40 uppercase tracking-widest">{format(new Date(appointment.startTime), "HH:mm")}</p>
+                        <div className="leading-tight">
+                          <p className="font-bold text-black text-sm">#{appointment.id}</p>
+                          <p className="text-[10px] font-black text-black/40 uppercase">{format(new Date(appointment.startTime), "HH:mm")}</p>
                         </div>
                       </div>
-                      <ArrowRight className="w-6 h-6 text-black group-hover:translate-x-2 transition-all" />
+                      <ArrowRight size={14} className="text-black/20" />
                     </div>
                   ))}
                 </div>
               ) : (
-                <div className="flex flex-col items-center justify-center h-80 text-black/20 italic font-black text-xl uppercase tracking-tighter">Agenda Livre</div>
+                <div className="flex items-center justify-center h-48 text-black/20 font-black text-sm uppercase">Vazio</div>
               )}
             </CardContent>
           </Card>
         </div>
 
-        {/* Calendar Card */}
-        <Card className="border-4 border-black shadow-[20px_20px_0px_0px_rgba(0,0,0,0.1)] rounded-[4rem] overflow-hidden bg-white">
-          <CardHeader className="p-12 border-b-4 border-black">
-            <div className="flex items-center gap-6">
-              <div className="p-5 rounded-3xl bg-primary text-black border-4 border-black shadow-xl">
-                <Calendar className="w-10 h-10" />
-              </div>
-              <div>
-                <CardTitle className="text-4xl font-black tracking-tighter uppercase text-black">Calendário Geral</CardTitle>
-                <CardDescription className="font-black text-black/40 uppercase tracking-widest text-sm mt-2">Visão total do seu pomar</CardDescription>
-              </div>
+        {/* Calendar - Less padding */}
+        <Card className="border-2 border-black shadow-lg rounded-[2.5rem] overflow-hidden bg-white">
+          <CardHeader className="p-8 border-b-2 border-black flex flex-row items-center gap-4">
+            <div className="p-3 rounded-xl bg-primary text-black border-2 border-black">
+              <Calendar size={20} />
             </div>
+            <CardTitle className="text-2xl font-black uppercase text-black tracking-tight">Agenda Completa</CardTitle>
           </CardHeader>
-          <CardContent className="p-12">
+          <CardContent className="p-6">
             <AppointmentCalendar appointments={upcomingAppointments} />
           </CardContent>
         </Card>
@@ -199,25 +192,20 @@ export default function Dashboard() {
 
 function MetricCard({ title, value, icon, loading, color }: any) {
   return (
-    <motion.div
-      whileHover={{ scale: 1.02, y: -10 }}
-      className="relative group"
-    >
-      <Card className="border-4 border-black shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] rounded-[2.5rem] overflow-hidden bg-white relative z-10">
-        <CardContent className="p-10">
-          <div className="flex items-start justify-between">
-            <div className="space-y-4">
-              <p className="text-xs font-black text-black/40 uppercase tracking-[0.3em]">{title}</p>
-              <h3 className="text-5xl font-black tracking-tighter text-black">
-                {loading ? "..." : value}
-              </h3>
-            </div>
-            <div className={`p-5 rounded-2xl ${color === 'primary' ? 'bg-primary text-black' : 'bg-black text-white'} border-4 border-black shadow-xl`}>
-              {icon}
-            </div>
+    <Card className="border-2 border-black shadow-md rounded-[1.5rem] overflow-hidden bg-white">
+      <CardContent className="p-6">
+        <div className="flex items-start justify-between">
+          <div className="space-y-2">
+            <p className="text-[9px] font-black text-black/40 uppercase tracking-widest">{title}</p>
+            <h3 className="text-2xl font-black tracking-tight text-black">
+              {loading ? "..." : value}
+            </h3>
           </div>
-        </CardContent>
-      </Card>
-    </motion.div>
+          <div className={`p-3 rounded-xl ${color === 'primary' ? 'bg-primary text-black' : 'bg-black text-white'} border-2 border-black shadow-sm`}>
+            {icon}
+          </div>
+        </div>
+      </CardContent>
+    </Card>
   );
 }

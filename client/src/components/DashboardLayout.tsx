@@ -31,8 +31,8 @@ import { Input } from "./ui/input";
 
 const menuItems = [
   { icon: LayoutDashboard, label: "Visão Geral", path: "/dashboard" },
-  { icon: Calendar, label: "Minha Agenda", path: "/appointments" },
-  { icon: Users, label: "Minhas Clientes", path: "/clients" },
+  { icon: Calendar, label: "Agenda", path: "/appointments" },
+  { icon: Users, label: "Clientes", path: "/clients" },
   { icon: ShoppingBag, label: "Serviços", path: "/services" },
   { icon: BarChart3, label: "Relatórios", path: "/reports" },
   { icon: CreditCard, label: "Financeiro", path: "/payments" },
@@ -78,28 +78,28 @@ function DashboardLayoutContent({
   const isMobile = useIsMobile();
 
   return (
-    <div className="flex min-h-screen bg-[#F5F4D7] relative text-black">
-      <div className="noise-bg opacity-20" />
+    <div className="flex min-h-screen bg-background relative text-black">
+      <div className="noise-bg opacity-10" />
       
       <Sidebar
         collapsible="icon"
-        className="border-r-[6px] border-black bg-white"
+        className="border-r-2 border-black/10 bg-white"
       >
-        <SidebarHeader className="h-32 justify-center px-6">
-          <div className="flex items-center gap-4">
-            <div className="w-16 h-16 rounded-[1.25rem] bg-primary flex items-center justify-center p-3 border-4 border-black shadow-[5px_5px_0px_0px_rgba(0,0,0,1)]">
+        <SidebarHeader className="h-20 justify-center px-4">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center p-2 border-2 border-black">
               <img src="/logo.png" alt="Pêra" className="w-full h-full object-contain animate-float" />
             </div>
             {!isCollapsed && (
-              <span className="font-black text-3xl tracking-tighter text-black uppercase">
+              <span className="font-black text-xl tracking-tighter text-black uppercase">
                 Pêra
               </span>
             )}
           </div>
         </SidebarHeader>
 
-        <SidebarContent className="px-4 pt-8">
-          <SidebarMenu className="gap-4">
+        <SidebarContent className="px-2 pt-4">
+          <SidebarMenu className="gap-1">
             {menuItems.map(item => {
               const isActive = location === item.path;
               return (
@@ -108,14 +108,14 @@ function DashboardLayoutContent({
                     isActive={isActive}
                     onClick={() => setLocation(item.path)}
                     tooltip={item.label}
-                    className={`h-16 rounded-2xl transition-all duration-300 font-black px-6 border-4 border-transparent ${
+                    className={`h-12 rounded-xl transition-all duration-200 font-bold px-4 ${
                       isActive
-                        ? "bg-primary text-black border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] scale-[1.02]"
-                        : "text-black/60 hover:bg-black/5 hover:text-black"
+                        ? "bg-primary text-black border-2 border-black shadow-sm"
+                        : "text-black/60 hover:bg-black/5"
                     }`}
                   >
-                    <item.icon className={`w-6 h-6 ${isActive ? "animate-pulse" : ""}`} />
-                    <span className="ml-4 text-base tracking-tight uppercase">{item.label}</span>
+                    <item.icon size={18} />
+                    <span className="ml-3 text-xs tracking-tight uppercase">{item.label}</span>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               );
@@ -123,31 +123,28 @@ function DashboardLayoutContent({
           </SidebarMenu>
         </SidebarContent>
 
-        <SidebarFooter className="p-6">
+        <SidebarFooter className="p-4">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <button className="flex items-center gap-4 rounded-2xl p-3 hover:bg-black/5 transition-all w-full group border-4 border-transparent hover:border-black">
-                <Avatar className="h-12 w-12 border-4 border-black shadow-lg">
-                  <AvatarFallback className="bg-primary text-black font-black text-lg">
+              <button className="flex items-center gap-3 rounded-xl p-2 hover:bg-black/5 transition-all w-full group">
+                <Avatar className="h-8 w-8 border-2 border-black">
+                  <AvatarFallback className="bg-primary text-black font-black text-xs">
                     {user?.name?.charAt(0).toUpperCase()}
                   </AvatarFallback>
                 </Avatar>
                 {!isCollapsed && (
                   <div className="flex-1 text-left min-w-0">
-                    <p className="text-base font-black truncate text-black leading-none">
+                    <p className="text-xs font-black truncate text-black leading-none">
                       {user?.name}
-                    </p>
-                    <p className="text-[10px] font-black text-black/40 uppercase tracking-widest mt-2">
-                      PRO PLAN
                     </p>
                   </div>
                 )}
               </button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-64 rounded-[2rem] p-3 border-4 border-black shadow-[15px_15px_0px_0px_rgba(0,0,0,1)] bg-white">
-              <DropdownMenuItem onClick={logout} className="rounded-xl text-destructive font-black uppercase tracking-widest focus:bg-destructive/10 focus:text-destructive cursor-pointer h-14 px-6">
-                <LogOut className="mr-4 h-5 w-5" />
-                <span>Sair do App</span>
+            <DropdownMenuContent align="end" className="w-48 rounded-xl p-2 border-2 border-black bg-white shadow-xl">
+              <DropdownMenuItem onClick={logout} className="rounded-lg text-destructive font-bold text-xs uppercase tracking-widest focus:bg-destructive/10 focus:text-destructive cursor-pointer h-10 px-4">
+                <LogOut size={14} className="mr-2" />
+                <span>Sair</span>
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
@@ -155,30 +152,29 @@ function DashboardLayoutContent({
       </Sidebar>
 
       <SidebarInset className="bg-transparent overflow-hidden">
-        {/* Modern Top Bar */}
-        <header className="h-24 flex items-center justify-between px-10 bg-white/80 backdrop-blur-md border-b-[6px] border-black sticky top-0 z-40">
-          <div className="flex items-center gap-6">
-            <h2 className="text-3xl font-black tracking-tighter text-black uppercase">
+        <header className="h-16 flex items-center justify-between px-8 bg-white/60 backdrop-blur-md border-b-2 border-black/10 sticky top-0 z-40">
+          <div className="flex items-center gap-4">
+            <h2 className="text-sm font-black tracking-widest text-black uppercase">
               {activeMenuItem?.label ?? "Dashboard"}
             </h2>
           </div>
 
-          <div className="flex items-center gap-6">
+          <div className="flex items-center gap-4">
             <button
               onClick={toggleTheme}
-              className="w-14 h-14 rounded-2xl bg-black/5 flex items-center justify-center hover:bg-primary/20 transition-all group border-4 border-transparent hover:border-black"
+              className="w-9 h-9 rounded-xl bg-black/5 flex items-center justify-center hover:bg-primary/20 transition-all"
             >
-              {theme === "dark" ? <Sun className="w-6 h-6 group-hover:rotate-90 transition-transform" /> : <Moon className="w-6 h-6 group-hover:-rotate-12 transition-transform" />}
+              {theme === "dark" ? <Sun size={16} /> : <Moon size={16} />}
             </button>
             
-            <div className="hidden sm:flex items-center gap-4 px-6 py-3 bg-primary/10 rounded-full border-4 border-black shadow-[5px_5px_0px_0px_rgba(0,0,0,1)]">
-              <div className="w-3 h-3 rounded-full bg-primary animate-pulse border-2 border-black" />
-              <span className="text-xs font-black text-black uppercase tracking-[0.2em]">SISTEMA ONLINE</span>
+            <div className="hidden sm:flex items-center gap-2 px-3 py-1 bg-primary/10 rounded-full border-2 border-black/10">
+              <div className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
+              <span className="text-[9px] font-black text-black uppercase tracking-widest">ONLINE</span>
             </div>
           </div>
         </header>
 
-        <main className="p-12 max-w-[1600px] mx-auto animate-in fade-in slide-in-from-bottom-6 duration-1000">
+        <main className="p-8 max-w-[1400px] mx-auto animate-in fade-in slide-in-from-bottom-2 duration-500">
           {children}
         </main>
       </SidebarInset>

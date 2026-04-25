@@ -44,75 +44,73 @@
 }
 
 :root {
-  /* High Contrast Pêra Palette */
-  --background: oklch(0.96 0.04 95); /* Creme mais visível */
-  --foreground: oklch(0.12 0.02 140); /* Quase preto para leitura máxima */
+  /* Ultra-Premium Brutalist Palette */
+  --background: oklch(0.98 0.02 95); 
+  --foreground: oklch(0.1 0.02 140); 
   
   --card: oklch(1 0 0);
-  --card-foreground: oklch(0.12 0.02 140);
+  --card-foreground: oklch(0.1 0.02 140);
   
-  --primary: oklch(0.65 0.22 145); /* Verde Pêra mais forte e saturado */
-  --primary-foreground: oklch(1 0 0);
+  --primary: oklch(0.7 0.22 145); 
+  --primary-foreground: oklch(0.1 0.02 140);
 
-  --secondary: oklch(0.9 0.08 145); /* Verde menta sólido */
+  --secondary: oklch(0.92 0.04 145); 
   --secondary-foreground: oklch(0.12 0.02 140);
 
-  --muted: oklch(0.92 0.03 95);
-  --muted-foreground: oklch(0.3 0.02 140); /* Texto mutado bem mais escuro */
+  --muted: oklch(0.95 0.02 95);
+  --muted-foreground: oklch(0.4 0.02 140); 
 
-  --accent: oklch(0.7 0.2 145);
-  --accent-foreground: oklch(1 0 0);
+  --accent: oklch(0.75 0.18 145);
+  --accent-foreground: oklch(0.1 0.02 140);
 
-  --border: oklch(0.12 0.02 140 / 0.15); /* Bordas mais marcadas */
-  --input: oklch(0.12 0.02 140 / 0.1);
-  --ring: oklch(0.65 0.22 145);
+  --border: oklch(0.1 0.02 140 / 0.1); 
+  --input: oklch(0.1 0.02 140 / 0.05);
+  --ring: oklch(0.7 0.22 145);
 
-  --sidebar: oklch(0.97 0.02 95);
+  --sidebar: oklch(0.99 0.01 95);
   --sidebar-foreground: oklch(0.12 0.02 140);
 
-  --radius: 1.25rem;
+  --radius: 1.5rem;
 }
 
 .dark {
-  --background: oklch(0.1 0.02 145);
+  --background: oklch(0.12 0.02 145);
   --foreground: oklch(0.98 0.01 95);
-  --card: oklch(0.14 0.02 145);
-  --card-foreground: oklch(0.98 0.01 95);
-  --primary: oklch(0.75 0.18 145);
-  --primary-foreground: oklch(0.1 0.02 145);
-  --border: oklch(0.98 0.01 95 / 0.2);
 }
 
 @layer base {
   * {
-    @apply border-border outline-ring/50;
+    @apply border-border outline-ring/50 transition-all duration-300;
   }
   body {
-    @apply bg-background text-foreground font-sans antialiased selection:bg-primary/40;
+    @apply bg-background text-foreground font-sans antialiased selection:bg-primary/30;
   }
   
-  /* Garantir que todos os títulos sejam super pretos/escuros */
   h1, h2, h3, h4, h5, h6 {
-    @apply text-foreground font-black;
+    @apply text-foreground font-black tracking-tighter;
     text-wrap: balance;
   }
 }
 
 @layer components {
-  .text-premium-shadow {
-    text-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  .brutalist-shadow {
+    box-shadow: 10px 10px 0px 0px rgba(0,0,0,1);
   }
   
-  .glass-premium {
-    @apply bg-white/80 backdrop-blur-2xl border border-black/10 shadow-xl;
+  .brutalist-shadow-sm {
+    box-shadow: 5px 5px 0px 0px rgba(0,0,0,1);
+  }
+
+  .brutalist-shadow-lg {
+    box-shadow: 20px 20px 0px 0px rgba(0,0,0,1);
   }
 
   .btn-hover-effect {
-    @apply hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 shadow-xl hover:shadow-primary/30;
+    @apply hover:translate-x-[-2px] hover:translate-y-[-2px] active:translate-x-[2px] active:translate-y-[2px] transition-all;
   }
 
   .pera-glow {
-    box-shadow: 0 0 40px oklch(0.65 0.22 145 / 0.2);
+    box-shadow: 0 0 30px oklch(0.7 0.22 145 / 0.2);
   }
 }
 
@@ -123,7 +121,7 @@
   width: 100%;
   height: 100%;
   content: "";
-  opacity: 0.04;
+  opacity: 0.03;
   z-index: 9999;
   pointer-events: none;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
@@ -131,7 +129,7 @@
 
 @keyframes float {
   0% { transform: translateY(0px) rotate(0deg); }
-  50% { transform: translateY(-20px) rotate(2deg); }
+  50% { transform: translateY(-15px) rotate(2deg); }
   100% { transform: translateY(0px) rotate(0deg); }
 }
 
