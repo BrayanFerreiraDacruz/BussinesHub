@@ -22,6 +22,13 @@
       "when": 1775929184040,
       "tag": "0002_shallow_stick",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "5",
+      "when": 1777084851809,
+      "tag": "0003_sleepy_brother_voodoo",
+      "breakpoints": true
     }
   ]
 }
