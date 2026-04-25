@@ -4,7 +4,7 @@ import { RevenueChart } from "@/components/RevenueChart";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { trpc } from "@/lib/trpc";
-import { Calendar, Users, DollarSign, Clock, Plus, ArrowRight, TrendingUp, Sparkles, Copy, Check } from "lucide-react";
+import { Calendar, Users, DollarSign, Clock, Plus, ArrowRight, TrendingUp, Sparkles, Copy, Check, Zap } from "lucide-react";
 import { Link } from "wouter";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
@@ -14,74 +14,22 @@ import { toast } from "sonner";
 
 function generateRevenueDataFromPayments(payments: any[] | undefined) {
   if (!payments) return [];
-  
   const revenueByDate: Record<string, number> = {};
   const today = new Date();
-  
   for (let i = 6; i >= 0; i--) {
     const date = new Date(today);
     date.setDate(date.getDate() - i);
     const dateStr = format(date, "dd/MM", { locale: ptBR });
     revenueByDate[dateStr] = 0;
   }
-  
-  payments
-    .filter((p) => p.status === "completed")
-    .forEach((payment) => {
-      const paymentDate = new Date(payment.createdAt);
-      const dateStr = format(paymentDate, "dd/MM", { locale: ptBR });
-      if (dateStr in revenueByDate) {
-        revenueByDate[dateStr] += parseFloat(payment.amount.toString());
-      }
-    });
-  
-  return Object.entries(revenueByDate).map(([date, revenue]) => ({
-    date,
-    revenue,
-  }));
-}
-
-const containerVariants = {
-  hidden: { opacity: 0 },
-  show: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.1
+  payments.filter((p) => p.status === "completed").forEach((payment) => {
+    const paymentDate = new Date(payment.createdAt);
+    const dateStr = format(paymentDate, "dd/MM", { locale: ptBR });
+    if (dateStr in revenueByDate) {
+      revenueByDate[dateStr] += parseFloat(payment.amount.toString());
     }
-  }
-};
-
-const itemVariants = {
-  hidden: { opacity: 0, y: 20 },
-  show: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 300, damping: 24 } }
-};
-
-function MetricCard({ title, value, icon, loading, subtext }: any) {
-  return (
-    <motion.div variants={itemVariants}>
-      <Card className="glass-card hover:shadow-md hover:border-primary/20 overflow-hidden relative group">
-        <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-        <CardContent className="p-6 relative z-10">
-          <div className="flex items-center justify-between">
-            <div className="space-y-1">
-              <p className="text-sm font-medium text-muted-foreground">{title}</p>
-              <p className="text-3xl font-bold tracking-tight text-foreground">
-                {loading ? "..." : value}
-              </p>
-              {subtext && (
-                <p className="text-xs text-muted-foreground mt-1">
-                  {subtext}
-                </p>
-              )}
-            </div>
-            <div className="p-3 bg-primary/10 rounded-2xl text-primary ring-1 ring-primary/20">
-              {icon}
-            </div>
-          </div>
-        </CardContent>
-      </Card>
-    </motion.div>
-  );
+  });
+  return Object.entries(revenueByDate).map(([date, revenue]) => ({ date, revenue }));
 }
 
 export default function Dashboard() {
@@ -96,227 +44,181 @@ export default function Dashboard() {
     const link = `${window.location.origin}/book/${user.id}`;
     navigator.clipboard.writeText(link);
     setCopied(true);
-    toast.success("Link de agendamento copiado!");
+    toast.success("Link de agendamento copiado! Mande para suas clientes.");
     setTimeout(() => setCopied(false), 2000);
   };
 
   return (
     <DashboardLayout>
-      <motion.div 
-        className="space-y-8 max-w-7xl mx-auto"
-        variants={containerVariants}
-        initial="hidden"
-        animate="show"
-      >
-        {/* Header */}
-        <motion.div variants={itemVariants} className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-          <div>
-            <div className="flex items-center gap-2 mb-2">
-              <div className="inline-flex items-center justify-center p-1.5 rounded-lg bg-primary/10 text-primary">
-                <Sparkles className="w-4 h-4" />
-              </div>
-              <span className="text-sm font-medium text-primary tracking-wider uppercase">Visão Geral</span>
+      <div className="space-y-10">
+        {/* Header Section */}
+        <section className="flex flex-col lg:flex-row lg:items-end justify-between gap-6">
+          <motion.div 
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            className="space-y-2"
+          >
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-primary text-[10px] font-black uppercase tracking-[0.2em]">
+              <Zap className="w-3 h-3" /> Dashboard Profissional
             </div>
-            <h1 className="text-3xl font-bold tracking-tight text-foreground">
-              Dashboard
+            <h1 className="text-4xl md:text-5xl font-black tracking-tighter text-foreground">
+              Papel e caneta? <span className="text-primary italic">Pera aí né...</span>
             </h1>
-            <p className="text-muted-foreground mt-1">
-              Bem-vindo de volta, {user?.name}. Aqui está o resumo do seu negócio.
+            <p className="text-muted-foreground font-medium text-lg">
+              Olá, {user?.name.split(' ')[0]}! Veja como seu negócio está crescendo hoje.
             </p>
-          </div>
-          <div className="flex items-center gap-3">
+          </motion.div>
+
+          <motion.div 
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            className="flex flex-wrap items-center gap-3"
+          >
             <Button 
               variant="outline" 
               onClick={copyBookingLink}
-              className="rounded-full px-6"
+              className="h-14 rounded-2xl px-6 border-2 font-bold hover:bg-primary/5 transition-all gap-3"
             >
-              {copied ? <Check className="w-4 h-4 mr-2" /> : <Copy className="w-4 h-4 mr-2" />}
-              {copied ? "Copiado!" : "Copiar Link de Agendamento"}
+              {copied ? <Check className="w-5 h-5 text-primary" /> : <Copy className="w-5 h-5" />}
+              {copied ? "Copiado com Sucesso!" : "Copiar meu Link de Agendamento"}
             </Button>
-            <Button asChild className="shadow-lg shadow-primary/20 hover:shadow-primary/30 transition-all rounded-full px-6">
-              <Link to="/appointments">
-                <Plus className="w-4 h-4 mr-2" />
-                Novo Agendamento
-              </Link>
-            </Button>
-          </div>
-        </motion.div>
+            <Link href="/appointments">
+              <Button className="h-14 rounded-2xl px-8 font-black text-lg btn-hover-effect shadow-primary/20 gap-2">
+                <Plus className="w-6 h-6" /> Novo Horário
+              </Button>
+            </Link>
+          </motion.div>
+        </section>
 
-        {/* Metrics Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        {/* Big Metrics Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           <MetricCard
-            title="Total de Clientes"
+            title="Minhas Clientes"
             value={metrics?.totalClients ?? 0}
-            icon={<Users className="w-5 h-5" />}
+            icon={<Users className="w-6 h-6" />}
+            color="primary"
             loading={metricsLoading}
-            subtext="Cadastrados no sistema"
           />
           <MetricCard
-            title="Agendamentos Ativos"
+            title="Agendamentos"
             value={metrics?.totalAppointments ?? 0}
-            icon={<Calendar className="w-5 h-5" />}
+            icon={<Calendar className="w-6 h-6" />}
+            color="primary"
             loading={metricsLoading}
-            subtext="Na agenda"
           />
           <MetricCard
             title="Hoje"
             value={metrics?.todayAppointments ?? 0}
-            icon={<Clock className="w-5 h-5" />}
+            icon={<Clock className="w-6 h-6" />}
+            color="accent"
             loading={metricsLoading}
-            subtext="Atendimentos para hoje"
           />
           <MetricCard
-            title="Faturamento (7 dias)"
-            value={`R$ ${(metrics?.totalRevenue ?? 0).toFixed(2)}`}
-            icon={<DollarSign className="w-5 h-5" />}
+            title="Faturamento"
+            value={`R$ ${(metrics?.totalRevenue ?? 0).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`}
+            icon={<DollarSign className="w-6 h-6" />}
+            color="primary"
             loading={metricsLoading}
-            subtext="Receita confirmada"
           />
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-7 gap-6">
-          {/* Main Chart Area */}
-          <motion.div variants={itemVariants} className="lg:col-span-4 space-y-6">
-            <Card className="glass-card border-border/50 overflow-hidden">
-              <CardHeader className="pb-2 border-b border-border/40 bg-muted/20">
-                <CardTitle className="text-lg font-medium flex items-center gap-2">
-                  <TrendingUp className="w-4 h-4 text-primary" />
-                  Evolução do Faturamento
-                </CardTitle>
-                <CardDescription>
-                  Pagamentos confirmados nos últimos 7 dias
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="pt-6">
-                <RevenueChart 
-                  data={generateRevenueDataFromPayments(payments)} 
-                />
-              </CardContent>
-            </Card>
-
-            {/* Status Overview */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <Card className="glass-card overflow-hidden group">
-                <div className="absolute inset-0 bg-gradient-to-br from-amber-500/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                <CardContent className="p-6 relative z-10">
-                  <div className="flex items-center gap-4">
-                    <div className="p-4 bg-amber-500/10 rounded-2xl text-amber-500 ring-1 ring-amber-500/20">
-                      <Clock className="w-6 h-6" />
-                    </div>
-                    <div>
-                      <p className="text-sm font-medium text-muted-foreground">Aguardando Execução</p>
-                      <h3 className="text-2xl font-bold tracking-tight text-foreground">{metrics?.pendingAppointments ?? 0}</h3>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-
-              <Card className="glass-card overflow-hidden group">
-                <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                <CardContent className="p-6 relative z-10">
-                  <div className="flex items-center gap-4">
-                    <div className="p-4 bg-emerald-500/10 rounded-2xl text-emerald-500 ring-1 ring-emerald-500/20">
-                      <TrendingUp className="w-6 h-6" />
-                    </div>
-                    <div>
-                      <p className="text-sm font-medium text-muted-foreground">Concluídos com Sucesso</p>
-                      <h3 className="text-2xl font-bold tracking-tight text-foreground">{metrics?.completedAppointments ?? 0}</h3>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
-          </motion.div>
-
-          {/* Sidebar Area */}
-          <motion.div variants={itemVariants} className="lg:col-span-3 space-y-6">
-            <Card className="glass-card border-border/50 h-full flex flex-col">
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 border-b border-border/40 bg-muted/20">
+        {/* Content Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+          {/* Chart Area */}
+          <Card className="lg:col-span-8 border-none shadow-[0_20px_50px_rgba(0,0,0,0.03)] rounded-[2.5rem] overflow-hidden bg-white/50 backdrop-blur-sm">
+            <CardHeader className="p-8 border-b border-border/50">
+              <div className="flex items-center justify-between">
                 <div>
-                  <CardTitle className="text-lg font-medium flex items-center gap-2">
-                    <Calendar className="w-4 h-4 text-primary" />
-                    Próximos
-                  </CardTitle>
+                  <CardTitle className="text-2xl font-black tracking-tighter">Fluxo de Caixa</CardTitle>
+                  <CardDescription className="font-medium">Seus ganhos nos últimos 7 dias</CardDescription>
                 </div>
-                <Button variant="ghost" size="sm" asChild className="h-8 text-xs hover:text-primary">
-                  <Link to="/appointments">
-                    Ver todos
-                    <ArrowRight className="w-3 h-3 ml-1" />
-                  </Link>
-                </Button>
-              </CardHeader>
-              <CardContent className="pt-6 flex-1">
-                {appointmentsLoading ? (
-                  <div className="flex items-center justify-center h-40">
-                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
-                  </div>
-                ) : upcomingAppointments && upcomingAppointments.length > 0 ? (
-                  <div className="space-y-4">
-                    {upcomingAppointments.slice(0, 5).map((appointment, index) => (
-                      <motion.div
-                        initial={{ opacity: 0, x: 20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: index * 0.1 }}
-                        key={appointment.id}
-                        className="group flex items-center justify-between p-4 rounded-xl bg-card border border-border/40 hover:border-primary/30 hover:shadow-sm transition-all"
-                      >
-                        <div className="flex items-center gap-3">
-                          <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary font-semibold text-sm ring-1 ring-primary/20">
-                            {format(new Date(appointment.startTime), "dd")}
-                          </div>
-                          <div>
-                            <p className="font-medium text-foreground group-hover:text-primary transition-colors">
-                              #{appointment.id}
-                            </p>
-                            <p className="text-xs text-muted-foreground flex items-center gap-1 mt-0.5">
-                              <Clock className="w-3 h-3" />
-                              {format(new Date(appointment.startTime), "HH:mm", { locale: ptBR })}
-                            </p>
-                          </div>
-                        </div>
-                        <div className="text-right">
-                          <p className="font-semibold text-foreground">
-                            R$ {appointment.price}
-                          </p>
-                          <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium mt-1
-                            ${appointment.status === 'scheduled' ? 'bg-amber-500/10 text-amber-500 ring-1 ring-inset ring-amber-500/20' : 
-                              appointment.status === 'completed' ? 'bg-emerald-500/10 text-emerald-500 ring-1 ring-inset ring-emerald-500/20' : 
-                              'bg-muted text-muted-foreground ring-1 ring-inset ring-border'}`}>
-                            {appointment.status === "scheduled" ? "Confirmado" : appointment.status}
-                          </span>
-                        </div>
-                      </motion.div>
-                    ))}
-                  </div>
-                ) : (
-                  <div className="flex flex-col items-center justify-center h-40 text-muted-foreground text-sm">
-                    <Calendar className="w-8 h-8 mb-2 opacity-20" />
-                    Nenhum agendamento próximo
-                  </div>
-                )}
-              </CardContent>
-            </Card>
-          </motion.div>
-        </div>
-
-        {/* Full Calendar View */}
-        <motion.div variants={itemVariants}>
-          <Card className="glass-card border-border/50">
-            <CardHeader className="border-b border-border/40 bg-muted/20">
-              <CardTitle className="text-lg font-medium flex items-center gap-2">
-                <Calendar className="w-4 h-4 text-primary" />
-                Calendário Completo
-              </CardTitle>
-              <CardDescription>
-                Visualize e gerencie todos os agendamentos do mês
-              </CardDescription>
+                <div className="p-3 rounded-2xl bg-emerald-500/10 text-emerald-600">
+                  <TrendingUp className="w-6 h-6" />
+                </div>
+              </div>
             </CardHeader>
-            <CardContent className="pt-6">
-              <AppointmentCalendar appointments={upcomingAppointments} />
+            <CardContent className="p-8">
+              <RevenueChart data={generateRevenueDataFromPayments(payments)} />
             </CardContent>
           </Card>
-        </motion.div>
-      </motion.div>
+
+          {/* Upcoming Area */}
+          <Card className="lg:col-span-4 border-none shadow-[0_20px_50px_rgba(0,0,0,0.03)] rounded-[2.5rem] overflow-hidden bg-white/50 backdrop-blur-sm">
+            <CardHeader className="p-8 border-b border-border/50">
+              <CardTitle className="text-2xl font-black tracking-tighter">Próximos Clientes</CardTitle>
+              <CardDescription className="font-medium">O que vem por aí</CardDescription>
+            </CardHeader>
+            <CardContent className="p-6">
+              {appointmentsLoading ? (
+                <div className="flex items-center justify-center h-64"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div></div>
+              ) : upcomingAppointments && upcomingAppointments.length > 0 ? (
+                <div className="space-y-4">
+                  {upcomingAppointments.slice(0, 4).map((appointment) => (
+                    <div key={appointment.id} className="flex items-center justify-between p-5 rounded-[1.5rem] bg-background border border-border/50 hover:border-primary/30 transition-all group">
+                      <div className="flex items-center gap-4">
+                        <div className="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center text-primary font-black animate-pulse">
+                          {format(new Date(appointment.startTime), "HH")}
+                        </div>
+                        <div>
+                          <p className="font-black text-foreground group-hover:text-primary transition-colors">Cliente #{appointment.id}</p>
+                          <p className="text-xs font-bold text-muted-foreground uppercase tracking-widest">{format(new Date(appointment.startTime), "HH:mm")}</p>
+                        </div>
+                      </div>
+                      <ArrowRight className="w-5 h-5 text-muted-foreground group-hover:text-primary transition-all group-hover:translate-x-1" />
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="flex flex-col items-center justify-center h-64 text-muted-foreground italic font-medium">Agenda livre no momento</div>
+              )}
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Calendar Card */}
+        <Card className="border-none shadow-[0_20px_50px_rgba(0,0,0,0.03)] rounded-[2.5rem] overflow-hidden bg-white/50 backdrop-blur-sm">
+          <CardHeader className="p-8 border-b border-border/50">
+            <div className="flex items-center gap-3">
+              <div className="p-3 rounded-2xl bg-primary/10 text-primary pera-glow">
+                <Calendar className="w-6 h-6" />
+              </div>
+              <div>
+                <CardTitle className="text-2xl font-black tracking-tighter">Calendário Completo</CardTitle>
+                <CardDescription className="font-medium">Visão mensal da sua Pêra</CardDescription>
+              </div>
+            </div>
+          </CardHeader>
+          <CardContent className="p-8">
+            <AppointmentCalendar appointments={upcomingAppointments} />
+          </CardContent>
+        </Card>
+      </div>
     </DashboardLayout>
+  );
+}
+
+function MetricCard({ title, value, icon, loading, color }: any) {
+  return (
+    <motion.div
+      whileHover={{ y: -5 }}
+      className="relative group"
+    >
+      <div className={`absolute inset-0 bg-primary/20 blur-[40px] rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500`} />
+      <Card className="border-none shadow-[0_15px_40px_rgba(0,0,0,0.02)] rounded-[2rem] overflow-hidden bg-white relative z-10">
+        <CardContent className="p-8">
+          <div className="flex items-start justify-between">
+            <div className="space-y-3">
+              <p className="text-xs font-black text-muted-foreground uppercase tracking-[0.2em]">{title}</p>
+              <h3 className="text-4xl font-black tracking-tighter text-foreground">
+                {loading ? "..." : value}
+              </h3>
+            </div>
+            <div className={`p-4 rounded-[1.25rem] ${color === 'primary' ? 'bg-primary/10 text-primary' : 'bg-accent/10 text-accent-foreground'} ring-1 ring-inset ring-white/20 shadow-inner`}>
+              {icon}
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+    </motion.div>
   );
 }

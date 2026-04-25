@@ -1,174 +1,152 @@
 import { useAuth } from "@/_core/hooks/useAuth";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { getLoginUrl } from "@/const";
-import { Redirect } from "wouter";
-import { Users, BarChart3, Clock, CheckCircle2, AlertCircle } from "lucide-react";
+import { Redirect, Link } from "wouter";
+import { Calendar, Users, BarChart3, Clock, CheckCircle2, ArrowRight, Sparkles, Zap, ShieldCheck } from "lucide-react";
+import { motion } from "framer-motion";
 
 export default function Home() {
   const { user, loading, isAuthenticated } = useAuth();
 
-  // Se o usuário está autenticado, redireciona para o dashboard
   if (isAuthenticated && !loading) {
     return <Redirect to="/dashboard" />;
   }
 
-  if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary/5 to-secondary/5">
-        <div className="text-center">
-          <div className="inline-flex animate-spin">
-            <div className="w-12 h-12 border-4 border-primary/20 border-t-primary rounded-full"></div>
-          </div>
-          <p className="mt-4 text-muted-foreground">Carregando...</p>
-        </div>
-      </div>
-    );
-  }
-
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-background to-primary/5">
+    <div className="min-h-screen selection:bg-primary/30 overflow-hidden relative">
+      <div className="noise-bg" />
+      
       {/* Navigation */}
-      <nav className="border-b border-border/40 backdrop-blur-sm sticky top-0 z-50 bg-background/95">
-        <div className="container flex items-center justify-between h-16">
-          <div className="flex items-center gap-2">
-            <img src="/logo.png" alt="Pêra Logo" className="w-8 h-8 object-contain" />
-            <span className="font-bold text-xl text-foreground">Pêra</span>
+      <nav className="fixed top-0 w-full z-50 border-b border-white/10 bg-background/60 backdrop-blur-md">
+        <div className="container flex items-center justify-between h-20">
+          <div className="flex items-center gap-3">
+            <img src="/logo.png" alt="Pêra Logo" className="w-10 h-10 object-contain animate-float" />
+            <span className="font-bold text-2xl tracking-tighter text-foreground">Pêra</span>
           </div>
-          <Button asChild>
-            <a href={getLoginUrl()}>Entrar</a>
-          </Button>
+          <div className="hidden md:flex items-center gap-8 text-sm font-medium text-muted-foreground">
+            <a href="#features" className="hover:text-primary transition-colors">Recursos</a>
+            <a href="#pricing" className="hover:text-primary transition-colors">Preços</a>
+            <a href="#about" className="hover:text-primary transition-colors">Sobre</a>
+          </div>
+          <div className="flex items-center gap-4">
+            <Link href="/login">
+              <Button variant="ghost" className="font-semibold hover:bg-primary/10">Entrar</Button>
+            </Link>
+            <Link href="/register">
+              <Button className="btn-hover-effect font-bold rounded-full px-6 bg-primary text-primary-foreground">
+                Começar agora
+              </Button>
+            </Link>
+          </div>
         </div>
       </nav>
 
       {/* Hero Section */}
-      <section className="container py-20 md:py-32">
-        <div className="max-w-3xl mx-auto text-center mb-16 animate-fade-in">
-          <h1 className="text-5xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-primary via-secondary to-primary bg-clip-text text-transparent">
-            Gerencie seu Negócio com Facilidade
-          </h1>
-          <p className="text-xl text-muted-foreground mb-8 leading-relaxed">
-            Sistema completo de agendamentos, gestão de clientes e relatórios para salões, clínicas e consultórios. Profissional, intuitivo e pronto para usar.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" asChild className="text-base h-12">
-              <a href={getLoginUrl()}>Começar Agora</a>
-            </Button>
-            <Button size="lg" variant="outline" className="text-base h-12">
-              Ver Demo
-            </Button>
+      <section className="relative pt-32 pb-20 md:pt-48 md:pb-32">
+        <div className="container relative z-10 text-center">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+          >
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 text-primary text-sm font-bold mb-8 pera-glow">
+              <Sparkles className="w-4 h-4" />
+              <span>O novo jeito de agendar chegou</span>
+            </div>
+            
+            <h1 className="text-6xl md:text-8xl font-black tracking-tighter text-foreground mb-6 leading-[0.9]">
+              Papel e caneta?<br />
+              <span className="text-primary italic">Pera aí né...</span>
+            </h1>
+            
+            <p className="text-xl md:text-2xl text-muted-foreground max-w-2xl mx-auto mb-10 font-medium leading-tight">
+              Sua agenda no automático, sua mente no descanso. O SaaS de gestão mais doce e eficiente para o seu negócio.
+            </p>
+            
+            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+              <Button size="lg" asChild className="h-16 px-10 text-lg font-bold rounded-full btn-hover-effect">
+                <a href="/register">Criar minha conta grátis</a>
+              </Button>
+              <Button size="lg" variant="outline" className="h-16 px-10 text-lg font-bold rounded-full border-2">
+                Ver demonstração
+              </Button>
+            </div>
+            
+            <div className="mt-16 relative">
+              <div className="absolute inset-0 bg-primary/20 blur-[120px] rounded-full scale-75 -z-10" />
+              <img 
+                src="/paleta.jpeg" 
+                alt="Pêra Dashboard Preview" 
+                className="w-full max-w-5xl mx-auto rounded-[2rem] shadow-2xl border border-white/20 animate-float"
+                style={{ opacity: 0.9 }}
+              />
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Features Section */}
+      <section id="features" className="py-24 bg-foreground text-background rounded-[3rem] mx-4">
+        <div className="container">
+          <div className="text-center mb-20">
+            <h2 className="text-4xl md:text-5xl font-black tracking-tight mb-4">Gestão completa, sem sementes.</h2>
+            <p className="text-muted-foreground/80 text-lg font-medium">Tudo o que você precisa em um único lugar.</p>
           </div>
-        </div>
-
-        {/* Features Grid */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-20">
-          <FeatureCard
-            icon={<Clock className="w-6 h-6" />}
-            title="Agendamentos Online"
-            description="Seus clientes marcam consultas 24/7. Você gerencia tudo em um calendário intuitivo."
-          />
-          <FeatureCard
-            icon={<Users className="w-6 h-6" />}
-            title="CRM de Clientes"
-            description="Histórico completo de atendimentos, telefone, email e notas personalizadas."
-          />
-          <FeatureCard
-            icon={<BarChart3 className="w-6 h-6" />}
-            title="Relatórios Detalhados"
-            description="Faturamento, agendamentos e métricas de clientes com filtros por período."
-          />
-          <FeatureCard
-            icon={<Clock className="w-6 h-6" />}
-            title="Lembretes Automáticos"
-            description="Notificações por WhatsApp para confirmação e lembretes de agendamentos."
-          />
-          <FeatureCard
-            icon={<CheckCircle2 className="w-6 h-6" />}
-            title="Catálogo de Serviços"
-            description="Organize seus serviços com preços, duração e descrição detalhada."
-          />
-          <FeatureCard
-            icon={<AlertCircle className="w-6 h-6" />}
-            title="Painel Administrativo"
-            description="Acesso seguro exclusivo para o dono do negócio com autenticação."
-          />
-        </div>
-
-        {/* Benefits Section */}
-        <div className="bg-card border border-border rounded-2xl p-8 md:p-12 mb-20">
-          <h2 className="text-3xl font-bold mb-12 text-center">Por que escolher Pêra?</h2>
-          <div className="grid md:grid-cols-2 gap-8">
-            <BenefitItem
-              title="Economia de Tempo"
-              description="Automatize agendamentos e lembretes. Menos ligações, mais produtividade."
+          
+          <div className="grid md:grid-cols-3 gap-8">
+            <FeatureCard 
+              icon={<Zap className="w-8 h-8" />}
+              title="Agendamento Veloz"
+              description="Sua cliente escolhe o horário em segundos, sem precisar te mandar mensagem."
             />
-            <BenefitItem
-              title="Aumento de Receita"
-              description="Reduza cancelamentos com lembretes. Venda mais com relatórios de dados."
+            <FeatureCard 
+              icon={<Users className="w-8 h-8" />}
+              title="Clientes Féis"
+              description="Histórico completo e lembretes automáticos via WhatsApp que evitam furos."
             />
-            <BenefitItem
-              title="Melhor Experiência"
-              description="Seus clientes marcam online. Você oferece um serviço moderno e profissional."
-            />
-            <BenefitItem
-              title="Fácil de Usar"
-              description="Interface intuitiva. Nenhuma experiência técnica necessária. Comece em minutos."
+            <FeatureCard 
+              icon={<ShieldCheck className="w-8 h-8" />}
+              title="Pagamentos Seguros"
+              description="Receba via PIX e cartão direto pelo app com a integração Abacatepay."
             />
           </div>
         </div>
+      </section>
 
-        {/* CTA Section */}
-        <div className="bg-gradient-to-r from-primary to-secondary rounded-2xl p-12 text-center text-white">
-          <h2 className="text-3xl font-bold mb-4">Pronto para transformar seu negócio?</h2>
-          <p className="text-lg mb-8 opacity-90">
-            Comece agora gratuitamente. Sem cartão de crédito necessário.
-          </p>
-          <Button size="lg" variant="secondary" asChild className="text-base h-12">
-            <a href={getLoginUrl()}>Criar Conta Grátis</a>
-          </Button>
+      {/* Social Proof / Call to Action */}
+      <section className="py-32 overflow-hidden">
+        <div className="container text-center">
+          <div className="glass-premium p-12 md:p-20 rounded-[3rem] relative">
+            <img src="/logo.png" alt="Logo" className="w-24 h-24 mx-auto mb-8 opacity-20 absolute top-10 right-10 rotate-12" />
+            <h2 className="text-5xl md:text-7xl font-black tracking-tighter mb-8 leading-none">
+              Pronta para colher<br />os <span className="text-primary">melhores frutos?</span>
+            </h2>
+            <p className="text-xl text-muted-foreground mb-12 max-w-xl mx-auto">
+              Junte-se a centenas de profissionais que já abandonaram o caderno e digitalizaram o sucesso.
+            </p>
+            <Button size="lg" asChild className="h-16 px-12 text-xl font-black rounded-full btn-hover-effect">
+              <a href="/register">Começar agora <ArrowRight className="ml-2 w-6 h-6" /></a>
+            </Button>
+          </div>
         </div>
       </section>
 
       {/* Footer */}
-      <footer className="border-t border-border/40 bg-card/50 backdrop-blur-sm mt-20">
-        <div className="container py-12">
-          <div className="grid md:grid-cols-4 gap-8 mb-8">
-            <div>
-              <div className="flex items-center gap-2 mb-4">
-                <img src="/logo.png" alt="Pêra Logo" className="w-6 h-6 object-contain" />
-                <span className="font-bold text-foreground">Pêra</span>
-              </div>
-              <p className="text-sm text-muted-foreground">
-                Gestão completa para seu negócio
-              </p>
+      <footer className="py-12 border-t border-border/50">
+        <div className="container">
+          <div className="flex flex-col md:flex-row justify-between items-center gap-8">
+            <div className="flex items-center gap-3">
+              <img src="/logo.png" alt="Pêra Logo" className="w-8 h-8 object-contain" />
+              <span className="font-bold text-xl tracking-tighter">Pêra</span>
             </div>
-            <div>
-              <h4 className="font-semibold mb-4">Produto</h4>
-              <ul className="space-y-2 text-sm text-muted-foreground">
-                <li><a href="#" className="hover:text-primary transition">Recursos</a></li>
-                <li><a href="#" className="hover:text-primary transition">Preços</a></li>
-                <li><a href="#" className="hover:text-primary transition">Segurança</a></li>
-              </ul>
+            <div className="flex gap-8 text-sm font-bold text-muted-foreground uppercase tracking-widest">
+              <a href="#" className="hover:text-primary transition-colors">Termos</a>
+              <a href="#" className="hover:text-primary transition-colors">Privacidade</a>
+              <a href="#" className="hover:text-primary transition-colors">Ajuda</a>
             </div>
-            <div>
-              <h4 className="font-semibold mb-4">Empresa</h4>
-              <ul className="space-y-2 text-sm text-muted-foreground">
-                <li><a href="#" className="hover:text-primary transition">Sobre</a></li>
-                <li><a href="#" className="hover:text-primary transition">Blog</a></li>
-                <li><a href="#" className="hover:text-primary transition">Contato</a></li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="font-semibold mb-4">Legal</h4>
-              <ul className="space-y-2 text-sm text-muted-foreground">
-                <li><a href="#" className="hover:text-primary transition">Privacidade</a></li>
-                <li><a href="#" className="hover:text-primary transition">Termos</a></li>
-                <li><a href="#" className="hover:text-primary transition">Cookies</a></li>
-              </ul>
-            </div>
-          </div>
-          <div className="border-t border-border pt-8 text-center text-sm text-muted-foreground">
-            <p>&copy; 2026 Pêra. Todos os direitos reservados.</p>
+            <p className="text-sm text-muted-foreground font-medium">
+              &copy; 2026 Pêra SaaS. Todos os direitos reservados.
+            </p>
           </div>
         </div>
       </footer>
@@ -176,32 +154,17 @@ export default function Home() {
   );
 }
 
-function FeatureCard({ icon, title, description }: { icon: React.ReactNode; title: string; description: string }) {
+function FeatureCard({ icon, title, description }: { icon: React.ReactNode, title: string, description: string }) {
   return (
-    <Card className="border-border/40 hover:border-primary/40 transition-all hover:shadow-lg hover:shadow-primary/10">
-      <CardHeader>
-        <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center mb-4 text-primary">
-          {icon}
-        </div>
-        <CardTitle className="text-lg">{title}</CardTitle>
-      </CardHeader>
-      <CardContent>
-        <p className="text-sm text-muted-foreground">{description}</p>
-      </CardContent>
-    </Card>
-  );
-}
-
-function BenefitItem({ title, description }: { title: string; description: string }) {
-  return (
-    <div className="flex gap-4">
-      <div className="w-6 h-6 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0 mt-1">
-        <CheckCircle2 className="w-4 h-4 text-primary" />
+    <motion.div 
+      whileHover={{ y: -10 }}
+      className="p-8 rounded-[2rem] bg-white/5 border border-white/10 hover:border-primary/50 transition-all"
+    >
+      <div className="w-16 h-16 rounded-2xl bg-primary flex items-center justify-center text-primary-foreground mb-6 shadow-xl shadow-primary/20">
+        {icon}
       </div>
-      <div>
-        <h3 className="font-semibold mb-2">{title}</h3>
-        <p className="text-muted-foreground text-sm">{description}</p>
-      </div>
-    </div>
+      <h3 className="text-2xl font-bold mb-3">{title}</h3>
+      <p className="text-muted-foreground/70 leading-relaxed font-medium">{description}</p>
+    </motion.div>
   );
 }
