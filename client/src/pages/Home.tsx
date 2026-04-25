@@ -2,7 +2,7 @@ import { useAuth } from "@/_core/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import { getLoginUrl } from "@/const";
 import { Redirect, Link } from "wouter";
-import { Calendar, Users, BarChart3, Clock, CheckCircle2, ArrowRight, Sparkles, Zap, ShieldCheck } from "lucide-react";
+import { Users, BarChart3, Clock, CheckCircle2, ArrowRight, Sparkles, Zap, ShieldCheck, Star, Rocket, Globe } from "lucide-react";
 import { motion } from "framer-motion";
 
 export default function Home() {
@@ -12,29 +12,59 @@ export default function Home() {
     return <Redirect to="/dashboard" />;
   }
 
+  // Partículas de Pêras caindo
+  const pears = Array.from({ length: 15 });
+
   return (
-    <div className="min-h-screen selection:bg-primary/30 overflow-hidden relative">
+    <div className="min-h-screen selection:bg-primary/30 overflow-hidden relative bg-[#FDFCF0]">
       <div className="noise-bg" />
       
+      {/* Pears Particles */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden">
+        {pears.map((_, i) => (
+          <motion.img
+            key={i}
+            src="/logo.png"
+            alt="Pêra particle"
+            className="absolute w-8 h-8 opacity-10"
+            initial={{ 
+              top: -50, 
+              left: `${Math.random() * 100}%`, 
+              rotate: 0 
+            }}
+            animate={{ 
+              top: "110%", 
+              rotate: 360,
+              left: `${(Math.random() * 100)}%`
+            }}
+            transition={{ 
+              duration: 10 + Math.random() * 20, 
+              repeat: Infinity, 
+              ease: "linear",
+              delay: Math.random() * 10
+            }}
+          />
+        ))}
+      </div>
+      
       {/* Navigation */}
-      <nav className="fixed top-0 w-full z-50 border-b border-white/10 bg-background/60 backdrop-blur-md">
+      <nav className="fixed top-0 w-full z-50 border-b border-black/5 bg-white/40 backdrop-blur-md">
         <div className="container flex items-center justify-between h-20">
           <div className="flex items-center gap-3">
-            <img src="/logo.png" alt="Pêra Logo" className="w-10 h-10 object-contain animate-float" />
-            <span className="font-bold text-2xl tracking-tighter text-foreground">Pêra</span>
+            <img src="/logo.png" alt="Pêra Logo" className="w-14 h-14 object-contain animate-float" />
+            {/* Nome Pêra removido como solicitado */}
           </div>
-          <div className="hidden md:flex items-center gap-8 text-sm font-medium text-muted-foreground">
+          <div className="hidden md:flex items-center gap-8 text-sm font-bold text-foreground/70 uppercase tracking-widest">
             <a href="#features" className="hover:text-primary transition-colors">Recursos</a>
             <a href="#pricing" className="hover:text-primary transition-colors">Preços</a>
-            <a href="#about" className="hover:text-primary transition-colors">Sobre</a>
           </div>
           <div className="flex items-center gap-4">
             <Link href="/login">
-              <Button variant="ghost" className="font-semibold hover:bg-primary/10">Entrar</Button>
+              <Button variant="ghost" className="font-black uppercase tracking-tighter hover:bg-primary/10">Entrar</Button>
             </Link>
             <Link href="/register">
-              <Button className="btn-hover-effect font-bold rounded-full px-6 bg-primary text-primary-foreground">
-                Começar agora
+              <Button className="btn-hover-effect font-black rounded-full px-8 bg-primary text-primary-foreground h-12">
+                TESTAR GRÁTIS
               </Button>
             </Link>
           </div>
@@ -49,122 +79,152 @@ export default function Home() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
           >
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 text-primary text-sm font-bold mb-8 pera-glow">
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-black mb-8 uppercase tracking-widest">
               <Sparkles className="w-4 h-4" />
-              <span>O novo jeito de agendar chegou</span>
+              <span>A revolução do agendamento</span>
             </div>
             
-            <h1 className="text-6xl md:text-8xl font-black tracking-tighter text-foreground mb-6 leading-[0.9]">
+            <h1 className="text-6xl md:text-9xl font-black tracking-tighter text-foreground mb-6 leading-[0.85]">
               Papel e caneta?<br />
               <span className="text-primary italic">Pera aí né...</span>
             </h1>
             
-            <p className="text-xl md:text-2xl text-muted-foreground max-w-2xl mx-auto mb-10 font-medium leading-tight">
-              Sua agenda no automático, sua mente no descanso. O SaaS de gestão mais doce e eficiente para o seu negócio.
+            <p className="text-xl md:text-2xl text-muted-foreground max-w-2xl mx-auto mb-12 font-medium leading-tight px-4">
+              O SaaS que transforma sua correria em lucro no automático. Simples como colher uma fruta.
             </p>
             
-            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-              <Button size="lg" asChild className="h-16 px-10 text-lg font-bold rounded-full btn-hover-effect">
-                <a href="/register">Criar minha conta grátis</a>
-              </Button>
-              <Button size="lg" variant="outline" className="h-16 px-10 text-lg font-bold rounded-full border-2">
-                Ver demonstração
+            <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
+              <Button size="lg" asChild className="h-20 px-12 text-xl font-black rounded-full btn-hover-effect shadow-2xl">
+                <a href="/register">QUERO COMEÇAR AGORA</a>
               </Button>
             </div>
             
-            <div className="mt-16 relative">
-              <div className="absolute inset-0 bg-primary/20 blur-[120px] rounded-full scale-75 -z-10" />
-              <img 
-                src="/paleta.jpeg" 
-                alt="Pêra Dashboard Preview" 
-                className="w-full max-w-5xl mx-auto rounded-[2rem] shadow-2xl border border-white/20 animate-float"
-                style={{ opacity: 0.9 }}
-              />
+            <div className="mt-24 grid grid-cols-2 md:grid-cols-4 gap-8 max-w-4xl mx-auto opacity-50">
+              <div className="flex flex-col items-center gap-2 font-black text-xs uppercase tracking-widest">
+                <ShieldCheck className="w-6 h-6" /> 100% Seguro
+              </div>
+              <div className="flex flex-col items-center gap-2 font-black text-xs uppercase tracking-widest">
+                <Zap className="w-6 h-6" /> Setup Instantâneo
+              </div>
+              <div className="flex flex-col items-center gap-2 font-black text-xs uppercase tracking-widest">
+                <Clock className="w-6 h-6" /> Suporte 24/7
+              </div>
+              <div className="flex flex-col items-center gap-2 font-black text-xs uppercase tracking-widest">
+                <Star className="w-6 h-6" /> Premium Quality
+              </div>
             </div>
           </motion.div>
         </div>
       </section>
 
-      {/* Features Section */}
-      <section id="features" className="py-24 bg-foreground text-background rounded-[3rem] mx-4">
-        <div className="container">
+      {/* Pricing Section */}
+      <section id="pricing" className="py-32 bg-white rounded-[4rem] mx-4 shadow-sm border border-black/5 relative overflow-hidden">
+        <div className="container relative z-10">
           <div className="text-center mb-20">
-            <h2 className="text-4xl md:text-5xl font-black tracking-tight mb-4">Gestão completa, sem sementes.</h2>
-            <p className="text-muted-foreground/80 text-lg font-medium">Tudo o que você precisa em um único lugar.</p>
+            <h2 className="text-5xl md:text-7xl font-black tracking-tighter mb-4">Planos para o seu <span className="text-primary">tamanho.</span></h2>
+            <p className="text-muted-foreground text-xl font-medium">Sem taxas escondidas, sem surpresas amargas.</p>
           </div>
           
-          <div className="grid md:grid-cols-3 gap-8">
-            <FeatureCard 
-              icon={<Zap className="w-8 h-8" />}
-              title="Agendamento Veloz"
-              description="Sua cliente escolhe o horário em segundos, sem precisar te mandar mensagem."
+          <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+            {/* Plano Básico */}
+            <PricingCard 
+              title="Essencial"
+              price="39,99"
+              description="Para quem está começando a crescer."
+              features={[
+                "Agendamentos Ilimitados",
+                "Gestão de até 50 Clientes",
+                "Link de Agendamento Público",
+                "Financeiro Básico"
+              ]}
+              icon={<Rocket className="w-6 h-6" />}
             />
-            <FeatureCard 
-              icon={<Users className="w-8 h-8" />}
-              title="Clientes Féis"
-              description="Histórico completo e lembretes automáticos via WhatsApp que evitam furos."
+            
+            {/* Plano Profissional */}
+            <PricingCard 
+              title="Profissional"
+              price="59,99"
+              description="O plano mais colhido pelos experts."
+              features={[
+                "Tudo do Essencial",
+                "Clientes Ilimitados",
+                "Notificações WhatsApp",
+                "Relatórios de Faturamento",
+                "Lembretes Automáticos"
+              ]}
+              highlighted
+              icon={<Zap className="w-6 h-6" />}
             />
-            <FeatureCard 
-              icon={<ShieldCheck className="w-8 h-8" />}
-              title="Pagamentos Seguros"
-              description="Receba via PIX e cartão direto pelo app com a integração Abacatepay."
+            
+            {/* Plano Enterprise */}
+            <PricingCard 
+              title="Império"
+              price="99,99"
+              description="Para quem domina o mercado."
+              features={[
+                "Tudo do Profissional",
+                "Multi-profissionais",
+                "API de Integração",
+                "Suporte Prioritário VIP",
+                "Domínio Personalizado"
+              ]}
+              icon={<Globe className="w-6 h-6" />}
             />
-          </div>
-        </div>
-      </section>
-
-      {/* Social Proof / Call to Action */}
-      <section className="py-32 overflow-hidden">
-        <div className="container text-center">
-          <div className="glass-premium p-12 md:p-20 rounded-[3rem] relative">
-            <img src="/logo.png" alt="Logo" className="w-24 h-24 mx-auto mb-8 opacity-20 absolute top-10 right-10 rotate-12" />
-            <h2 className="text-5xl md:text-7xl font-black tracking-tighter mb-8 leading-none">
-              Pronta para colher<br />os <span className="text-primary">melhores frutos?</span>
-            </h2>
-            <p className="text-xl text-muted-foreground mb-12 max-w-xl mx-auto">
-              Junte-se a centenas de profissionais que já abandonaram o caderno e digitalizaram o sucesso.
-            </p>
-            <Button size="lg" asChild className="h-16 px-12 text-xl font-black rounded-full btn-hover-effect">
-              <a href="/register">Começar agora <ArrowRight className="ml-2 w-6 h-6" /></a>
-            </Button>
           </div>
         </div>
       </section>
 
       {/* Footer */}
-      <footer className="py-12 border-t border-border/50">
-        <div className="container">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-8">
-            <div className="flex items-center gap-3">
-              <img src="/logo.png" alt="Pêra Logo" className="w-8 h-8 object-contain" />
-              <span className="font-bold text-xl tracking-tighter">Pêra</span>
-            </div>
-            <div className="flex gap-8 text-sm font-bold text-muted-foreground uppercase tracking-widest">
-              <a href="#" className="hover:text-primary transition-colors">Termos</a>
-              <a href="#" className="hover:text-primary transition-colors">Privacidade</a>
-              <a href="#" className="hover:text-primary transition-colors">Ajuda</a>
-            </div>
-            <p className="text-sm text-muted-foreground font-medium">
-              &copy; 2026 Pêra SaaS. Todos os direitos reservados.
-            </p>
-          </div>
+      <footer className="py-20">
+        <div className="container text-center">
+          <img src="/logo.png" alt="Pêra Logo" className="w-20 h-20 mx-auto mb-8 grayscale hover:grayscale-0 transition-all cursor-pointer" />
+          <p className="text-muted-foreground font-black text-xs uppercase tracking-[0.4em]">
+            Digitalizando o futuro dos serviços &copy; 2026
+          </p>
         </div>
       </footer>
     </div>
   );
 }
 
-function FeatureCard({ icon, title, description }: { icon: React.ReactNode, title: string, description: string }) {
+function PricingCard({ title, price, description, features, highlighted = false, icon }: any) {
   return (
     <motion.div 
       whileHover={{ y: -10 }}
-      className="p-8 rounded-[2rem] bg-white/5 border border-white/10 hover:border-primary/50 transition-all"
+      className={`p-10 rounded-[3rem] border-2 transition-all ${
+        highlighted 
+          ? "bg-foreground text-background border-primary shadow-[0_30px_60px_-10px_rgba(120,190,32,0.3)] scale-105 z-10" 
+          : "bg-muted/30 border-black/5 text-foreground"
+      }`}
     >
-      <div className="w-16 h-16 rounded-2xl bg-primary flex items-center justify-center text-primary-foreground mb-6 shadow-xl shadow-primary/20">
+      <div className={`w-12 h-12 rounded-2xl flex items-center justify-center mb-6 ${highlighted ? "bg-primary text-foreground" : "bg-primary/10 text-primary"}`}>
         {icon}
       </div>
-      <h3 className="text-2xl font-bold mb-3">{title}</h3>
-      <p className="text-muted-foreground/70 leading-relaxed font-medium">{description}</p>
+      <h3 className="text-3xl font-black tracking-tighter mb-2">{title}</h3>
+      <p className={`text-sm mb-8 font-medium ${highlighted ? "text-background/60" : "text-muted-foreground"}`}>{description}</p>
+      
+      <div className="flex items-baseline gap-1 mb-8">
+        <span className="text-lg font-black italic">R$</span>
+        <span className="text-6xl font-black tracking-tighter">{price}</span>
+        <span className="text-sm font-bold opacity-60">/mês</span>
+      </div>
+      
+      <ul className="space-y-4 mb-10">
+        {features.map((f: string, i: number) => (
+          <li key={i} className="flex items-center gap-3 text-sm font-bold">
+            <CheckCircle2 className={`w-5 h-5 ${highlighted ? "text-primary" : "text-primary"}`} />
+            {f}
+          </li>
+        ))}
+      </ul>
+      
+      <Button className={`w-full h-14 rounded-2xl font-black text-lg ${
+        highlighted 
+          ? "bg-primary text-foreground hover:bg-primary/90" 
+          : "bg-foreground text-background hover:bg-foreground/90"
+      }`}>
+        Escolher Plano
+      </Button>
     </motion.div>
   );
 }
