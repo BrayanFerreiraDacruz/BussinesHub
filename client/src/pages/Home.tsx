@@ -12,12 +12,12 @@ export default function Home() {
     return <Redirect to="/dashboard" />;
   }
 
-  // Partículas de Pêras caindo
-  const pears = Array.from({ length: 15 });
+  // Partículas de Pêras caindo - Aumentadas e mais visíveis
+  const pears = Array.from({ length: 12 });
 
   return (
-    <div className="min-h-screen selection:bg-primary/30 overflow-hidden relative bg-[#FDFCF0]">
-      <div className="noise-bg" />
+    <div className="min-h-screen selection:bg-primary/30 overflow-hidden relative bg-[#F8F7E5]">
+      <div className="noise-bg opacity-10" />
       
       {/* Pears Particles */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
@@ -26,11 +26,11 @@ export default function Home() {
             key={i}
             src="/logo.png"
             alt="Pêra particle"
-            className="absolute w-8 h-8 opacity-10"
+            className="absolute w-16 h-16 opacity-15"
             initial={{ 
-              top: -50, 
+              top: -100, 
               left: `${Math.random() * 100}%`, 
-              rotate: 0 
+              rotate: Math.random() * 360
             }}
             animate={{ 
               top: "110%", 
@@ -38,7 +38,7 @@ export default function Home() {
               left: `${(Math.random() * 100)}%`
             }}
             transition={{ 
-              duration: 10 + Math.random() * 20, 
+              duration: 15 + Math.random() * 15, 
               repeat: Infinity, 
               ease: "linear",
               delay: Math.random() * 10
@@ -48,22 +48,21 @@ export default function Home() {
       </div>
       
       {/* Navigation */}
-      <nav className="fixed top-0 w-full z-50 border-b border-black/5 bg-white/40 backdrop-blur-md">
-        <div className="container flex items-center justify-between h-20">
+      <nav className="fixed top-0 w-full z-50 border-b border-black/10 bg-white/60 backdrop-blur-lg">
+        <div className="container max-w-7xl mx-auto flex items-center justify-between h-24 px-6">
           <div className="flex items-center gap-3">
-            <img src="/logo.png" alt="Pêra Logo" className="w-14 h-14 object-contain animate-float" />
-            {/* Nome Pêra removido como solicitado */}
+            <img src="/logo.png" alt="Pêra Logo" className="w-16 h-16 object-contain animate-float drop-shadow-sm" />
           </div>
-          <div className="hidden md:flex items-center gap-8 text-sm font-bold text-foreground/70 uppercase tracking-widest">
+          <div className="hidden md:flex items-center gap-10 text-sm font-black text-foreground uppercase tracking-widest">
             <a href="#features" className="hover:text-primary transition-colors">Recursos</a>
             <a href="#pricing" className="hover:text-primary transition-colors">Preços</a>
           </div>
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-6">
             <Link href="/login">
-              <Button variant="ghost" className="font-black uppercase tracking-tighter hover:bg-primary/10">Entrar</Button>
+              <Button variant="ghost" className="font-black text-base uppercase tracking-tighter hover:bg-primary/10 text-foreground">Entrar</Button>
             </Link>
             <Link href="/register">
-              <Button className="btn-hover-effect font-black rounded-full px-8 bg-primary text-primary-foreground h-12">
+              <Button className="btn-hover-effect font-black rounded-full px-10 bg-foreground text-background h-14 text-base border-none">
                 TESTAR GRÁTIS
               </Button>
             </Link>
@@ -72,45 +71,45 @@ export default function Home() {
       </nav>
 
       {/* Hero Section */}
-      <section className="relative pt-32 pb-20 md:pt-48 md:pb-32">
-        <div className="container relative z-10 text-center">
+      <section className="relative pt-44 pb-32 md:pt-64 md:pb-48">
+        <div className="container max-w-6xl mx-auto relative z-10 text-center px-6">
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
           >
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-black mb-8 uppercase tracking-widest">
-              <Sparkles className="w-4 h-4" />
-              <span>A revolução do agendamento</span>
+            <div className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full bg-primary/20 border border-primary/30 text-primary-foreground font-black mb-10 uppercase tracking-[0.2em] text-xs shadow-sm">
+              <Sparkles className="w-4 h-4 text-primary" />
+              <span className="text-foreground">A revolução do agendamento</span>
             </div>
             
-            <h1 className="text-6xl md:text-9xl font-black tracking-tighter text-foreground mb-6 leading-[0.85]">
+            <h1 className="text-7xl md:text-[10rem] font-black tracking-tighter text-foreground mb-8 leading-[0.8] drop-shadow-sm">
               Papel e caneta?<br />
               <span className="text-primary italic">Pera aí né...</span>
             </h1>
             
-            <p className="text-xl md:text-2xl text-muted-foreground max-w-2xl mx-auto mb-12 font-medium leading-tight px-4">
+            <p className="text-2xl md:text-3xl text-foreground/80 max-w-3xl mx-auto mb-16 font-bold leading-tight drop-shadow-sm">
               O SaaS que transforma sua correria em lucro no automático. Simples como colher uma fruta.
             </p>
             
-            <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
-              <Button size="lg" asChild className="h-20 px-12 text-xl font-black rounded-full btn-hover-effect shadow-2xl">
+            <div className="flex flex-col sm:flex-row gap-8 justify-center items-center mb-32">
+              <Button size="lg" asChild className="h-24 px-16 text-2xl font-black rounded-full btn-hover-effect shadow-2xl bg-primary text-primary-foreground border-none">
                 <a href="/register">QUERO COMEÇAR AGORA</a>
               </Button>
             </div>
             
-            <div className="mt-24 grid grid-cols-2 md:grid-cols-4 gap-8 max-w-4xl mx-auto opacity-50">
-              <div className="flex flex-col items-center gap-2 font-black text-xs uppercase tracking-widest">
-                <ShieldCheck className="w-6 h-6" /> 100% Seguro
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-12 max-w-5xl mx-auto border-t border-black/10 pt-16">
+              <div className="flex flex-col items-center gap-3 font-black text-sm uppercase tracking-widest text-foreground">
+                <ShieldCheck className="w-8 h-8 text-primary" /> 100% Seguro
               </div>
-              <div className="flex flex-col items-center gap-2 font-black text-xs uppercase tracking-widest">
-                <Zap className="w-6 h-6" /> Setup Instantâneo
+              <div className="flex flex-col items-center gap-3 font-black text-sm uppercase tracking-widest text-foreground">
+                <Zap className="w-8 h-8 text-primary" /> Setup Instantâneo
               </div>
-              <div className="flex flex-col items-center gap-2 font-black text-xs uppercase tracking-widest">
-                <Clock className="w-6 h-6" /> Suporte 24/7
+              <div className="flex flex-col items-center gap-3 font-black text-sm uppercase tracking-widest text-foreground">
+                <Clock className="w-8 h-8 text-primary" /> Suporte 24/7
               </div>
-              <div className="flex flex-col items-center gap-2 font-black text-xs uppercase tracking-widest">
-                <Star className="w-6 h-6" /> Premium Quality
+              <div className="flex flex-col items-center gap-3 font-black text-sm uppercase tracking-widest text-foreground">
+                <Star className="w-8 h-8 text-primary" /> Premium Quality
               </div>
             </div>
           </motion.div>
@@ -118,14 +117,14 @@ export default function Home() {
       </section>
 
       {/* Pricing Section */}
-      <section id="pricing" className="py-32 bg-white rounded-[4rem] mx-4 shadow-sm border border-black/5 relative overflow-hidden">
-        <div className="container relative z-10">
-          <div className="text-center mb-20">
-            <h2 className="text-5xl md:text-7xl font-black tracking-tighter mb-4">Planos para o seu <span className="text-primary">tamanho.</span></h2>
-            <p className="text-muted-foreground text-xl font-medium">Sem taxas escondidas, sem surpresas amargas.</p>
+      <section id="pricing" className="py-40 bg-white rounded-[5rem] mx-6 shadow-xl border border-black/5 relative overflow-hidden">
+        <div className="container max-w-7xl mx-auto relative z-10 px-6 text-center">
+          <div className="mb-24">
+            <h2 className="text-6xl md:text-[6rem] font-black tracking-tighter mb-6 text-foreground leading-none">Planos para o seu <span className="text-primary italic text-8xl md:text-[8rem]">tamanho.</span></h2>
+            <p className="text-foreground/60 text-2xl font-bold">Sem taxas escondidas, sem surpresas amargas.</p>
           </div>
           
-          <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+          <div className="grid md:grid-cols-3 gap-10 max-w-6xl mx-auto items-center">
             {/* Plano Básico */}
             <PricingCard 
               title="Essencial"
@@ -133,11 +132,11 @@ export default function Home() {
               description="Para quem está começando a crescer."
               features={[
                 "Agendamentos Ilimitados",
-                "Gestão de até 50 Clientes",
-                "Link de Agendamento Público",
+                "Até 50 Clientes",
+                "Link de Agendamento",
                 "Financeiro Básico"
               ]}
-              icon={<Rocket className="w-6 h-6" />}
+              icon={<Rocket className="w-8 h-8" />}
             />
             
             {/* Plano Profissional */}
@@ -146,14 +145,14 @@ export default function Home() {
               price="59,99"
               description="O plano mais colhido pelos experts."
               features={[
-                "Tudo do Essencial",
                 "Clientes Ilimitados",
-                "Notificações WhatsApp",
-                "Relatórios de Faturamento",
-                "Lembretes Automáticos"
+                "WhatsApp Automático",
+                "Relatórios de Ganhos",
+                "Lembretes Automáticos",
+                "Fila de Espera"
               ]}
               highlighted
-              icon={<Zap className="w-6 h-6" />}
+              icon={<Zap className="w-8 h-8" />}
             />
             
             {/* Plano Enterprise */}
@@ -162,23 +161,23 @@ export default function Home() {
               price="99,99"
               description="Para quem domina o mercado."
               features={[
-                "Tudo do Profissional",
-                "Multi-profissionais",
+                "Múltiplos Profissionais",
                 "API de Integração",
                 "Suporte Prioritário VIP",
-                "Domínio Personalizado"
+                "Domínio Próprio",
+                "Personalização Total"
               ]}
-              icon={<Globe className="w-6 h-6" />}
+              icon={<Globe className="w-8 h-8" />}
             />
           </div>
         </div>
       </section>
 
       {/* Footer */}
-      <footer className="py-20">
-        <div className="container text-center">
-          <img src="/logo.png" alt="Pêra Logo" className="w-20 h-20 mx-auto mb-8 grayscale hover:grayscale-0 transition-all cursor-pointer" />
-          <p className="text-muted-foreground font-black text-xs uppercase tracking-[0.4em]">
+      <footer className="py-32 bg-[#F8F7E5]">
+        <div className="container max-w-7xl mx-auto text-center px-6">
+          <img src="/logo.png" alt="Pêra Logo" className="w-24 h-24 mx-auto mb-10 animate-pulse" />
+          <p className="text-foreground/40 font-black text-sm uppercase tracking-[0.6em]">
             Digitalizando o futuro dos serviços &copy; 2026
           </p>
         </div>
@@ -190,35 +189,40 @@ export default function Home() {
 function PricingCard({ title, price, description, features, highlighted = false, icon }: any) {
   return (
     <motion.div 
-      whileHover={{ y: -10 }}
-      className={`p-10 rounded-[3rem] border-2 transition-all ${
+      whileHover={{ scale: 1.02 }}
+      className={`p-12 rounded-[4rem] border-2 transition-all flex flex-col items-center text-center ${
         highlighted 
-          ? "bg-foreground text-background border-primary shadow-[0_30px_60px_-10px_rgba(120,190,32,0.3)] scale-105 z-10" 
-          : "bg-muted/30 border-black/5 text-foreground"
+          ? "bg-foreground text-background border-primary shadow-[0_40px_80px_-15px_rgba(120,190,32,0.4)] py-20 relative z-10" 
+          : "bg-[#F3F2D7] border-black/5 text-foreground"
       }`}
     >
-      <div className={`w-12 h-12 rounded-2xl flex items-center justify-center mb-6 ${highlighted ? "bg-primary text-foreground" : "bg-primary/10 text-primary"}`}>
+      <div className={`w-16 h-16 rounded-3xl flex items-center justify-center mb-8 ${highlighted ? "bg-primary text-foreground shadow-lg shadow-primary/20" : "bg-primary/10 text-primary"}`}>
         {icon}
       </div>
-      <h3 className="text-3xl font-black tracking-tighter mb-2">{title}</h3>
-      <p className={`text-sm mb-8 font-medium ${highlighted ? "text-background/60" : "text-muted-foreground"}`}>{description}</p>
+      <h3 className="text-4xl font-black tracking-tighter mb-3">{title}</h3>
+      <p className={`text-base mb-10 font-bold ${highlighted ? "text-background/50" : "text-foreground/50"}`}>{description}</p>
       
-      <div className="flex items-baseline gap-1 mb-8">
-        <span className="text-lg font-black italic">R$</span>
-        <span className="text-6xl font-black tracking-tighter">{price}</span>
-        <span className="text-sm font-bold opacity-60">/mês</span>
+      <div className="flex items-start justify-center gap-1 mb-12">
+        <span className="text-2xl font-black italic mt-2">R$</span>
+        <span className="text-8xl font-black tracking-tighter leading-none">{price.split(',')[0]}</span>
+        <div className="flex flex-col items-start mt-2">
+          <span className="text-2xl font-black leading-none">,{price.split(',')[1]}</span>
+          <span className="text-sm font-black opacity-50 uppercase tracking-widest">/mês</span>
+        </div>
       </div>
       
-      <ul className="space-y-4 mb-10">
+      <ul className="space-y-5 mb-12 text-left w-full">
         {features.map((f: string, i: number) => (
-          <li key={i} className="flex items-center gap-3 text-sm font-bold">
-            <CheckCircle2 className={`w-5 h-5 ${highlighted ? "text-primary" : "text-primary"}`} />
+          <li key={i} className="flex items-center gap-4 text-base font-black tracking-tight">
+            <div className={`w-6 h-6 rounded-full flex items-center justify-center ${highlighted ? "bg-primary text-foreground" : "bg-primary text-background"}`}>
+              <CheckCircle2 className="w-4 h-4" />
+            </div>
             {f}
           </li>
         ))}
       </ul>
       
-      <Button className={`w-full h-14 rounded-2xl font-black text-lg ${
+      <Button className={`w-full h-20 rounded-3xl font-black text-xl shadow-xl transition-all ${
         highlighted 
           ? "bg-primary text-foreground hover:bg-primary/90" 
           : "bg-foreground text-background hover:bg-foreground/90"
