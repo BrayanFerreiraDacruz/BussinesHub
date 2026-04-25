@@ -3,8 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { getLoginUrl } from "@/const";
 import { Redirect } from "wouter";
-import { Calendar, Users, BarChart3, Clock, CheckCircle2, AlertCircle } from "lucide-react";
-import { useEffect } from "react";
+import { Users, BarChart3, Clock, CheckCircle2, AlertCircle } from "lucide-react";
 
 export default function Home() {
   const { user, loading, isAuthenticated } = useAuth();
@@ -33,10 +32,8 @@ export default function Home() {
       <nav className="border-b border-border/40 backdrop-blur-sm sticky top-0 z-50 bg-background/95">
         <div className="container flex items-center justify-between h-16">
           <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary to-secondary flex items-center justify-center">
-              <Calendar className="w-5 h-5 text-white" />
-            </div>
-            <span className="font-bold text-xl text-foreground">BusinessHub</span>
+            <img src="/logo.png" alt="Pêra Logo" className="w-8 h-8 object-contain" />
+            <span className="font-bold text-xl text-foreground">Pêra</span>
           </div>
           <Button asChild>
             <a href={getLoginUrl()}>Entrar</a>
@@ -66,7 +63,7 @@ export default function Home() {
         {/* Features Grid */}
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-20">
           <FeatureCard
-            icon={<Calendar className="w-6 h-6" />}
+            icon={<Clock className="w-6 h-6" />}
             title="Agendamentos Online"
             description="Seus clientes marcam consultas 24/7. Você gerencia tudo em um calendário intuitivo."
           />
@@ -83,7 +80,7 @@ export default function Home() {
           <FeatureCard
             icon={<Clock className="w-6 h-6" />}
             title="Lembretes Automáticos"
-            description="Notificações por email para confirmação e lembretes de agendamentos."
+            description="Notificações por WhatsApp para confirmação e lembretes de agendamentos."
           />
           <FeatureCard
             icon={<CheckCircle2 className="w-6 h-6" />}
@@ -99,7 +96,7 @@ export default function Home() {
 
         {/* Benefits Section */}
         <div className="bg-card border border-border rounded-2xl p-8 md:p-12 mb-20">
-          <h2 className="text-3xl font-bold mb-12 text-center">Por que escolher BusinessHub?</h2>
+          <h2 className="text-3xl font-bold mb-12 text-center">Por que escolher Pêra?</h2>
           <div className="grid md:grid-cols-2 gap-8">
             <BenefitItem
               title="Economia de Tempo"
@@ -116,52 +113,6 @@ export default function Home() {
             <BenefitItem
               title="Fácil de Usar"
               description="Interface intuitiva. Nenhuma experiência técnica necessária. Comece em minutos."
-            />
-          </div>
-        </div>
-
-        {/* Pricing Section */}
-        <div className="mb-20">
-          <h2 className="text-3xl font-bold mb-4 text-center">Planos Simples e Transparentes</h2>
-          <p className="text-center text-muted-foreground mb-12 text-lg">
-            Escolha o plano ideal para seu negócio
-          </p>
-          <div className="grid md:grid-cols-3 gap-6">
-            <PricingCard
-              name="Básico"
-              price="R$ 39,99"
-              description="Para pequenos negócios"
-              features={[
-                "Até 100 clientes",
-                "Agendamentos ilimitados",
-                "Relatórios básicos",
-
-              ]}
-            />
-            <PricingCard
-              name="Profissional"
-              price="R$ 59,99"
-              description="Para negócios em crescimento"
-              features={[
-                "Clientes ilimitados",
-                "Agendamentos ilimitados",
-                "Relatórios avançados",
-                " ",
-                "Suporte prioritário",
-              ]}
-              highlighted
-            />
-            <PricingCard
-              name="Empresarial"
-              price="Customizado"
-              description="Para grandes operações"
-              features={[
-                "Tudo do Profissional",
-                "Integração com Google Calendar",
-                "API customizada",
-                "Suporte 24/7",
-                "Treinamento dedicado",
-              ]}
             />
           </div>
         </div>
@@ -184,10 +135,8 @@ export default function Home() {
           <div className="grid md:grid-cols-4 gap-8 mb-8">
             <div>
               <div className="flex items-center gap-2 mb-4">
-                <div className="w-6 h-6 rounded-lg bg-gradient-to-br from-primary to-secondary flex items-center justify-center">
-                  <Calendar className="w-4 h-4 text-white" />
-                </div>
-                <span className="font-bold text-foreground">BusinessHub</span>
+                <img src="/logo.png" alt="Pêra Logo" className="w-6 h-6 object-contain" />
+                <span className="font-bold text-foreground">Pêra</span>
               </div>
               <p className="text-sm text-muted-foreground">
                 Gestão completa para seu negócio
@@ -219,7 +168,7 @@ export default function Home() {
             </div>
           </div>
           <div className="border-t border-border pt-8 text-center text-sm text-muted-foreground">
-            <p>&copy; 2026 BusinessHub. Todos os direitos reservados.</p>
+            <p>&copy; 2026 Pêra. Todos os direitos reservados.</p>
           </div>
         </div>
       </footer>
@@ -254,33 +203,5 @@ function BenefitItem({ title, description }: { title: string; description: strin
         <p className="text-muted-foreground text-sm">{description}</p>
       </div>
     </div>
-  );
-}
-
-function PricingCard({ name, price, description, features, highlighted }: { name: string; price: string; description: string; features: string[]; highlighted?: boolean }) {
-  return (
-    <Card className={`border-2 transition-all ${highlighted ? "border-primary shadow-lg shadow-primary/20 scale-105" : "border-border/40"}`}>
-      <CardHeader>
-        <CardTitle>{name}</CardTitle>
-        <CardDescription>{description}</CardDescription>
-      </CardHeader>
-      <CardContent>
-        <div className="mb-6">
-          <span className="text-3xl font-bold">{price}</span>
-          {price !== "Customizado" && <span className="text-muted-foreground text-sm">/mês</span>}
-        </div>
-        <ul className="space-y-3 mb-6">
-          {features.map((feature, i) => (
-            <li key={i} className="flex items-center gap-2 text-sm">
-              <CheckCircle2 className="w-4 h-4 text-primary flex-shrink-0" />
-              {feature}
-            </li>
-          ))}
-        </ul>
-        <Button className="w-full" variant={highlighted ? "default" : "outline"}>
-          Começar
-        </Button>
-      </CardContent>
-    </Card>
   );
 }
