@@ -3,7 +3,7 @@ import { trpc } from "@/lib/trpc";
 import { useLocation, Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import { motion } from "framer-motion";
@@ -16,11 +16,11 @@ export default function Login() {
 
   const loginMutation = trpc.auth.login.useMutation({
     onSuccess: () => {
-      toast.success("Bem-vindo de volta!");
+      toast.success("Bem-vinda de volta ao pomar! 🍐");
       setLocation("/dashboard");
     },
     onError: (error) => {
-      toast.error(error.message || "Erro ao fazer login");
+      toast.error("Credenciais incorretas. Tente novamente.");
     },
   });
 
@@ -30,12 +30,12 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen bg-background flex items-center justify-center p-6 relative overflow-hidden">
-      <div className="noise-bg" />
+    <div className="min-h-screen bg-[#F8F7E5] flex items-center justify-center p-6 relative overflow-hidden">
+      <div className="noise-bg opacity-20" />
       <div className="absolute top-10 left-10 z-20">
         <Link href="/">
-          <Button variant="ghost" className="gap-2 font-bold hover:bg-primary/10">
-            <ArrowLeft className="w-4 h-4" /> Voltar
+          <Button variant="ghost" className="gap-2 font-black text-foreground hover:bg-primary/10">
+            <ArrowLeft className="w-4 h-4" /> VOLTAR AO INÍCIO
           </Button>
         </Link>
       </div>
@@ -44,38 +44,39 @@ export default function Login() {
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.4 }}
-        className="w-full max-w-[440px] z-10"
+        className="w-full max-w-[460px] z-10"
       >
-        <div className="flex flex-col items-center mb-10">
-          <img src="/logo.png" alt="Pêra Logo" className="w-24 h-24 object-contain animate-float mb-4" />
-          <h1 className="text-3xl font-black tracking-tighter">Entrar na sua Pêra</h1>
-          <p className="text-muted-foreground font-medium">Bom te ver de novo!</p>
+        <div className="flex flex-col items-center mb-12 text-center">
+          <img src="/logo.png" alt="Pêra Logo" className="w-32 h-32 object-contain animate-float mb-6 drop-shadow-2xl" />
+          <h1 className="text-4xl font-black tracking-tighter text-foreground">Acessar minha Pêra</h1>
+          <p className="text-foreground/60 font-bold uppercase tracking-widest text-xs mt-2">Pronta para colher resultados?</p>
         </div>
 
-        <Card className="border-none shadow-[0_20px_50px_rgba(0,0,0,0.05)] rounded-[2rem] overflow-hidden">
-          <CardContent className="p-8 md:p-10">
-            <form onSubmit={handleSubmit} className="space-y-6">
-              <div className="space-y-2">
-                <Label htmlFor="email" className="font-bold text-xs uppercase tracking-widest ml-1">Email</Label>
+        <Card className="border-4 border-foreground shadow-[20px_20px_0px_0px_rgba(0,0,0,1)] rounded-[3rem] overflow-hidden bg-background">
+          <CardContent className="p-10 md:p-14">
+            <form onSubmit={handleSubmit} className="space-y-8">
+              <div className="space-y-3">
+                <Label htmlFor="email" className="font-black text-sm uppercase tracking-widest text-foreground ml-1">Seu Email</Label>
                 <Input
                   id="email"
                   type="email"
-                  placeholder="exemplo@gmail.com"
-                  className="h-14 rounded-2xl bg-muted/50 border-transparent focus:bg-background transition-all text-lg font-medium px-6"
+                  placeholder="voce@exemplo.com"
+                  className="h-16 rounded-2xl border-4 border-foreground bg-white focus:ring-primary focus:border-primary transition-all text-xl font-black px-6 text-foreground placeholder:text-foreground/20 shadow-inner"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
                 />
               </div>
-              <div className="space-y-2">
+              <div className="space-y-3">
                 <div className="flex justify-between items-center ml-1">
-                  <Label htmlFor="password" className="font-bold text-xs uppercase tracking-widest">Senha</Label>
-                  <a href="#" className="text-xs font-bold text-primary hover:underline">Esqueceu?</a>
+                  <Label htmlFor="password" className="font-black text-sm uppercase tracking-widest text-foreground">Sua Senha</Label>
+                  <a href="#" className="text-xs font-black text-primary hover:underline uppercase tracking-widest">Esqueceu?</a>
                 </div>
                 <Input
                   id="password"
                   type="password"
-                  className="h-14 rounded-2xl bg-muted/50 border-transparent focus:bg-background transition-all text-lg font-medium px-6"
+                  placeholder="••••••••"
+                  className="h-16 rounded-2xl border-4 border-foreground bg-white focus:ring-primary focus:border-primary transition-all text-xl font-black px-6 text-foreground placeholder:text-foreground/20 shadow-inner"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
@@ -83,25 +84,25 @@ export default function Login() {
               </div>
               <Button 
                 type="submit" 
-                className="w-full h-14 rounded-2xl text-lg font-bold btn-hover-effect shadow-primary/20" 
+                className="w-full h-20 rounded-[2rem] text-2xl font-black btn-hover-effect bg-primary text-foreground border-4 border-foreground shadow-2xl" 
                 disabled={loginMutation.isPending}
               >
-                {loginMutation.isPending ? "Autenticando..." : "Entrar no Painel"}
+                {loginMutation.isPending ? "ACESSANDO..." : "ENTRAR AGORA"}
               </Button>
             </form>
           </CardContent>
         </Card>
 
-        <p className="text-center mt-8 text-muted-foreground font-medium">
-          Ainda não colhe nossos frutos?{" "}
-          <Link href="/register" className="text-primary font-black hover:underline">
-            Crie sua conta grátis
+        <p className="text-center mt-12 text-foreground font-bold">
+          Ainda não é do time?{" "}
+          <Link href="/register" className="text-primary font-black hover:underline uppercase tracking-widest text-sm">
+            Criar conta grátis
           </Link>
         </p>
       </motion.div>
 
-      {/* Decorative Blur */}
-      <div className="absolute -bottom-20 -right-20 w-[400px] h-[400px] bg-primary/10 blur-[100px] rounded-full -z-0" />
+      {/* Background Decor */}
+      <div className="absolute -bottom-20 -right-20 w-[500px] h-[500px] bg-primary/20 blur-[120px] rounded-full -z-0" />
     </div>
   );
 }
