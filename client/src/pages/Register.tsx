@@ -31,8 +31,9 @@ export default function Register() {
   return (
     <div className="flex items-center justify-center min-h-screen bg-background p-4">
       <Card className="w-full max-w-md">
-        <CardHeader className="space-y-1">
-          <CardTitle className="text-2xl font-bold text-center">BusinessHub</CardTitle>
+        <CardHeader className="space-y-1 flex flex-col items-center">
+          <img src="/logo.png" alt="Pêra Logo" className="w-16 h-16 object-contain mb-2" />
+          <CardTitle className="text-2xl font-bold text-center">Pêra</CardTitle>
           <CardDescription className="text-center">
             Crie sua conta para começar a gerenciar seu negócio
           </CardDescription>

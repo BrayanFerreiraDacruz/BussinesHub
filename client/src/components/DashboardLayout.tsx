@@ -69,10 +69,10 @@ export default function DashboardLayout({
         <div className="flex flex-col items-center gap-8 p-8 max-w-md w-full">
           <div className="flex flex-col items-center gap-6">
             <h1 className="text-2xl font-semibold tracking-tight text-center">
-              Sign in to continue
+              Acesse sua conta para continuar
             </h1>
             <p className="text-sm text-muted-foreground text-center max-w-sm">
-              Access to this dashboard requires authentication. Continue to launch the login flow.
+              O acesso a este painel requer autenticação.
             </p>
           </div>
           <Button
@@ -82,7 +82,7 @@ export default function DashboardLayout({
             size="lg"
             className="w-full shadow-lg hover:shadow-xl transition-all"
           >
-            Sign in
+            Entrar
           </Button>
         </div>
       </div>
@@ -178,8 +178,9 @@ function DashboardLayoutContent({
               </button>
               {!isCollapsed ? (
                 <div className="flex items-center gap-2 min-w-0">
+                  <img src="/logo.png" alt="Logo" className="w-6 h-6 object-contain" />
                   <span className="font-bold tracking-tight truncate text-sidebar-accent">
-                    BusinessHub
+                    Pêra
                   </span>
                 </div>
               ) : null}
@@ -236,7 +237,7 @@ function DashboardLayoutContent({
                   className="cursor-pointer text-destructive focus:text-destructive"
                 >
                   <LogOut className="mr-2 h-4 w-4" />
-                  <span>Sign out</span>
+                  <span>Sair</span>
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
@@ -282,7 +283,7 @@ function DashboardLayoutContent({
               <div className="hidden md:flex relative w-64">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                 <Input
-                  placeholder="Search..."
+                  placeholder="Pesquisar..."
                   className="pl-9 bg-background/50 border-border/50 text-foreground placeholder:text-muted-foreground"
                 />
               </div>
@@ -327,7 +328,7 @@ function DashboardLayoutContent({
                     className="cursor-pointer text-destructive focus:text-destructive"
                   >
                     <LogOut className="mr-2 h-4 w-4" />
-                    <span>Sign out</span>
+                    <span>Sair</span>
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>

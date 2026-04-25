@@ -4,7 +4,6 @@ import { trpc } from "@/lib/trpc";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Calendar } from "@/components/ui/calendar";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { format } from "date-fns";
@@ -76,9 +75,10 @@ export default function PublicBooking() {
   return (
     <div className="min-h-screen bg-muted/30 p-4 md:p-8 flex items-center justify-center">
       <Card className="w-full max-w-2xl shadow-lg border-primary/10">
-        <CardHeader className="text-center bg-primary/5 rounded-t-lg border-b">
+        <CardHeader className="text-center bg-primary/5 rounded-t-lg border-b flex flex-col items-center">
+          <img src="/logo.png" alt="Pêra Logo" className="w-12 h-12 object-contain mb-2" />
           <CardTitle className="text-2xl font-bold">{providerQuery.data.name}</CardTitle>
-          <CardDescription>Reserve seu horário de forma rápida e prática</CardDescription>
+          <CardDescription>Reserve seu horário de forma rápida e prática via Pêra</CardDescription>
         </CardHeader>
         <CardContent className="p-6">
           {step === 1 && (

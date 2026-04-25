@@ -4,11 +4,13 @@ import { RevenueChart } from "@/components/RevenueChart";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { trpc } from "@/lib/trpc";
-import { Calendar, Users, DollarSign, Clock, Plus, ArrowRight, TrendingUp, Sparkles } from "lucide-react";
+import { Calendar, Users, DollarSign, Clock, Plus, ArrowRight, TrendingUp, Sparkles, Copy, Check } from "lucide-react";
 import { Link } from "wouter";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { motion } from "framer-motion";
+import { useState } from "react";
+import { toast } from "sonner";
 
 function generateRevenueDataFromPayments(payments: any[] | undefined) {
   if (!payments) return [];
@@ -86,6 +88,17 @@ export default function Dashboard() {
   const { data: metrics, isLoading: metricsLoading } = trpc.dashboard.metrics.useQuery();
   const { data: upcomingAppointments, isLoading: appointmentsLoading } = trpc.dashboard.upcomingAppointments.useQuery();
   const { data: payments } = trpc.payments.list.useQuery();
+  const { data: user } = trpc.auth.me.useQuery();
+  const [copied, setCopied] = useState(false);
+
+  const copyBookingLink = () => {
+    if (!user) return;
+    const link = `${window.location.origin}/book/${user.id}`;
+    navigator.clipboard.writeText(link);
+    setCopied(true);
+    toast.success("Link de agendamento copiado!");
+    setTimeout(() => setCopied(false), 2000);
+  };
 
   return (
     <DashboardLayout>
@@ -108,15 +121,25 @@ export default function Dashboard() {
               Dashboard
             </h1>
             <p className="text-muted-foreground mt-1">
-              Bem-vindo de volta. Aqui está o resumo do seu negócio hoje.
+              Bem-vindo de volta, {user?.name}. Aqui está o resumo do seu negócio.
             </p>
           </div>
-          <Button asChild className="shadow-lg shadow-primary/20 hover:shadow-primary/30 transition-all rounded-full px-6">
-            <Link to="/appointments">
-              <Plus className="w-4 h-4 mr-2" />
-              Novo Agendamento
-            </Link>
-          </Button>
+          <div className="flex items-center gap-3">
+            <Button 
+              variant="outline" 
+              onClick={copyBookingLink}
+              className="rounded-full px-6"
+            >
+              {copied ? <Check className="w-4 h-4 mr-2" /> : <Copy className="w-4 h-4 mr-2" />}
+              {copied ? "Copiado!" : "Copiar Link de Agendamento"}
+            </Button>
+            <Button asChild className="shadow-lg shadow-primary/20 hover:shadow-primary/30 transition-all rounded-full px-6">
+              <Link to="/appointments">
+                <Plus className="w-4 h-4 mr-2" />
+                Novo Agendamento
+              </Link>
+            </Button>
+          </div>
         </motion.div>
 
         {/* Metrics Grid */}

@@ -12,7 +12,7 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, Di
 
 export default function Notifications() {
   const [testPhone, setTestPhone] = useState("");
-  const [testMessage, setTestMessage] = useState("Olá! Este é um teste de notificação do BusinessHub.");
+  const [testMessage, setTestMessage] = useState("Olá! Este é um teste de notificação do P�ra.");
   const [isSending, setIsSending] = useState(false);
 
   const { data: status, refetch: refetchStatus } = trpc.whatsapp.status.useQuery();
