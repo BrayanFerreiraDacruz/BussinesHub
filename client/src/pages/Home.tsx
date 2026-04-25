@@ -1,3 +1,4 @@
+import React from "react";
 import { useAuth } from "@/_core/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import { getLoginUrl } from "@/const";
@@ -12,12 +13,12 @@ export default function Home() {
     return <Redirect to="/dashboard" />;
   }
 
-  // Partículas de Pêras caindo - Aumentadas e mais visíveis
+  // Partículas de Pêras - SUPER GIGANTES E MAIS VISÍVEIS
   const pears = Array.from({ length: 12 });
 
   return (
-    <div className="min-h-screen selection:bg-primary/30 overflow-hidden relative bg-[#F8F7E5]">
-      <div className="noise-bg opacity-10" />
+    <div className="min-h-screen selection:bg-primary/30 overflow-hidden relative bg-[#F5F4D7] text-black font-sans antialiased">
+      <div className="noise-bg opacity-30" />
       
       {/* Pears Particles */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
@@ -25,44 +26,49 @@ export default function Home() {
           <motion.img
             key={i}
             src="/logo.png"
-            alt="Pêra particle"
-            className="absolute w-16 h-16 opacity-15"
+            alt=""
+            className="absolute opacity-20"
+            style={{ 
+              width: i % 2 === 0 ? "250px" : "350px", 
+              height: "auto",
+              filter: "blur(2px)" 
+            }}
             initial={{ 
-              top: -100, 
+              top: -500, 
               left: `${Math.random() * 100}%`, 
               rotate: Math.random() * 360
             }}
             animate={{ 
-              top: "110%", 
-              rotate: 360,
-              left: `${(Math.random() * 100)}%`
+              top: "120%", 
+              rotate: 1080,
+              left: `${(Math.random() * 120) - 10}%`
             }}
             transition={{ 
-              duration: 15 + Math.random() * 15, 
+              duration: 30 + Math.random() * 20, 
               repeat: Infinity, 
               ease: "linear",
-              delay: Math.random() * 10
+              delay: Math.random() * 25
             }}
           />
         ))}
       </div>
       
       {/* Navigation */}
-      <nav className="fixed top-0 w-full z-50 border-b border-black/10 bg-white/60 backdrop-blur-lg">
-        <div className="container max-w-7xl mx-auto flex items-center justify-between h-24 px-6">
-          <div className="flex items-center gap-3">
-            <img src="/logo.png" alt="Pêra Logo" className="w-16 h-16 object-contain animate-float drop-shadow-sm" />
+      <nav className="fixed top-0 w-full z-50 border-b-[6px] border-black bg-white/95 backdrop-blur-xl">
+        <div className="container max-w-[1400px] mx-auto flex items-center justify-between h-32 px-12">
+          <div className="flex items-center">
+            <img src="/logo.png" alt="Pêra Logo" className="w-24 h-24 object-contain animate-float drop-shadow-2xl" />
           </div>
-          <div className="hidden md:flex items-center gap-10 text-sm font-black text-foreground uppercase tracking-widest">
-            <a href="#features" className="hover:text-primary transition-colors">Recursos</a>
-            <a href="#pricing" className="hover:text-primary transition-colors">Preços</a>
+          <div className="hidden md:flex items-center gap-16">
+            <a href="#features" className="text-xl font-black text-black uppercase tracking-[0.3em] hover:text-primary transition-all">Recursos</a>
+            <a href="#pricing" className="text-xl font-black text-black uppercase tracking-[0.3em] hover:text-primary transition-all">Preços</a>
           </div>
-          <div className="flex items-center gap-6">
+          <div className="flex items-center gap-8">
             <Link href="/login">
-              <Button variant="ghost" className="font-black text-base uppercase tracking-tighter hover:bg-primary/10 text-foreground">Entrar</Button>
+              <Button variant="ghost" className="font-black text-xl uppercase tracking-tighter hover:bg-black/5 text-black border-none">Entrar</Button>
             </Link>
             <Link href="/register">
-              <Button className="btn-hover-effect font-black rounded-full px-10 bg-foreground text-background h-14 text-base border-none">
+              <Button className="btn-hover-effect font-black rounded-[2rem] px-14 bg-black text-white h-20 text-xl border-none shadow-[15px_15px_0px_0px_rgba(120,190,32,1)]">
                 TESTAR GRÁTIS
               </Button>
             </Link>
@@ -71,117 +77,122 @@ export default function Home() {
       </nav>
 
       {/* Hero Section */}
-      <section className="relative pt-44 pb-32 md:pt-64 md:pb-48">
-        <div className="container max-w-6xl mx-auto relative z-10 text-center px-6">
+      <section className="relative pt-80 pb-64 flex flex-col items-center justify-center text-center w-full">
+        <div className="container max-w-7xl mx-auto relative z-10 px-12 flex flex-col items-center">
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0, y: 60 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, ease: "easeOut" }}
+            transition={{ duration: 1.2, ease: "easeOut" }}
+            className="flex flex-col items-center w-full"
           >
-            <div className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full bg-primary/20 border border-primary/30 text-primary-foreground font-black mb-10 uppercase tracking-[0.2em] text-xs shadow-sm">
-              <Sparkles className="w-4 h-4 text-primary" />
-              <span className="text-foreground">A revolução do agendamento</span>
+            <div className="inline-flex items-center gap-6 px-12 py-5 rounded-full bg-black text-white font-black mb-20 uppercase tracking-[0.5em] text-sm shadow-[20px_20px_0px_0px_rgba(120,190,32,1)]">
+              <Sparkles className="w-8 h-8 text-primary fill-primary" />
+              <span>A REVOLUÇÃO DO AGENDAMENTO</span>
             </div>
             
-            <h1 className="text-7xl md:text-[10rem] font-black tracking-tighter text-foreground mb-8 leading-[0.8] drop-shadow-sm">
+            <h1 className="text-8xl md:text-[14rem] font-black tracking-[calc(-0.05em)] text-black mb-16 leading-[0.7] drop-shadow-[0_20px_20px_rgba(0,0,0,0.15)]">
               Papel e caneta?<br />
-              <span className="text-primary italic">Pera aí né...</span>
+              <span className="text-primary italic drop-shadow-2xl">Pera aí né...</span>
             </h1>
             
-            <p className="text-2xl md:text-3xl text-foreground/80 max-w-3xl mx-auto mb-16 font-bold leading-tight drop-shadow-sm">
-              O SaaS que transforma sua correria em lucro no automático. Simples como colher uma fruta.
+            <p className="text-3xl md:text-6xl text-black font-black max-w-6xl mx-auto mb-24 leading-[1] tracking-tight">
+              O SaaS que transforma sua correria em <span className="underline decoration-primary decoration-[12px] underline-offset-[16px]">lucro real.</span> <br />
+              <span className="opacity-60 font-bold mt-8 block">Simples como colher uma fruta madura.</span>
             </p>
             
-            <div className="flex flex-col sm:flex-row gap-8 justify-center items-center mb-32">
-              <Button size="lg" asChild className="h-24 px-16 text-2xl font-black rounded-full btn-hover-effect shadow-2xl bg-primary text-primary-foreground border-none">
+            <div className="flex flex-col sm:flex-row gap-12 justify-center items-center mb-64">
+              <Button size="lg" asChild className="h-40 px-32 text-4xl font-black rounded-[3rem] btn-hover-effect shadow-[30px_30px_0px_0px_rgba(0,0,0,1)] bg-primary text-black border-[6px] border-black">
                 <a href="/register">QUERO COMEÇAR AGORA</a>
               </Button>
             </div>
             
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-12 max-w-5xl mx-auto border-t border-black/10 pt-16">
-              <div className="flex flex-col items-center gap-3 font-black text-sm uppercase tracking-widest text-foreground">
-                <ShieldCheck className="w-8 h-8 text-primary" /> 100% Seguro
-              </div>
-              <div className="flex flex-col items-center gap-3 font-black text-sm uppercase tracking-widest text-foreground">
-                <Zap className="w-8 h-8 text-primary" /> Setup Instantâneo
-              </div>
-              <div className="flex flex-col items-center gap-3 font-black text-sm uppercase tracking-widest text-foreground">
-                <Clock className="w-8 h-8 text-primary" /> Suporte 24/7
-              </div>
-              <div className="flex flex-col items-center gap-3 font-black text-sm uppercase tracking-widest text-foreground">
-                <Star className="w-8 h-8 text-primary" /> Premium Quality
-              </div>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-24 w-full max-w-7xl mx-auto border-t-[12px] border-black/10 pt-32 pb-12">
+              <FeatureMini icon={<ShieldCheck />} label="100% SEGURO" />
+              <FeatureMini icon={<Zap />} label="SETUP INSTANTÂNEO" />
+              <FeatureMini icon={<Clock />} label="SUPORTE VIP" />
+              <FeatureMini icon={<Star />} label="QUALIDADE PREMIUM" />
             </div>
           </motion.div>
         </div>
       </section>
 
       {/* Pricing Section */}
-      <section id="pricing" className="py-40 bg-white rounded-[5rem] mx-6 shadow-xl border border-black/5 relative overflow-hidden">
-        <div className="container max-w-7xl mx-auto relative z-10 px-6 text-center">
-          <div className="mb-24">
-            <h2 className="text-6xl md:text-[6rem] font-black tracking-tighter mb-6 text-foreground leading-none">Planos para o seu <span className="text-primary italic text-8xl md:text-[8rem]">tamanho.</span></h2>
-            <p className="text-foreground/60 text-2xl font-bold">Sem taxas escondidas, sem surpresas amargas.</p>
+      <section id="pricing" className="py-72 bg-black rounded-[10rem] mx-12 shadow-[0_-100px_200px_rgba(0,0,0,0.3)] relative overflow-hidden text-white text-center flex flex-col items-center w-[calc(100%-6rem)]">
+        <div className="container max-w-full mx-auto relative z-10 px-12 text-center flex flex-col items-center">
+          <div className="mb-64">
+            <h2 className="text-8xl md:text-[13rem] font-black tracking-tighter mb-12 leading-none drop-shadow-2xl">Preço que <br /><span className="text-primary italic">não amarga.</span></h2>
+            <p className="text-white/40 text-4xl font-black uppercase tracking-[0.4em]">Foco total no seu crescimento profissional.</p>
           </div>
           
-          <div className="grid md:grid-cols-3 gap-10 max-w-6xl mx-auto items-center">
-            {/* Plano Básico */}
+          <div className="grid md:grid-cols-3 gap-20 max-w-[1600px] mx-auto items-stretch">
             <PricingCard 
-              title="Essencial"
+              title="ESSENCIAL"
               price="39,99"
-              description="Para quem está começando a crescer."
+              description="Para quem está começando a colher resultados agora."
               features={[
                 "Agendamentos Ilimitados",
-                "Até 50 Clientes",
-                "Link de Agendamento",
-                "Financeiro Básico"
+                "Gestão de até 50 Clientes",
+                "Link de Agendamento Profissional",
+                "Financeiro Integrado"
               ]}
-              icon={<Rocket className="w-8 h-8" />}
+              icon={<Rocket className="w-16 h-16" />}
+              highlighted={false}
             />
             
-            {/* Plano Profissional */}
             <PricingCard 
-              title="Profissional"
+              title="PROFISSIONAL"
               price="59,99"
-              description="O plano mais colhido pelos experts."
+              description="O plano mais colhido pelos maiores do mercado nacional."
               features={[
                 "Clientes Ilimitados",
-                "WhatsApp Automático",
-                "Relatórios de Ganhos",
-                "Lembretes Automáticos",
-                "Fila de Espera"
+                "WhatsApp Automático VIP",
+                "Relatórios de Ganhos Reais",
+                "Lembretes Inteligentes",
+                "Fila de Espera Digital"
               ]}
-              highlighted
-              icon={<Zap className="w-8 h-8" />}
+              highlighted={true}
+              icon={<Zap className="w-16 h-16" />}
             />
             
-            {/* Plano Enterprise */}
             <PricingCard 
-              title="Império"
+              title="IMPÉRIO"
               price="99,99"
-              description="Para quem domina o mercado."
+              description="Para quem já domina todo o pomar e quer escala total."
               features={[
                 "Múltiplos Profissionais",
-                "API de Integração",
-                "Suporte Prioritário VIP",
-                "Domínio Próprio",
-                "Personalização Total"
+                "API de Integração Aberta",
+                "Suporte Prioritário 24/7",
+                "Domínio Próprio (.com.br)",
+                "Personalização da Marca"
               ]}
-              icon={<Globe className="w-8 h-8" />}
+              icon={<Globe className="w-16 h-16" />}
+              highlighted={false}
             />
           </div>
         </div>
       </section>
 
       {/* Footer */}
-      <footer className="py-32 bg-[#F8F7E5]">
-        <div className="container max-w-7xl mx-auto text-center px-6">
-          <img src="/logo.png" alt="Pêra Logo" className="w-24 h-24 mx-auto mb-10 animate-pulse" />
-          <p className="text-foreground/40 font-black text-sm uppercase tracking-[0.6em]">
-            Digitalizando o futuro dos serviços &copy; 2026
+      <footer className="py-64 bg-[#F5F4D7] w-full">
+        <div className="container max-w-7xl mx-auto text-center px-12 flex flex-col items-center">
+          <img src="/logo.png" alt="Pêra Logo" className="w-56 h-56 mx-auto mb-20 drop-shadow-3xl hover:scale-110 transition-transform cursor-pointer" />
+          <p className="text-black font-black text-3xl uppercase tracking-[1em] opacity-90">
+            PÊRA SAAS &copy; 2026
           </p>
+          <p className="text-black/50 font-black mt-8 uppercase tracking-[0.5em] text-lg">GESTÃO SEM SEMENTES, LUCRO MADURO.</p>
         </div>
       </footer>
+    </div>
+  );
+}
+
+function FeatureMini({ icon, label }: { icon: any, label: string }) {
+  return (
+    <div className="flex flex-col items-center gap-8">
+      <div className="text-primary drop-shadow-[0_10px_30px_rgba(120,190,32,0.6)]">
+        {React.cloneElement(icon as React.ReactElement, { size: 80, strokeWidth: 4 })}
+      </div>
+      <span className="font-black text-lg uppercase tracking-[0.4em] text-black text-center">{label}</span>
     </div>
   );
 }
@@ -189,45 +200,52 @@ export default function Home() {
 function PricingCard({ title, price, description, features, highlighted = false, icon }: any) {
   return (
     <motion.div 
-      whileHover={{ scale: 1.02 }}
-      className={`p-12 rounded-[4rem] border-2 transition-all flex flex-col items-center text-center ${
+      whileHover={{ scale: 1.05, y: -30 }}
+      className={`p-20 rounded-[8rem] border-[8px] transition-all flex flex-col items-center text-center relative ${
         highlighted 
-          ? "bg-foreground text-background border-primary shadow-[0_40px_80px_-15px_rgba(120,190,32,0.4)] py-20 relative z-10" 
-          : "bg-[#F3F2D7] border-black/5 text-foreground"
+          ? "bg-primary text-black border-black shadow-[50px_50px_0px_0px_rgba(0,0,0,1)] scale-110 z-20" 
+          : "bg-white text-black border-black shadow-[30px_30px_0px_0px_rgba(0,0,0,0.5)]"
       }`}
     >
-      <div className={`w-16 h-16 rounded-3xl flex items-center justify-center mb-8 ${highlighted ? "bg-primary text-foreground shadow-lg shadow-primary/20" : "bg-primary/10 text-primary"}`}>
+      {highlighted && (
+        <div className="absolute -top-14 bg-black text-white px-16 py-5 rounded-full font-black text-2xl tracking-[0.5em] shadow-3xl border-4 border-primary">
+          O FAVORITO
+        </div>
+      )}
+      
+      <div className={`mb-16 p-8 rounded-[3rem] border-4 border-black ${highlighted ? "bg-black text-white shadow-2xl" : "bg-primary text-black shadow-2xl"}`}>
         {icon}
       </div>
-      <h3 className="text-4xl font-black tracking-tighter mb-3">{title}</h3>
-      <p className={`text-base mb-10 font-bold ${highlighted ? "text-background/50" : "text-foreground/50"}`}>{description}</p>
       
-      <div className="flex items-start justify-center gap-1 mb-12">
-        <span className="text-2xl font-black italic mt-2">R$</span>
-        <span className="text-8xl font-black tracking-tighter leading-none">{price.split(',')[0]}</span>
-        <div className="flex flex-col items-start mt-2">
-          <span className="text-2xl font-black leading-none">,{price.split(',')[1]}</span>
-          <span className="text-sm font-black opacity-50 uppercase tracking-widest">/mês</span>
+      <h3 className="text-6xl font-black tracking-tight mb-8 uppercase">{title}</h3>
+      <p className={`text-lg mb-20 font-black uppercase tracking-widest leading-relaxed ${highlighted ? "text-black/70" : "text-black/50"}`}>{description}</p>
+      
+      <div className="flex items-start justify-center gap-3 mb-24 scale-150">
+        <span className="text-5xl font-black italic mt-4">R$</span>
+        <span className="text-[14rem] font-black tracking-tighter leading-none">{price.split(',')[0]}</span>
+        <div className="flex flex-col items-start mt-4">
+          <span className="text-5xl font-black leading-none">,{price.split(',')[1]}</span>
+          <span className="text-xs font-black opacity-60 uppercase tracking-[0.5em] mt-3">/mês</span>
         </div>
       </div>
       
-      <ul className="space-y-5 mb-12 text-left w-full">
+      <ul className="space-y-10 mb-32 text-left w-full px-8">
         {features.map((f: string, i: number) => (
-          <li key={i} className="flex items-center gap-4 text-base font-black tracking-tight">
-            <div className={`w-6 h-6 rounded-full flex items-center justify-center ${highlighted ? "bg-primary text-foreground" : "bg-primary text-background"}`}>
-              <CheckCircle2 className="w-4 h-4" />
+          <li key={i} className="flex items-center gap-8 text-2xl font-black tracking-tight">
+            <div className={`w-12 h-12 rounded-full flex items-center justify-center shrink-0 border-[6px] border-black ${highlighted ? "bg-black text-white" : "bg-primary text-black"}`}>
+              <CheckCircle2 className="w-6 h-6" />
             </div>
-            {f}
+            <span className="leading-tight">{f}</span>
           </li>
         ))}
       </ul>
       
-      <Button className={`w-full h-20 rounded-3xl font-black text-xl shadow-xl transition-all ${
+      <Button className={`w-full h-40 rounded-[4rem] font-black text-5xl shadow-3xl transition-all border-[8px] border-black ${
         highlighted 
-          ? "bg-primary text-foreground hover:bg-primary/90" 
-          : "bg-foreground text-background hover:bg-foreground/90"
+          ? "bg-black text-white hover:bg-black/90" 
+          : "bg-primary text-black hover:bg-primary/90"
       }`}>
-        Escolher Plano
+        QUERO ESTE!
       </Button>
     </motion.div>
   );
