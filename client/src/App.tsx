@@ -15,6 +15,7 @@ import Payments from "./pages/Payments";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import PublicBooking from "./pages/PublicBooking";
+import MarketingKit from "./pages/MarketingKit";
 import { useAuth } from "./_core/hooks/useAuth";
 import { Spinner } from "./components/ui/spinner";
 
@@ -43,6 +44,7 @@ function Router() {
       <Route path={"/login"} component={Login} />
       <Route path={"/register"} component={Register} />
       <Route path={"/book/:userId"} component={PublicBooking} />
+      <Route path={"/marketing-kit"} component={MarketingKit} />
       
       <Route path="/dashboard">
         {(params) => <ProtectedRoute component={Dashboard} path="/dashboard" {...params} />}

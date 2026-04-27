@@ -1,282 +1,90 @@
-# BusinessHub - Sistema de Gestão para Pequenos Negócios
+# 🍐 Pêra SaaS - Gestão Inteligente de Agendamentos
 
-**BusinessHub** é uma plataforma SaaS completa e profissional para gestão de agendamentos, clientes e relatórios. Ideal para salões de beleza, clínicas, consultórios e outros negócios de serviços.
-
-## 🎯 Funcionalidades Principais
-
-### 📅 Agendamentos Online
-- Calendário intuitivo com visualização de agendamentos
-- Criação, edição e cancelamento de agendamentos
-- Status de agendamento (agendado, concluído, cancelado, não compareceu)
-- Integração automática com serviços e clientes
-
-### 👥 CRM de Clientes
-- Cadastro completo de clientes com histórico
-- Armazenamento de telefone, email e notas personalizadas
-- Rastreamento de gasto total por cliente
-- Registro de última visita
-- Busca e filtros rápidos
-
-### 🛠️ Catálogo de Serviços
-- Gerenciamento de serviços com preço e duração
-- Descrição detalhada de cada serviço
-- Ativação/desativação de serviços
-- Vinculação automática com agendamentos
-
-### 📊 Relatórios e Análises
-- Dashboard com métricas em tempo real
-- Relatório de faturamento por período
-- Análise de agendamentos (concluídos, cancelados, não compareceu)
-- Relatório de clientes com dados agregados
-- Filtros por período (semana, mês, trimestre, ano)
-
-### 🔐 Autenticação Segura
-- Login seguro com OAuth Manus
-- Painel administrativo exclusivo para o dono
-- Controle de acesso baseado em roles
-- Sessões seguras com cookies
-
-### 📱 Interface Responsiva
-- Design moderno e profissional
-- Totalmente responsivo (mobile, tablet, desktop)
-- Paleta de cores profissional para saúde/beleza
-- Navegação intuitiva e acessível
-
-## 🚀 Começar Rápido
-
-### Pré-requisitos
-- Node.js 22.x ou superior
-- MySQL 8.0 ou superior
-- pnpm (ou npm)
-
-### Instalação Local
-
-```bash
-# Clonar o repositório
-git clone seu_repositorio businesshub
-cd businesshub
-
-# Instalar dependências
-pnpm install
-
-# Configurar variáveis de ambiente
-cp .env.example .env
-# Editar .env com suas configurações
-
-# Executar migrations do banco
-pnpm run db:push
-
-# Iniciar em desenvolvimento
-pnpm run dev
-
-# Acessar em http://localhost:3000
-```
-
-### Build para Produção
-
-```bash
-# Compilar para produção
-pnpm run build
-
-# Iniciar servidor de produção
-pnpm start
-```
-
-## 📁 Estrutura do Projeto
-
-```
-businesshub/
-├── client/                 # Frontend React
-│   ├── src/
-│   │   ├── pages/         # Páginas principais
-│   │   ├── components/    # Componentes reutilizáveis
-│   │   ├── lib/           # Utilitários e configurações
-│   │   └── index.css      # Estilos globais
-│   └── public/            # Arquivos estáticos
-├── server/                # Backend Express + tRPC
-│   ├── routers.ts         # Definição de APIs
-│   ├── db.ts              # Queries do banco
-│   └── _core/             # Configurações internas
-├── drizzle/               # Migrations e schema
-│   ├── schema.ts          # Definição de tabelas
-│   └── migrations/        # Arquivos SQL
-├── shared/                # Código compartilhado
-└── DEPLOY.md              # Guia de deployment
-```
-
-## 🏗️ Arquitetura
-
-### Backend
-- **Framework**: Express.js 4.x
-- **API**: tRPC 11.x (type-safe RPC)
-- **Database**: MySQL com Drizzle ORM
-- **Autenticação**: OAuth Manus
-
-### Frontend
-- **Framework**: React 19.x
-- **Styling**: Tailwind CSS 4.x
-- **UI Components**: shadcn/ui
-- **State Management**: React Query (tRPC)
-- **Routing**: Wouter
-
-### Database
-- **Tabelas**: users, clients, services, appointments, payments, emailNotifications, visitHistory
-- **Relacionamentos**: Clientes → Agendamentos → Serviços → Pagamentos
-
-## 📊 Modelo de Dados
-
-### Users (Proprietários)
-- id, openId, name, email, phone
-- businessName, businessType (salon, clinic, consulting, other)
-- role (admin, user)
-
-### Clients (CRM)
-- id, userId, name, email, phone
-- birthDate, notes, totalSpent, lastVisit
-
-### Services (Catálogo)
-- id, userId, name, description
-- price, duration (minutos), isActive
-
-### Appointments (Agendamentos)
-- id, userId, clientId, serviceId
-- startTime, endTime, status, notes, price
-
-### Payments (Faturamento)
-- id, userId, appointmentId, clientId
-- amount, paymentMethod, status, transactionId
-
-## 🔧 Variáveis de Ambiente
-
-```env
-# Banco de dados
-DATABASE_URL=mysql://usuario:senha@localhost:3306/businesshub
-
-# OAuth Manus
-VITE_APP_ID=seu_app_id
-OAUTH_SERVER_URL=https://api.manus.im
-VITE_OAUTH_PORTAL_URL=https://oauth.manus.im
-JWT_SECRET=sua_chave_secreta
-
-# APIs Manus
-BUILT_IN_FORGE_API_URL=https://api.manus.im
-BUILT_IN_FORGE_API_KEY=sua_chave_api
-VITE_FRONTEND_FORGE_API_KEY=sua_chave_frontend
-```
-
-## 📚 Documentação
-
-- **[DEPLOY.md](./DEPLOY.md)** - Guia completo de deployment no Hostinger
-- **[API Reference](./docs/api.md)** - Documentação das APIs tRPC
-- **[Database Schema](./docs/schema.md)** - Detalhes do modelo de dados
-
-## 🧪 Testes
-
-```bash
-# Executar testes unitários
-pnpm test
-
-# Executar testes com cobertura
-pnpm test:coverage
-
-# Executar testes em modo watch
-pnpm test:watch
-```
-
-## 🎨 Design System
-
-### Cores Profissionais
-- **Primária**: Azul profissional (#4F46E5)
-- **Secundária**: Roxo suave (#9333EA)
-- **Accent**: Verde para ações positivas (#22C55E)
-- **Neutras**: Cinzas para backgrounds e borders
-
-### Tipografia
-- **Headlines**: Poppins (600, 700)
-- **Body**: Inter (300, 400, 500, 600, 700)
-
-### Componentes
-- Buttons, Cards, Forms, Tables, Modals
-- Todos com suporte a dark/light mode
-- Acessibilidade WCAG 2.1 AA
-
-## 🚀 Deployment
-
-Para fazer deploy no Hostinger ou outro servidor, consulte [DEPLOY.md](./DEPLOY.md).
-
-Resumo rápido:
-1. Preparar servidor (Node.js, MySQL)
-2. Configurar variáveis de ambiente
-3. Executar `pnpm install && pnpm run build`
-4. Usar PM2 para gerenciar o processo
-5. Configurar Nginx como reverse proxy
-6. Ativar SSL/TLS
-
-## 📞 Suporte
-
-- **Email**: suporte@businesshub.com
-- **Chat**: Disponível no dashboard
-- **Documentação**: [businesshub.com/docs](https://businesshub.com/docs)
-
-## 📄 Licença
-
-Proprietary - Todos os direitos reservados © 2026 BusinessHub
-
-## 🤝 Contribuindo
-
-Contribuições são bem-vindas! Por favor:
-1. Faça um fork do projeto
-2. Crie uma branch para sua feature (`git checkout -b feature/AmazingFeature`)
-3. Commit suas mudanças (`git commit -m 'Add some AmazingFeature'`)
-4. Push para a branch (`git push origin feature/AmazingFeature`)
-5. Abra um Pull Request
-
-## 🎯 Roadmap
-
-- [ ] Integração com Google Calendar
-- [ ] Notificações por WhatsApp
-- [ ] Integração com Stripe/PIX
-- [ ] Google My Business sync
-- [ ] Email marketing automático
-- [ ] Aplicativo mobile
-- [ ] API pública para integrações
-- [ ] Multi-idioma (EN, ES, PT)
-
-## 📈 Performance
-
-- Tempo de carregamento: < 2s (primeira visita)
-- Tempo de interação: < 100ms
-- Lighthouse Score: 90+
-- Suporta 10.000+ clientes por negócio
-- Suporta 100.000+ agendamentos por ano
-
-## 🔒 Segurança
-
-- Autenticação OAuth segura
-- Criptografia de senhas com bcrypt
-- Proteção contra CSRF
-- Validação de entrada em todas as APIs
-- Rate limiting
-- Logs de auditoria
-- Backup automático do banco
+O **Pêra** é um SaaS (Software as a Service) ultra-premium focado na gestão de agendamentos, clientes e financeiro para profissionais liberais (salões, clínicas, consultórios, etc.). Com visual Neo-Brutalista e experiência focada no mobile, ele transforma a gestão de negócios em algo simples, moderno e lucrativo.
 
 ---
 
-**Desenvolvido com ❤️ para pequenos negócios**
+## 🚀 Tecnologias Utilizadas
 
-Versão 3.0.0 | Última atualização: Abril 2026
+- **Frontend:** React + TypeScript + Vite + Tailwind CSS + Framer Motion.
+- **Backend:** Node.js + Express + tRPC.
+- **Banco de Dados:** MySQL (via Drizzle ORM).
+- **Inteligência Artificial:** Google Gemini 1.5 Flash (via API).
+- **Integrações:** WhatsApp (Baileys) e Pagamentos (Abacatepay).
+- **Segurança:** JWT (JSON Web Token) + Bcrypt para senhas.
 
-## 💳 Integrações
+---
 
-### Abacatepay (Pagamentos PIX)
-- **Documentação:** https://docs.abacatepay.com
-- **API Key:** Obtenha em https://dashboard.abacatepay.com
-- **Webhook:** Configurado em `/api/webhooks/abacatepay`
+## 🛠️ Configuração Local
 
-### Baileys (WhatsApp)
-- **Documentação:** https://github.com/WhiskeySockets/Baileys
-- **Autenticação:** QR Code via navegador
+Para rodar o Pêra no seu computador:
 
-### OAuth Manus
-- **Documentação:** https://manus.im/docs
-- **Callback:** `/api/oauth/callback`
+1.  **Instale as dependências:**
+    ```bash
+    pnpm install
+    ```
+2.  **Configure o Banco de Dados:**
+    - Tenha um MySQL rodando (XAMPP/Wamp).
+    - Crie um banco chamado `businesshub`.
+    - Execute `pnpm drizzle-kit push` para criar as tabelas.
+3.  **Variáveis de Ambiente:**
+    - Crie um arquivo `.env` baseado no `.env.example`.
+4.  **Inicie o desenvolvimento:**
+    ```bash
+    pnpm dev
+    ```
+
+---
+
+## 📦 Deploy na Hostinger (Método Infalível)
+
+Devido às restrições de build da Hostinger, o método recomendado é gerar o pacote pronto no seu PC e subir manualmente.
+
+### 1. No seu PC:
+Gere o arquivo de deploy rodando o script de build:
+```bash
+pnpm build
+```
+O projeto já possui um script que gera o arquivo **`VITORIA_RESPONSIVA_V4.zip`** na raiz.
+
+### 2. Na Hostinger (Gerenciador de Arquivos):
+1.  Limpe a pasta `public_html`.
+2.  Suba o arquivo `.zip` e extraia-o na raiz.
+3.  Certifique-se de que os arquivos `index.js`, `package.json` e a pasta `public` estão soltos na raiz.
+
+### 3. Painel Node.js da Hostinger:
+- **Arquivo de Entrada:** `index.js`
+- **Gerente de Pacotes:** `npm` (ou `None` se preferir não instalar nada lá).
+- **Comando de Compilação:** Deixar Vazio.
+- **Variáveis de Ambiente:** Configure conforme o item abaixo.
+
+### 4. Banco de Dados (phpMyAdmin):
+Cole este SQL para criar as tabelas iniciais:
+```sql
+CREATE TABLE `users` (`id` int AUTO_INCREMENT NOT NULL, `openId` varchar(64) UNIQUE, `name` text, `email` varchar(320) NOT NULL UNIQUE, `password` text, `phone` varchar(20), `businessName` text, `businessType` enum('salon','clinic','consulting','other') DEFAULT 'salon', `loginMethod` varchar(64), `role` enum('user','admin') NOT NULL DEFAULT 'user', `createdAt` timestamp NOT NULL DEFAULT (now()), `updatedAt` timestamp NOT NULL DEFAULT (now()) ON UPDATE CURRENT_TIMESTAMP, `lastSignedIn` timestamp NOT NULL DEFAULT (now()), CONSTRAINT `users_id` PRIMARY KEY(`id`));
+CREATE TABLE `clients` (`id` int AUTO_INCREMENT NOT NULL, `userId` int NOT NULL, `name` text NOT NULL, `email` varchar(320), `phone` varchar(20), `address` text, `city` text, `notes` text, `lastVisit` timestamp, `createdAt` timestamp NOT NULL DEFAULT (now()), `updatedAt` timestamp NOT NULL DEFAULT (now()) ON UPDATE CURRENT_TIMESTAMP, CONSTRAINT `clients_id` PRIMARY KEY(`id`));
+CREATE TABLE `services` (`id` int AUTO_INCREMENT NOT NULL, `userId` int NOT NULL, `name` text NOT NULL, `description` text, `price` decimal(10,2) NOT NULL, `duration` int NOT NULL, `isActive` boolean NOT NULL DEFAULT true, `createdAt` timestamp NOT NULL DEFAULT (now()), `updatedAt` timestamp NOT NULL DEFAULT (now()) ON UPDATE CURRENT_TIMESTAMP, CONSTRAINT `services_id` PRIMARY KEY(`id`));
+CREATE TABLE `appointments` (`id` int AUTO_INCREMENT NOT NULL, `userId` int NOT NULL, `clientId` int NOT NULL, `serviceId` int NOT NULL, `startTime` datetime NOT NULL, `endTime` datetime NOT NULL, `status` enum('scheduled','completed','cancelled','no-show') NOT NULL DEFAULT 'scheduled', `price` decimal(10,2) NOT NULL, `notes` text, `createdAt` timestamp NOT NULL DEFAULT (now()), `updatedAt` timestamp NOT NULL DEFAULT (now()) ON UPDATE CURRENT_TIMESTAMP, CONSTRAINT `appointments_id` PRIMARY KEY(`id`));
+```
+
+---
+
+## 🔑 Variáveis de Ambiente (.env)
+
+| Variável | Descrição | Exemplo / Valor |
+| :--- | :--- | :--- |
+| `DATABASE_URL` | URL de conexão MySQL | `mysql://user:pass@host:3306/db` |
+| `JWT_SECRET` | Chave secreta para tokens | Uma string aleatória e longa |
+| `FORGE_API_KEY` | Chave do Google Gemini | Pegar no Google AI Studio |
+| `NODE_ENV` | Modo do Node | `production` |
+| `PORT` | Porta do servidor | `3000` |
+
+---
+
+## 🍐 Identidade Visual e Rebranding
+
+O Pêra utiliza uma paleta de cores Creme (`#F8F7E5`) e Verde Pêra (`oklch(0.65 0.22 145)`). O design é baseado no Neo-Brutalismo, com bordas grossas pretas, sombras sólidas e tipografia impactante.
+
+---
+
+**Desenvolvido com ❤️ por Gemini CLI para o Brayan.**
