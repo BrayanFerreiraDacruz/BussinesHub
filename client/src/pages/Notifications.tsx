@@ -12,7 +12,7 @@ import { motion, AnimatePresence } from "framer-motion";
 
 export default function Notifications() {
   const [testPhone, setTestPhone] = useState("");
-  const [testMessage, setTestMessage] = useState("Olá! Este é um teste de notificação do Pêra. 🍐");
+  const [testMessage, setTestMessage] = useState("Olá! Este é um teste de notificação do P�ra.");
   const [isSending, setIsSending] = useState(false);
 
   const { data: status, refetch: refetchStatus } = trpc.whatsapp.status.useQuery();

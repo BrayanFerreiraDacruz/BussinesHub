@@ -15,15 +15,11 @@ export default function Login() {
   const [password, setPassword] = useState("");
 
   const loginMutation = trpc.auth.login.useMutation({
-    onSuccess: (data) => {
-      console.log("Login success:", data);
+    onSuccess: () => {
       toast.success("Bem-vinda de volta ao pomar! 🍐");
-      setTimeout(() => {
-        window.location.href = "/dashboard";
-      }, 500);
+      setLocation("/dashboard");
     },
     onError: (error) => {
-      console.error("Login error:", error);
       toast.error("Credenciais incorretas.");
     },
   });
