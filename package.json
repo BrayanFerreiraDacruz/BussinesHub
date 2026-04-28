@@ -5,7 +5,9 @@
   "license": "MIT",
   "scripts": {
     "dev": "cross-env NODE_ENV=development tsx watch server/_core/index.ts",
-    "build": "vite build && esbuild server/_core/index.ts --bundle --platform=node --format=esm --outdir=dist --external:fsevents --external:vite",
+    "build": "esbuild server/_core/index.ts --bundle --platform=node --format=esm --outdir=dist --external:fsevents --external:vite",
+    "build:frontend": "vite build",
+    "build:all": "npm run build:frontend && npm run build",
     "start": "cross-env NODE_ENV=production node dist/index.js",
     "check": "tsc --noEmit",
     "format": "prettier --write .",
