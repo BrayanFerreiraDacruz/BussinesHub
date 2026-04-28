@@ -5,7 +5,7 @@ import net from "net";
 import { createExpressMiddleware } from "@trpc/server/adapters/express";
 import { appRouter } from "../routers";
 import { createContext } from "./context";
-import { serveStatic } from "./vite";
+import { serveStatic } from "./static";
 import { initWhatsApp } from "../whatsapp";
 import { startScheduledJobs } from "../jobs";
 import { getDb } from "../db";
