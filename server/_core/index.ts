@@ -11,25 +11,6 @@ import { startScheduledJobs } from "../jobs";
 import { getDb } from "../db";
 import { handleAbacatepayWebhook } from "../webhooks";
 
-function isPortAvailable(port: number): Promise<boolean> {
-  return new Promise(resolve => {
-    const server = net.createServer();
-    server.listen(port, () => {
-      server.close(() => resolve(true));
-    });
-    server.on("error", () => resolve(false));
-  });
-}
-
-async function findAvailablePort(startPort: number = 3000): Promise<number> {
-  for (let port = startPort; port < startPort + 20; port++) {
-    if (await isPortAvailable(port)) {
-      return port;
-    }
-  }
-  throw new Error(`No available port found starting from ${startPort}`);
-}
-
 async function startServer() {
   const app = express();
   const server = createServer(app);
@@ -54,15 +35,19 @@ async function startServer() {
     serveStatic(app);
   }
 
-  const preferredPort = parseInt(process.env.PORT || "3000");
-  const port = await findAvailablePort(preferredPort);
+  // Hostinger and most cloud providers provide the port via process.env.PORT
+  const port = parseInt(process.env.PORT || "3001"); // Mudando o padrão para 3001 para evitar conflito com a 3000 da Hostinger
 
-  if (port !== preferredPort) {
-    console.log(`Port ${preferredPort} is busy, using port ${port} instead`);
-  }
-
-  server.listen(port, () => {
-    console.log(`Server running on http://localhost:${port}/`);
+  server.listen(port, "0.0.0.0", () => {
+    console.log(`[Server] BusinessHub is running on port ${port}`);
+    console.log(`[Server] Environment: ${process.env.NODE_ENV}`);
+  }).on('error', (err: any) => {
+    if (err.code === 'EADDRINUSE') {
+      console.error(`[Error] Port ${port} is already in use. Please change the PORT in your .env file.`);
+    } else {
+      console.error(`[Error] Failed to start server:`, err);
+    }
+    process.exit(1);
   });
 
   // Inicializar WhatsApp e jobs agendados
