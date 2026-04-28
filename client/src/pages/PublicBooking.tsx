@@ -13,8 +13,8 @@ import { Spinner } from "@/components/ui/spinner";
 import { CheckCircle2 } from "lucide-react";
 
 export default function PublicBooking() {
-  const [, params] = useRoute("/book/:userId");
-  const userId = params?.userId ? parseInt(params.userId) : null;
+  const [, params] = useRoute<{ userId: string }>("/book/:userId");
+  const userId = params ? parseInt(params.userId) : null;
 
   const [step, setStep] = useState(1);
   const [selectedService, setSelectedService] = useState<string>("");

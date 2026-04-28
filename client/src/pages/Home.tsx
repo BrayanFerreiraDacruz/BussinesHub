@@ -189,7 +189,7 @@ function FeatureMini({ icon, label }: { icon: any, label: string }) {
   return (
     <div className="flex flex-col items-center gap-2 md:gap-4 text-center">
       <div className="text-primary drop-shadow-lg scale-75 md:scale-100">
-        {React.cloneElement(icon as React.ReactElement, { size: 32, strokeWidth: 3 })}
+        {React.cloneElement(icon as React.ReactElement, { size: 32, strokeWidth: 3 } as any)}
       </div>
       <span className="font-black text-[8px] md:text-[10px] uppercase tracking-[0.2em] text-foreground leading-tight">{label}</span>
     </div>

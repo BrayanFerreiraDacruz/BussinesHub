@@ -47,25 +47,25 @@ function Router() {
       <Route path={"/marketing-kit"} component={MarketingKit} />
       
       <Route path="/dashboard">
-        {(params) => <ProtectedRoute component={Dashboard} path="/dashboard" {...params} />}
+        {(params) => <ProtectedRoute component={Dashboard} path="/dashboard" {...(params || {})} />}
       </Route>
       <Route path="/appointments">
-        {(params) => <ProtectedRoute component={Appointments} path="/appointments" {...params} />}
+        {(params) => <ProtectedRoute component={Appointments} path="/appointments" {...(params || {})} />}
       </Route>
       <Route path="/clients">
-        {(params) => <ProtectedRoute component={Clients} path="/clients" {...params} />}
+        {(params) => <ProtectedRoute component={Clients} path="/clients" {...(params || {})} />}
       </Route>
       <Route path="/services">
-        {(params) => <ProtectedRoute component={Services} path="/services" {...params} />}
+        {(params) => <ProtectedRoute component={Services} path="/services" {...(params || {})} />}
       </Route>
       <Route path="/reports">
-        {(params) => <ProtectedRoute component={Reports} path="/reports" {...params} />}
+        {(params) => <ProtectedRoute component={Reports} path="/reports" {...(params || {})} />}
       </Route>
       <Route path="/payments">
-        {(params) => <ProtectedRoute component={Payments} path="/payments" {...params} />}
+        {(params) => <ProtectedRoute component={Payments} path="/payments" {...(params || {})} />}
       </Route>
       <Route path="/notifications">
-        {(params) => <ProtectedRoute component={Notifications} path="/notifications" {...params} />}
+        {(params) => <ProtectedRoute component={Notifications} path="/notifications" {...(params || {})} />}
       </Route>
 
       <Route path={"/404"} component={NotFound} />

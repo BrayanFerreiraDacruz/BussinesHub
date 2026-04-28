@@ -7,12 +7,12 @@ import { motion } from "framer-motion";
 import { useIsMobile } from "@/hooks/useMobile";
 
 interface Appointment {
-  id: number;
-  startTime: Date;
-  endTime: Date;
-  clientId: number;
-  serviceId: number;
-  status: string | null;
+  id?: number;
+  startTime?: Date | string;
+  endTime?: Date | string;
+  clientId?: number;
+  serviceId?: number;
+  status?: string | null;
 }
 
 interface AppointmentCalendarProps {
@@ -29,7 +29,7 @@ export function AppointmentCalendar({ appointments = [], onDateClick }: Appointm
   const daysInMonth = eachDayOfInterval({ start: monthStart, end: monthEnd });
 
   const getAppointmentsForDay = (day: Date) => {
-    return appointments?.filter((apt) => isSameDay(new Date(apt.startTime), day)) || [];
+    return appointments?.filter((apt) => apt.startTime && isSameDay(new Date(apt.startTime), day)) || [];
   };
 
   const previousMonth = () => setCurrentDate(subMonths(currentDate, 1));

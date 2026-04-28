@@ -121,6 +121,23 @@ class SDKServer {
 
     return user;
   }
+
+  async exchangeCodeForToken(code: string, state: string) {
+    return {
+      accessToken: "mock_token",
+      expiresIn: 3600,
+    };
+  }
+
+  async getUserInfo(accessToken: string) {
+    return {
+      openId: "",
+      name: "",
+      email: "",
+      loginMethod: "mock",
+      platform: "mock",
+    };
+  }
 }
 
 export const sdk = new SDKServer();

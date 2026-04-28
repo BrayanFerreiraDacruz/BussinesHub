@@ -26,9 +26,9 @@ import {
   createPayment,
   updatePayment,
   getUserByEmail,
+  getUserById,
   upsertUser,
-} from "./db";
-import {
+  } from "./db";import {
   getOrCreateNotificationSettings,
   updateNotificationSettings,
   getWhatsAppNotifications,

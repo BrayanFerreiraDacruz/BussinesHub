@@ -20,11 +20,12 @@ import {
 } from "@/components/ui/sidebar";
 import { useIsMobile } from "@/hooks/useMobile";
 import { useAuth } from "@/_core/hooks/useAuth";
-import { LayoutDashboard, LogOut, Users, Calendar, ShoppingBag, BarChart3, MessageCircle, CreditCard, Sparkles } from "lucide-react";
+import { LayoutDashboard, LogOut, Users, Calendar, ShoppingBag, BarChart3, MessageCircle, CreditCard, Sparkles, Sun, Moon } from "lucide-react";
 import { useEffect } from "react";
 import { useLocation } from "wouter";
 import { DashboardLayoutSkeleton } from './DashboardLayoutSkeleton';
 import { Button } from "./ui/button";
+import { useTheme } from "@/contexts/ThemeContext";
 
 const menuItems = [
   { icon: LayoutDashboard, label: "Visão Geral", path: "/dashboard" },
@@ -41,11 +42,8 @@ export default function DashboardLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const { loading, user } = useAuth();
-
-  if (loading) {
-    return <DashboardLayoutSkeleton />
-  }
+  const [location, setLocation] = useLocation();
+  const { user, logout, loading } = useAuth();
 
   if (loading) return <DashboardLayoutSkeleton />;
   if (!user) {
@@ -69,6 +67,7 @@ function DashboardLayoutContent({
 }) {
   const { user, logout } = useAuth();
   const [location, setLocation] = useLocation();
+  const { theme, toggleTheme } = useTheme();
   const { state } = useSidebar();
   const isCollapsed = state === "collapsed";
   const activeMenuItem = menuItems.find(item => item.path === location);
